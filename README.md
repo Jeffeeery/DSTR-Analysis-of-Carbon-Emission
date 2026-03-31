@@ -51,12 +51,12 @@ Each member contributes findings from their own section
 # Timeline
 Week 6	Member 1 [BAN] completes resident.h, csvloader, array/LL classes. All others begin their modules.
 
-Week 7	Member 2 & 3 finish sorting. Member 4 starts searching. Member 5 starts analysis.
+Week 7	Member 2 [EV] & 3 [WT] finish sorting. Member 4 starts searching. Member 5 starts analysis.
 
-Week 8	Member 4 finishes searching + timing. Member 5 finishes analysis + recommendations.
+Week 8	Member 4 [WK] finishes searching + timing. Member 5 [EEE] finishes analysis + recommendations.
 
 Week 9	Full integration — plug all modules into both main programs. Fix bugs together.
 
-Week 9 (end)	Record video (max 30 min, each member ≤5 min). Member 5 finalizes report.
+Week 9 (end)	Record video (max 30 min, each member ≤5 min). Member 5 [EEE] finalizes report.
 
 Week 10 Mon 5pm	Submit ZIP + MP4 + DOCX.
