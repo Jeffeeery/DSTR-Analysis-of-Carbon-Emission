@@ -49,7 +49,7 @@ Each member contributes findings from their own section
 .cpp (source)	Defines how it works — the actual code/logic
 
 # Timeline
-Week 6	Member 1 completes resident.h, csvloader, array/LL classes. All others begin their modules.
+Week 6	Member 1 [BAN] completes resident.h, csvloader, array/LL classes. All others begin their modules.
 
 Week 7	Member 2 & 3 finish sorting. Member 4 starts searching. Member 5 starts analysis.
 
