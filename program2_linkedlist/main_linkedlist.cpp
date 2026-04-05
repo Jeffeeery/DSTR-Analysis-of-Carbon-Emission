@@ -27,7 +27,11 @@ int main() {
 
     printf("Loaded: City A = %d | City B = %d | City C = %d\n", countA, countB, countC);
 
-    // TODO (Member 1): populate ResidentList objects from rawA/B/C
+    // Populate ResidentList objects from raw arrays from structured access
+    ResidentList listA, listB, listC;
+    for (int i = 0; i < countA; i++) listA.insertAtTail(rawA[i]);
+    for (int i = 0; i < countB; i++) listB.insertAtTail(rawB[i]);
+    for (int i = 0; i < countC; i++) listC.insertAtTail(rawC[i]);
 
     int choice = 0;
     do {
@@ -45,8 +49,11 @@ int main() {
         scanf("%d", &choice);
 
         switch (choice) {
+            // Case 1: Display age ground categorisation and emission analysis for all cities
             case 1:
-                // TODO [BAN]: call analyzeByAgeGroup for each city
+                analyzeByAgeGroup(rawA, countA, "City A");
+                analyzeByAgeGroup(rawB, countB, "City B");
+                analyzeByAgeGroup(rawC, countC, "City C");
                 break;
             case 2:
                 // TODO [EV]: call printTotalEmissions + printEmissionsByTransport
