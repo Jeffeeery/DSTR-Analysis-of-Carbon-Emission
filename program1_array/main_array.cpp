@@ -27,26 +27,33 @@ int main() {
 
     printf("Loaded: City A = %d | City B = %d | City C = %d\n", countA, countB, countC);
 
-    // TODO (Member 1): populate ResidentArray objects from rawA/B/C
+    // Populate ResidentArray objects from raw arrays for structured access
+    ResidentArray arrA, arrB, arrC;
+    for (int i = 0; i < countA; i++) arrA.add(rawA[i]);
+    for (int i = 0; i < countA; i++) arrB.add(rawB[i]);
+    for (int i = 0; i < countA; i++) arrC.add(rawC[i]);
 
     int choice = 0;
     do {
         printf("\n========================================\n");
         printf("  DSTR Assignment - Array Program\n");
         printf("========================================\n");
-        printf("1. Age Group Categorization & Analysis\n");  // Member 1 [BAN]
-        printf("2. Carbon Emission Analysis\n");              // Member 5 [EV]
-        printf("3. Sorting Experiments\n");                   // Member 2 [WT]
-        printf("4. Searching Experiments\n");                 // Member 4 [WK]
-        printf("5. Performance Analysis\n");                  // Member 3 [EEE]
-        printf("6. Insights & Recommendations\n");            // All
+        printf("1. Age Group Categorization & Analysis\n");     // Member 1 [BAN]
+        printf("2. Carbon Emission Analysis\n");                // Member 5 [EV]
+        printf("3. Sorting Experiments\n");                     // Member 2 [WT]
+        printf("4. Searching Experiments\n");                   // Member 4 [WK]
+        printf("5. Performance Analysis\n");                    // Member 3 [EEE]
+        printf("6. Insights & Recommendations\n");              // All
         printf("0. Exit\n");
         printf("Enter choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
+            // Case 1: Display age group categorisation and emission analysis for all cities
             case 1:
-                // TODO [BAN]: call analyzeByAgeGroup for each city
+                analyzeByAgeGroup(rawA, countA, "City A");
+                analyzeByAgeGroup(rawB, countB, "City B");
+                analyzeByAgeGroup(rawC, countC, "City C");
                 break;
             case 2:
                 // TODO [EV]: call printTotalEmissions + printEmissionsByTransport
