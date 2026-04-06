@@ -43,14 +43,28 @@ Assignment1_2026/
 
 ### Program 1 — Array
 ```bash
-g++ program1_array/main_array.cpp shared/csvloader.cpp shared/analysis.cpp -o program1
-./program1
+g++ program1_array/main_array.cpp \
+    program1_array/arraylist.cpp \
+    program1_array/array_sort.cpp \
+    program1_array/array_search.cpp \
+    shared/csvloader.cpp \
+    shared/resident.cpp \
+    shared/analysis.cpp \
+    -o program1_array/main_array
 ```
 
 ### Program 2 — Linked List
 ```bash
-g++ program2_linkedlist/main_linkedlist.cpp shared/csvloader.cpp shared/analysis.cpp -o program2
-./program2
+g++ program2_linkedlist/main_linkedlist.cpp \
+    program2_linkedlist/linkedlist.cpp \
+    program2_linkedlist/linkedlist_sort.cpp \
+    program2_linkedlist/linkedlist_search.cpp \
+    shared/csvloader.cpp \
+    shared/resident.cpp \
+    shared/analysis.cpp \
+    -I program1_array \
+    -o program2_linkedlist/main_linkedlist
+
 ```
 
 ---
