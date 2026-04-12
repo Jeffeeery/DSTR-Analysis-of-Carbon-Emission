@@ -9,9 +9,9 @@
 #include "array_search.h"
 
 // Dataset file paths (adjust relative path as needed)
-#define PATH_CITY_A "../dataset1-cityA.csv"
-#define PATH_CITY_B "../dataset2-cityB.csv"
-#define PATH_CITY_C "../dataset3-cityC.csv"
+#define PATH_CITY_A "dataset1-cityA.csv"
+#define PATH_CITY_B "dataset2-cityB.csv"
+#define PATH_CITY_C "dataset3-cityC.csv"
 
 int main() {
     // --- Load datasets ---
