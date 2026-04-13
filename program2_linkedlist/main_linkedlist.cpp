@@ -57,6 +57,12 @@ int main() {
                 break;
             case 2:
                 // TODO [EV]: call printTotalEmissions + printEmissionsByTransport
+                printTotalEmissions(rawA, countA, "City A");
+                printTotalEmissions(rawB, countB, "City B");
+                printTotalEmissions(rawC, countC, "City C");
+                printEmissionsByTransport(rawA, countA, "City A");
+                printEmissionsByTransport(rawB, countB, "City B");
+                printEmissionsByTransport(rawC, countC, "City C");
                 break;
             case 3:
                 // TODO [EEE]: prompt sort field/order, run insertionSortLL + selectionSortLL
