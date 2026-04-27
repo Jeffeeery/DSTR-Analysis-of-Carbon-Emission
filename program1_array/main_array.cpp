@@ -68,9 +68,37 @@ int main() {
             case 3:
                 // TODO [WT]: prompt sort field/order, run bubbleSort + mergeSort, print comparison
                 break;
-            case 4:
-                // TODO [WK]: prompt search criteria/keyword, run linearSearch + binarySearch
+            case 4:{
+                printf("\n--- Searching Experiments ---\n");
+                printf("1. Age Group\n2. Transport Mode\n3. Distance Threshold\nSelect: ");
+                int sChoice;
+                scanf("%d", &sChoice);
+
+                char keyword[50];
+                printf("Enter search keyword (Case Sensitive, e.g., 'Car' or 'Working Adults (26-45)'): ");
+                scanf(" %[^\n]s", keyword); 
+
+                SearchCriteria crit = (sChoice == 1) ? SEARCH_BY_AGE_GROUP : 
+                                    (sChoice == 2) ? SEARCH_BY_TRANSPORT : 
+                                    SEARCH_BY_DISTANCE_THRESHOLD;
+
+                // We will create pointers to easily iterate through our cities
+                ResidentArray* cities[] = {&arrA, &arrB, &arrC};
+                const char* cityNames[] = {"City A", "City B", "City C"};
+
+                for (int i = 0; i < 3; i++) {
+                    printf("\n>>> Results for %s <<<", cityNames[i]);
+        
+                    // Run Searches
+                    SearchResult linRes = linearSearch(*cities[i], crit, keyword);
+                    SearchResult binRes = binarySearch(*cities[i], crit, keyword);
+
+                    // Display results using your functions
+                    printSearchResults(*cities[i], linRes, crit, keyword);
+                    printSearchComparison(linRes, binRes);
+                }
                 break;
+            }                  
             case 5:
                 // TODO [EEE]: display collected timing + memory discussion
                 break;
