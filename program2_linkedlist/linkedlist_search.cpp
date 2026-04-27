@@ -1,5 +1,5 @@
 // Member 4 - [WK]
-// program2_linkedlist/linkedlist_search.cpp - Search implementation for Linked List program
+// program2_linkedlist/linkedlist_search.cpp - Search experiments for Linked List-based implementation
 
 #include "linkedlist_search.h"
 #include <chrono>
@@ -9,35 +9,37 @@
 
 using namespace std::chrono;
 
-// Helper: check if a node's resident matches the search criteria
+// Helper function: check if a node's resident matches the search criteria
 static bool matchesLL(const Resident& r, SearchCriteria criteria, const char* keyword, int& comparisonCount) {
-    comparisonCount++; // Increment every time we check a record
+    comparisonCount++; // Increment every time when checking a record
     switch (criteria) {
         case SEARCH_BY_AGE_GROUP:
             return (strcmp(r.ageGroup, keyword) == 0);
         case SEARCH_BY_TRANSPORT:
             return (strcmp(r.transportMode, keyword) == 0);
         case SEARCH_BY_DISTANCE_THRESHOLD:
-            // Convert string keyword to double for comparison
+            // Convert string keyword to double for numeric comparison
             return (r.dailyDistance >= atof(keyword));
         default:
             return false;
     }
 }
 
+// Standard O(n) linear search on linked list
 SearchResult linearSearchLL(const ResidentList& list, SearchCriteria criteria, const char* keyword) {
     SearchResult result;
     result.indices = new int[list.size()]; // Member 1 provided size() in linkedlist.cpp 
     
     auto start = high_resolution_clock::now();
-    Node* curr = list.getHead();
+    Node* curr = list.getHead(); // Start traversal at head pointer
     int idx = 0;
 
+    // Standard linear search - Traverse the linked list from head to tail, checking each node's resident data against the search criteria
     while (curr != nullptr) {
         if (matchesLL(curr->data, criteria, keyword, result.comparisons)) {
             result.indices[result.count++] = idx;
         }
-        curr = curr->next;
+        curr = curr->next; // Move to the next node
         idx++;
     }
 
@@ -46,6 +48,7 @@ SearchResult linearSearchLL(const ResidentList& list, SearchCriteria criteria, c
     return result;
 }
 
+// Ordered Traversal Search Implementation 
 SearchResult orderedSearchLL(const ResidentList& list, SearchCriteria criteria, const char* keyword) {
     SearchResult result;
     result.indices = new int[list.size()];
@@ -54,9 +57,6 @@ SearchResult orderedSearchLL(const ResidentList& list, SearchCriteria criteria, 
     Node* curr = list.getHead();
     int idx = 0;
 
-    // Ordered Traversal Example: If searching for distance >= threshold 
-    // and the list is sorted by distance, we still check all.
-    // However, if searching for a SPECIFIC age in a sorted list:
     while (curr != nullptr) {
         bool isMatch = matchesLL(curr->data, criteria, keyword, result.comparisons);
         
@@ -78,6 +78,7 @@ SearchResult orderedSearchLL(const ResidentList& list, SearchCriteria criteria, 
     return result;
 }
 
+// Print matched residents as a formatted text table
 void printSearchResultsLL(const ResidentList& list, const SearchResult& result,
                           SearchCriteria criteria, const char* keyword) {
     printf("\nLinked List Results for [%s]: %d match(es) found\n", keyword, result.count);
@@ -88,7 +89,7 @@ void printSearchResultsLL(const ResidentList& list, const SearchResult& result,
            "ResidentID", "Age", "Transport", "Distance", "Emission", "Age Group");
     printf("--------------------------------------------------------------------------------------------------\n");
 
-    // Optimized approach: Traverse the matches directly
+    // Iterate through the matched indices and print the corresponding resident data
     for (int i = 0; i < result.count; i++) {
         Node* target = list.getAt(result.indices[i]);
         if (target != nullptr) { // Safety check
@@ -100,6 +101,7 @@ void printSearchResultsLL(const ResidentList& list, const SearchResult& result,
     printf("--------------------------------------------------------------------------------------------------\n");
 }
 
+// Print performance comparison between linear and ordered traversal search
 void printSearchComparisonLL(const SearchResult& linear, const SearchResult& ordered) {
     printf("\n--- Linked List Search Performance Comparison ---\n");
     printf("%-25s %12s %15s %12s\n", "Method", "Matches", "Comparisons", "Time (ms)");
