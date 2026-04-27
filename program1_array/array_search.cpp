@@ -6,40 +6,112 @@
 #include <chrono>
 #include <cstdio>
 #include <cstring>
+#include <cstdlib>
 
 using namespace std::chrono;
 
 // Helper: check if a resident matches the search criteria
-static bool matches(const Resident& r, SearchCriteria criteria, const char* keyword) {
-    // TODO: compare r.ageGroup / r.transportMode / r.dailyDistance against keyword
-    return false;
+static bool matches(const Resident& r, SearchCriteria criteria, const char* keyword, int& comparisonCount) {
+    comparisonCount++; // Increment every time we check a record
+    switch (criteria) {
+        case SEARCH_BY_AGE_GROUP:
+            return (strcmp(r.ageGroup, keyword) == 0);
+        case SEARCH_BY_TRANSPORT:
+            return (strcmp(r.transportMode, keyword) == 0);
+        case SEARCH_BY_DISTANCE_THRESHOLD:
+            // Convert string keyword to double for comparison
+            return (r.dailyDistance >= atof(keyword));
+        default:
+            return false;
+    }
 }
 
 SearchResult linearSearch(const ResidentArray& arr, SearchCriteria criteria, const char* keyword) {
-    // TODO:
-    // 1. Record start time
-    // 2. Iterate all elements, call matches(), collect matching indices
-    // 3. Count comparisons
-    // 4. Return SearchResult with time, count, indices
     SearchResult result;
+    result.indices = new int[arr.size()]; // Allocate max possible size
+    
+    auto start = high_resolution_clock::now();
+
+    for (int i = 0; i < arr.size(); i++) {
+        if (matches(arr.get(i), criteria, keyword, result.comparisons)) {
+            result.indices[result.count++] = i;
+        }
+    }
+
+    auto end = high_resolution_clock::now();
+    result.timeMs = duration<double, std::milli>(end - start).count();
     return result;
 }
 
 SearchResult binarySearch(const ResidentArray& arr, SearchCriteria criteria, const char* keyword) {
-    // NOTE: Array must be sorted by the relevant field before calling this
-    // TODO:
-    // 1. Record start time
-    // 2. Standard binary search loop
-    // 3. Expand left/right to collect all matching neighbours
-    // 4. Return SearchResult with time, count, indices
     SearchResult result;
+    result.indices = new int[arr.size()];
+    
+    auto start = high_resolution_clock::now();
+
+    int low = 0, high = arr.size() - 1;
+    int firstMatch = -1;
+
+    while (low <= high) {
+        result.comparisons++; // Track the "Divide" step
+        int mid = low + (high - low) / 2;
+        
+        int cmp;
+        if (criteria == SEARCH_BY_DISTANCE_THRESHOLD) {
+            double target = atof(keyword);
+            if (arr.get(mid).dailyDistance == target) cmp = 0;
+            else if (arr.get(mid).dailyDistance < target) cmp = -1;
+            else cmp = 1;
+        } else {
+            const char* currentVal = (criteria == SEARCH_BY_AGE_GROUP) ? arr.get(mid).ageGroup : arr.get(mid).transportMode;
+            cmp = strcmp(currentVal, keyword);
+        }
+
+        if (cmp == 0) {
+            firstMatch = mid;
+            break; 
+        } else if (cmp < 0) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+
+    // Expand search to capture all identical matches (e.g., all "Bus" users)
+    if (firstMatch != -1) {
+        int temp = firstMatch;
+        while (temp >= 0 && matches(arr.get(temp), criteria, keyword, result.comparisons)) {
+            result.indices[result.count++] = temp;
+            temp--;
+        }
+        temp = firstMatch + 1;
+        while (temp < arr.size() && matches(arr.get(temp), criteria, keyword, result.comparisons)) {
+            result.indices[result.count++] = temp;
+            temp++;
+        }
+    }
+
+    auto end = high_resolution_clock::now();
+    result.timeMs = duration<double, std::milli>(end - start).count();
     return result;
 }
 
 void printSearchResults(const ResidentArray& arr, const SearchResult& result,
                         SearchCriteria criteria, const char* keyword) {
-    // TODO: print matched residents in a formatted table
-    printf("Search Results for [%s]: %d match(es) found\n", keyword, result.count);
+    printf("\nSearch Results for [%s]: %d match(es) found\n", keyword, result.count);
+    if (result.count == 0) return;
+
+    printf("--------------------------------------------------------------------------------------------------\n");
+    printf("%-12s | %-4s | %-12s | %-10s | %-10s | %-15s\n", 
+           "ResidentID", "Age", "Transport", "Distance", "Emission", "Age Group");
+    printf("--------------------------------------------------------------------------------------------------\n");
+
+    for (int i = 0; i < result.count; i++) {
+        const Resident& r = arr.get(result.indices[i]);
+        printf("%-12s | %-4d | %-12s | %-10.2f | %-10.4f | %-15s\n", 
+               r.residentID, r.age, r.transportMode, r.dailyDistance, r.monthlyEmission, r.ageGroup);
+    }
+    printf("--------------------------------------------------------------------------------------------------\n");
 }
 
 void printSearchComparison(const SearchResult& linear, const SearchResult& binary) {

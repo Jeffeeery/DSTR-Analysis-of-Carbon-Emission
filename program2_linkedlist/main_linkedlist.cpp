@@ -67,9 +67,41 @@ int main() {
             case 3:
                 // TODO [EEE]: prompt sort field/order, run insertionSortLL + selectionSortLL
                 break;
-            case 4:
-                // TODO [WK]: prompt search criteria/keyword, run linearSearchLL + orderedSearchLL
+            case 4:{
+                printf("\n--- Searching Experiments (All Cities - Linked List) ---\n");
+                printf("1. Age Group\n2. Transport Mode\n3. Distance Threshold\nSelect: ");
+                int sChoice;
+                scanf("%d", &sChoice);
+    
+                char keyword[50];
+                printf("Enter search keyword: ");
+                scanf(" %[^\n]s", keyword); // Space before % allows for spaces in keyword
+
+                SearchCriteria crit;
+                if (sChoice == 1) crit = SEARCH_BY_AGE_GROUP;
+                else if (sChoice == 2) crit = SEARCH_BY_TRANSPORT;
+                else crit = SEARCH_BY_DISTANCE_THRESHOLD;
+
+                // Array of pointers to our 3 lists for easy iteration
+                ResidentList* lists[] = {&listA, &listB, &listC};
+                const char* cityNames[] = {"City A", "City B", "City C"};
+
+                for (int i = 0; i < 3; i++) {
+                    printf("\n>>> Searching %s <<<", cityNames[i]);
+                    
+                    // Run Linear Search
+                    SearchResult linRes = linearSearchLL(*lists[i], crit, keyword);
+                    
+                    // Run Ordered Traversal Search
+                    printf("\nNote: Ordered Search results only valid if %s was sorted by this field in Option 3.\n", cityNames[i]);
+                    SearchResult ordRes = orderedSearchLL(*lists[i], crit, keyword);
+
+                    // Show Results and Performance Comparison
+                    printSearchResultsLL(*lists[i], linRes, crit, keyword);
+                    printSearchComparisonLL(linRes, ordRes);
+                }
                 break;
+            }
             case 5:
                 // TODO [EEE]: display collected timing + cross-structure comparison
                 break;
