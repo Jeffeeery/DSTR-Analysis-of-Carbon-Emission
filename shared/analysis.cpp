@@ -164,6 +164,77 @@ void printEmissionsByTransport(const Resident* arr, int count, const char* cityL
     }
 }
 
+void printEmissionsByAgeGroup(const Resident* arr, int count, const char* cityLabel) {
+    const char* ageGroups[] = {
+        AGE_GROUP_1, AGE_GROUP_2, AGE_GROUP_3, AGE_GROUP_4, AGE_GROUP_5
+    };
+    const int NUM_GROUPS = 5;
+
+    cout << "\n========================================\n";
+    cout << "  Emissions by Age Group: " << cityLabel << "\n";
+    cout << "========================================\n";
+
+    for (int grpNum = 0; grpNum < NUM_GROUPS; grpNum++) {
+        double groupTotal = 0.0;
+        int groupCount = 0;
+
+        char modes[6][30];
+        double modeEmission[6];
+        int modeResidents[6];
+        int modeCount = 0;
+
+        for (int x = 0; x < 6; x++) {
+            modeEmission[x] = 0.0;
+            modeResidents[x] = 0;
+        }
+
+        for (int r = 0; r < count; r++) {
+            if (string(arr[r].ageGroup) != ageGroups[grpNum]) continue;
+            groupCount++;
+            groupTotal += arr[r].monthlyEmission;
+
+            bool modeExists = false;
+            for (int m = 0; m < modeCount; m++) {
+                if (string(modes[m]) == arr[r].transportMode) {
+                    modeEmission[m] += arr[r].monthlyEmission;
+                    modeResidents[m]++;
+                    modeExists = true;
+                    break;
+                }
+            }
+            if (!modeExists && modeCount < 6) {
+                copyStr(modes[modeCount], sizeof(modes[modeCount]), arr[r].transportMode);
+                modeEmission[modeCount] = arr[r].monthlyEmission;
+                modeResidents[modeCount] = 1;
+                modeCount++;
+            }
+        }
+
+        if (groupCount == 0) continue;
+
+        cout << "\nAge Group: " << ageGroups[grpNum] << "\n";
+        for (int i = 0; i < 70; i++) cout << '-'; cout << "\n";
+        cout << left
+             << setw(22) << "Mode of Transport"
+             << setw(8)  << "Count"
+             << setw(24) << "Total Emission (kg CO2)"
+             << setw(20) << "Average per Resident" << "\n";
+        for (int i = 0; i < 70; i++) cout << '-'; cout << "\n";
+
+        for (int m = 0; m < modeCount; m++) {
+            double avg = (modeResidents[m] > 0) ? modeEmission[m] / modeResidents[m] : 0.0;
+            cout << left
+                 << setw(22) << modes[m]
+                 << setw(8)  << modeResidents[m]
+                 << setw(24) << fixed << setprecision(2) << modeEmission[m]
+                 << setw(20) << fixed << setprecision(2) << avg << "\n";
+        }
+        for (int i = 0; i < 70; i++) cout << '-'; cout << "\n";
+        cout << "Total Emission for Age Group: "
+             << fixed << setprecision(2) << groupTotal << " kg CO2\n";
+    }
+}
+
 void compareAllCities(
     const Resident* cityA, int countA,
     const Resident* cityB, int countB,
@@ -229,6 +300,48 @@ void compareAllCities(
          << setw(12) << totalResidents
          << setw(20) << fixed << setprecision(2) << overallEmission
          << setw(20) << fixed << setprecision(2) << overallAvg << "\n";
+}
+
+void compareAllCitiesByAgeGroup(
+    const Resident* cityA, int countA,
+    const Resident* cityB, int countB,
+    const Resident* cityC, int countC
+) {
+    const char* ageGroups[] = {
+        AGE_GROUP_1, AGE_GROUP_2, AGE_GROUP_3, AGE_GROUP_4, AGE_GROUP_5
+    };
+    const int NUM_GROUPS = 5;
+
+    cout << "\n========================================\n";
+    cout << "  Age Group Comparison - All Cities\n";
+    cout << "========================================\n";
+    cout << left
+         << setw(30) << "Age Group"
+         << setw(20) << "City A (kg CO2)"
+         << setw(20) << "City B (kg CO2)"
+         << setw(20) << "City C (kg CO2)" << "\n";
+    for (int i = 0; i < 90; i++) cout << '-'; cout << "\n";
+
+    for (int grpNum = 0; grpNum < NUM_GROUPS; grpNum++) {
+        double totalA = 0, totalB = 0, totalC = 0;
+
+        for (int r = 0; r < countA; r++)
+            if (string(cityA[r].ageGroup) == ageGroups[grpNum])
+                totalA += cityA[r].monthlyEmission;
+        for (int r = 0; r < countB; r++)
+            if (string(cityB[r].ageGroup) == ageGroups[grpNum])
+                totalB += cityB[r].monthlyEmission;
+        for (int r = 0; r < countC; r++)
+            if (string(cityC[r].ageGroup) == ageGroups[grpNum])
+                totalC += cityC[r].monthlyEmission;
+
+        cout << left
+             << setw(30) << ageGroups[grpNum]
+             << setw(20) << fixed << setprecision(2) << totalA
+             << setw(20) << fixed << setprecision(2) << totalB
+             << setw(20) << fixed << setprecision(2) << totalC << "\n";
+    }
+    for (int i = 0; i < 90; i++) cout << '-'; cout << "\n";
 }
 
 void printRecommendations(

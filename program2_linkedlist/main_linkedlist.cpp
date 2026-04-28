@@ -46,11 +46,10 @@ int main() {
              << "  DSTR Assignment - Linked List Program\n"
              << "========================================\n"
              << "1. Age Group Categorization & Analysis\n"  // Member 1 [BAN]
-             << "2. Carbon Emission Analysis\n"              // Member 5 [EV]
+             << "2. Carbon Emission Analysis\n"              // Member 2 [EV]
              << "3. Sorting Experiments\n"                   // Member 3 [EEE]
              << "4. Searching Experiments\n"                 // Member 4 [WK]
-             << "5. Performance Analysis\n"                  // Member 3 [EEE]
-             << "6. Insights & Recommendations\n"            // All
+             << "5. Performance Analysis\n"                  // Member 5 [EEE]
              << "0. Exit\n"
              << "Enter choice: ";
         cin >> choice;
@@ -62,14 +61,48 @@ int main() {
                 analyzeByAgeGroup(rawB, countB, "City B");
                 analyzeByAgeGroup(rawC, countC, "City C");
                 break;
-            case 2:
-                printTotalEmissions(rawA, countA, "City A");
-                printTotalEmissions(rawB, countB, "City B");
-                printTotalEmissions(rawC, countC, "City C");
-                printEmissionsByTransport(rawA, countA, "City A");
-                printEmissionsByTransport(rawB, countB, "City B");
-                printEmissionsByTransport(rawC, countC, "City C");
+            case 2: {
+                int subChoice = 0;
+                do {
+                    cout << "\n--- Carbon Emission Analysis ---\n"
+                         << "1. Total emissions per city\n"
+                         << "2. Emissions by transport mode\n"
+                         << "3. Emissions by age group\n"
+                         << "4. Compare all cities\n"
+                         << "5. Compare all cities by age group\n"
+                         << "0. Back\n"
+                         << "Enter choice: ";
+                    cin >> subChoice;
+                    switch (subChoice) {
+                        case 1:
+                            printTotalEmissions(rawA, countA, "City A");
+                            printTotalEmissions(rawB, countB, "City B");
+                            printTotalEmissions(rawC, countC, "City C");
+                            break;
+                        case 2:
+                            printEmissionsByTransport(rawA, countA, "City A");
+                            printEmissionsByTransport(rawB, countB, "City B");
+                            printEmissionsByTransport(rawC, countC, "City C");
+                            break;
+                        case 3:
+                            printEmissionsByAgeGroup(rawA, countA, "City A");
+                            printEmissionsByAgeGroup(rawB, countB, "City B");
+                            printEmissionsByAgeGroup(rawC, countC, "City C");
+                            break;
+                        case 4:
+                            compareAllCities(rawA, countA, rawB, countB, rawC, countC);
+                            break;
+                        case 5:
+                            compareAllCitiesByAgeGroup(rawA, countA, rawB, countB, rawC, countC);
+                            break;
+                        case 0:
+                            break;
+                        default:
+                            cout << "Invalid choice.\n";
+                    }
+                } while (subChoice != 0);
                 break;
+            }
             case 3: {
                 // TODO [WT]: prompt sort field/order, run insertionSortLL + selectionSortLL
                 cout << "\n--- Sorting Experiments: Linked List ---\n";
@@ -292,10 +325,6 @@ int main() {
                 }
                 break;
             }
-            case 6:
-                compareAllCities(rawA, countA, rawB, countB, rawC, countC);
-                printRecommendations(rawA, countA, rawB, countB, rawC, countC);
-                break;
             case 0:
                 cout << "Exiting...\n";
                 break;
