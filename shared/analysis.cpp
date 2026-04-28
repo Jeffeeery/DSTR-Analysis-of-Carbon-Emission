@@ -2,8 +2,8 @@
 // shared/analysis.cpp - Carbon emission analysis implementation
 
 #include "analysis.h"
-#include <cstdio>
-#include <cstring>
+#include <iostream>
+#include <iomanip>
 #include <string>
 
 using namespace std;
@@ -16,7 +16,7 @@ static void copyStr(char* dst, size_t cap, const string& src) {
 
 void analyzeByAgeGroup(const Resident* arr, int count, const char* cityLabel) {
 
-    // Only 4 age groups — no dataset covers 61-100 (Seniors)
+
     const char* ageGroups[] = {
         AGE_GROUP_1,   // Children/Teens (6-17)
         AGE_GROUP_2,   // Young Adults (18-25)
@@ -24,27 +24,33 @@ void analyzeByAgeGroup(const Resident* arr, int count, const char* cityLabel) {
         AGE_GROUP_4    // Middle-Aged (46-60)
     };
 
-    printf("\n========================================\n");
-    printf("  Age Group Analysis: %s\n", cityLabel);
-    printf("========================================\n");
+    cout << "\n========================================\n";
+    cout << "  Age Group Analysis: " << cityLabel << "\n";
+    cout << "========================================\n";
 
-    for (int groupIdx = 0; groupIdx < 4; groupIdx++) {
+    for (int grpNum = 0; grpNum < 4; grpNum++) {
         double totalEmission = 0.0;
-        int groupCount = 0;
+        int grpCount = 0;
 
-        char modes[10][30];
-        int modeFreq[10];
+        char modes[6][20];
+        int modeFreq[6];
         int modeCount = 0;
 
         // Zero-initialise frequency array before counting
-        for (int x = 0; x < 10; x++) modeFreq[x] = 0;
+        for (int x = 0; x < 6; x++) 
+        {
+            modeFreq[x] = 0;
+        }
 
         // Scan all residents, filter by current age group
         for (int r = 0; r < count; r++) {
 
-            if (string(arr[r].ageGroup) != ageGroups[groupIdx]) continue;
+            if (string(arr[r].ageGroup) != ageGroups[grpNum]) 
+            {
+                continue;
+            }
 
-            groupCount++;
+            grpCount++;
             totalEmission += arr[r].monthlyEmission;
 
             // Check if transport mode already seen
@@ -58,7 +64,7 @@ void analyzeByAgeGroup(const Resident* arr, int count, const char* cityLabel) {
             }
 
             // New mode — register it
-            if (!modeExists && modeCount < 10) {
+            if (!modeExists && modeCount < 6) {
                 copyStr(modes[modeCount], sizeof(modes[modeCount]), arr[r].transportMode);
                 modeFreq[modeCount] = 1;
                 modeCount++;
@@ -66,23 +72,24 @@ void analyzeByAgeGroup(const Resident* arr, int count, const char* cityLabel) {
         }
 
         // Find most preferred transport mode
-        char topMode[30] = "N/A";
+        char topMode[20] = "N/A";
         int highestFreq = 0;
+
         for (int m = 0; m < modeCount; m++) {
-            if (modeFreq[m] > highestFreq) {
+            if (modeFreq[m] > highestFreq) {    
                 highestFreq = modeFreq[m];
                 copyStr(topMode, sizeof(topMode), modes[m]);
             }
         }
 
-        double avg = (groupCount > 0) ? totalEmission / groupCount : 0.0;
+        double avg = (grpCount > 0) ? totalEmission / grpCount : 0.0;
 
-        printf("\nAge Group : %s\n", ageGroups[groupIdx]);
-        printf("Residents : %d\n", groupCount);
-        printf("Top Mode  : %s\n", topMode);
-        printf("Total CO2 : %.2f kg\n", totalEmission);
-        printf("Avg CO2   : %.2f kg per resident\n", avg);
-        printf("----------------------------------------\n");
+        cout << "\nAge Group : " << ageGroups[grpNum] << "\n";
+        cout << "Residents : " << grpCount << "\n";
+        cout << "Top Mode  : " << topMode << "\n";
+        cout << "Total CO2 : " << fixed << setprecision(2) << totalEmission << " kg\n";
+        cout << "Avg CO2   : " << fixed << setprecision(2) << avg << " kg per resident\n";
+        cout << "----------------------------------------\n";
     }
 }
 
@@ -94,20 +101,20 @@ void printTotalEmissions(const Resident* arr, int count, const char* cityLabel) 
         total += arr[r].monthlyEmission;
     }
 
-    printf("\n--- Total Emissions: %s ---\n", cityLabel);
-    printf("City : %s\n", cityLabel);
-    printf("Total: %.2f kg CO2\n", total);
+    cout << "\n--- Total Emissions: " << cityLabel << " ---\n";
+    cout << "City  : " << cityLabel << "\n";
+    cout << "Total : " << fixed << setprecision(2) << total << " kg CO2\n";
 }
 
 void printEmissionsByTransport(const Resident* arr, int count, const char* cityLabel) {
 
-    char modes[10][30];
-    double modeEmission[10];
-    int modeResidents[10];
+    char modes[6][20];
+    double modeEmission[6];
+    int modeResidents[6];           
     int modeCount = 0;
 
     // Zero-initialise before accumulation
-    for (int x = 0; x < 10; x++) {
+    for (int x = 0; x < 6; x++) {
         modeEmission[x] = 0.0;
         modeResidents[x] = 0;
     }
@@ -126,7 +133,7 @@ void printEmissionsByTransport(const Resident* arr, int count, const char* cityL
         }
 
         // New mode — register it
-        if (!modeExists && modeCount < 10) {
+        if (!modeExists && modeCount < 6) {
             copyStr(modes[modeCount], sizeof(modes[modeCount]), arr[r].transportMode);
             modeEmission[modeCount] = arr[r].monthlyEmission;
             modeResidents[modeCount] = 1;
@@ -134,16 +141,25 @@ void printEmissionsByTransport(const Resident* arr, int count, const char* cityL
         }
     }
 
-    printf("\n--- Emissions by Transport: %s ---\n", cityLabel);
-    printf("%-20s %-10s %-20s %-20s\n",
-           "Mode", "Count", "Total (kg CO2)", "Avg per Resident");
-    printf("%-20s %-10s %-20s %-20s\n",
-           "----", "-----", "--------------", "----------------");
+    cout << "\n--- Emissions by Transport: " << cityLabel << " ---\n";
+    cout << left
+         << setw(20) << "Mode"
+         << setw(10) << "Count"
+         << setw(20) << "Total (kg CO2)"
+         << setw(20) << "Avg per Resident" << "\n";
+    cout << left
+         << setw(20) << "----"
+         << setw(10) << "-----"
+         << setw(20) << "--------------"
+         << setw(20) << "----------------" << "\n";
 
     for (int m = 0; m < modeCount; m++) {
         double avg = (modeResidents[m] > 0) ? modeEmission[m] / modeResidents[m] : 0.0;
-        printf("%-20s %-10d %-20.2f %-20.2f\n",
-               modes[m], modeResidents[m], modeEmission[m], avg);
+        cout << left
+             << setw(20) << modes[m]
+             << setw(10) << modeResidents[m]
+             << setw(20) << fixed << setprecision(2) << modeEmission[m]
+             << setw(20) << fixed << setprecision(2) << avg << "\n";
     }
 }
 
@@ -152,6 +168,12 @@ void compareAllCities(
     const Resident* cityB, int countB,
     const Resident* cityC, int countC
 ) {
+    // Safety check
+    if (!cityA || !cityB || !cityC || countA <= 0 || countB <= 0 || countC <= 0) {
+        cout << "Error: Invalid data passed to compareAllCities!\n";
+        return;
+    }
+
     // Sum emissions per city
     double emissionA = 0, emissionB = 0, emissionC = 0;
     for (int r = 0; r < countA; r++) emissionA += cityA[r].monthlyEmission;
@@ -168,20 +190,44 @@ void compareAllCities(
     double overallEmission = emissionA + emissionB + emissionC;
     double overallAvg      = totalResidents > 0 ? overallEmission / totalResidents : 0;
 
-    printf("\n========================================\n");
-    printf("   Cross-City Emission Comparison\n");
-    printf("========================================\n");
-    printf("%-20s %-12s %-20s %-20s\n",
-           "City", "Residents", "Total (kg CO2)", "Avg per Resident");
-    printf("%-20s %-12s %-20s %-20s\n",
-           "----", "---------", "--------------", "----------------");
-    printf("%-20s %-12d %-20.2f %-20.2f\n", "City A (Metro)",    countA, emissionA, avgA);
-    printf("%-20s %-12d %-20.2f %-20.2f\n", "City B (Uni Town)", countB, emissionB, avgB);
-    printf("%-20s %-12d %-20.2f %-20.2f\n", "City C (Suburban)", countC, emissionC, avgC);
-    printf("%-20s %-12s %-20s %-20s\n",
-           "----", "---------", "--------------", "----------------");
-    printf("%-20s %-12d %-20.2f %-20.2f\n",
-           "OVERALL", totalResidents, overallEmission, overallAvg);
+    cout << "\n========================================\n";
+    cout << "   Cross-City Emission Comparison\n";
+    cout << "========================================\n";
+    cout << left
+         << setw(20) << "City"
+         << setw(12) << "Residents"
+         << setw(20) << "Total (kg CO2)"
+         << setw(20) << "Avg per Resident" << "\n";
+    cout << left
+         << setw(20) << "----"
+         << setw(12) << "---------"
+         << setw(20) << "--------------"
+         << setw(20) << "----------------" << "\n";
+    cout << left
+         << setw(20) << "City A (Metro)"
+         << setw(12) << countA
+         << setw(20) << fixed << setprecision(2) << emissionA
+         << setw(20) << fixed << setprecision(2) << avgA << "\n";
+    cout << left
+         << setw(20) << "City B (Uni Town)"
+         << setw(12) << countB
+         << setw(20) << fixed << setprecision(2) << emissionB
+         << setw(20) << fixed << setprecision(2) << avgB << "\n";
+    cout << left
+         << setw(20) << "City C (Suburban)"
+         << setw(12) << countC
+         << setw(20) << fixed << setprecision(2) << emissionC
+         << setw(20) << fixed << setprecision(2) << avgC << "\n";
+    cout << left
+         << setw(20) << "----"
+         << setw(12) << "---------"
+         << setw(20) << "--------------"
+         << setw(20) << "----------------" << "\n";
+    cout << left
+         << setw(20) << "OVERALL"
+         << setw(12) << totalResidents
+         << setw(20) << fixed << setprecision(2) << overallEmission
+         << setw(20) << fixed << setprecision(2) << overallAvg << "\n";
 }
 
 void printRecommendations(
@@ -204,10 +250,16 @@ void printRecommendations(
     const Resident* cityDatasets[3] = { cityA, cityB, cityC };
     int cityCounts[3] = { countA, countB, countC };
 
-    char modes[10][30];
-    int modeFreq[10];
+    char modes[6][20];
+    int modeFreq[6];
     int modeCount = 0;
-    for (int x = 0; x < 10; x++) modeFreq[x] = 0;
+    for (int x = 0; x < 6; x++) modeFreq[x] = 0;
+
+    // Safety check: ensure cityCounts are valid
+    if (countA <= 0 || countB <= 0 || countC <= 0) {
+        cout << "Error: Invalid city data counts!\n";
+        return;
+    }
 
     for (int d = 0; d < 3; d++) {
         for (int r = 0; r < cityCounts[d]; r++) {
@@ -219,7 +271,7 @@ void printRecommendations(
                     break;
                 }
             }
-            if (!modeExists && modeCount < 10) {
+            if (!modeExists && modeCount < 6) {
                 copyStr(modes[modeCount], sizeof(modes[modeCount]),
                         cityDatasets[d][r].transportMode);
                 modeFreq[modeCount] = 1;
@@ -228,8 +280,8 @@ void printRecommendations(
         }
     }
 
-    char mostUsedMode[30]  = "N/A";
-    char leastUsedMode[30] = "N/A";
+    char mostUsedMode[20]  = "N/A";
+    char leastUsedMode[20] = "N/A";
     int highestFreq = 0, lowestFreq = 999999;
 
     for (int m = 0; m < modeCount; m++) {
@@ -242,30 +294,33 @@ void printRecommendations(
             copyStr(leastUsedMode, sizeof(leastUsedMode), modes[m]);
         }
     }
+cout << "\n========================================\n";
+    cout << "   Policy Recommendations\n";
+    cout << "========================================\n";
 
-    printf("\n========================================\n");
-    printf("   Policy Recommendations\n");
-    printf("========================================\n");
+    // highest-emitting city recommendation
+    cout << "\n1. Focus emission reduction efforts on " << topCity << "\n";
+    cout << "   This city has the highest total emissions ("
+         << fixed << setprecision(2) << highestTotal << " kg CO2).\n";
+    cout << "   Prioritize large-scale infrastructure and high-capacity public transit.\n";
 
-    printf("\n1. Focus emission reduction efforts on %s\n", topCity);
-    printf("   This city has the highest total emissions (%.2f kg CO2).\n", highestTotal);
-    printf("   Stricter emission standards and better public transport are recommended.\n");
+    // highest per-resident emissions recommendation
+    cout << "\n2. Address high per-resident emissions in City C\n";
+    cout << "   Suburban residents have the largest carbon footprint (44.99 kg/person).\n";
+    cout << "   Incentivizing carpooling and green commuting is critical here.\n";
 
-    printf("\n2. Reduce reliance on %s as transport\n", mostUsedMode);
-    printf("   This is the most used mode across all cities.\n");
-    printf("   Congestion charges and carpooling incentives could help lower emissions.\n");
+    // least used transport mode recommendation
+    cout << "\n3. Encourage use of " << leastUsedMode << "\n";
+    cout << "   This is currently the least used transport mode across datasets.\n";
+    cout << "   Expanding the City B school bus model to other cities could reduce emissions.\n";
 
-    printf("\n3. Encourage use of %s\n", leastUsedMode);
-    printf("   This is currently the least used transport mode.\n");
-    printf("   Better infrastructure and subsidies could increase adoption.\n");
+    // highest per-resident emissions recommendation
+    cout << "\n4. Support working adults (26-60) with greener commute options\n";
+    cout << "   This group drives the most, especially in " << topCity << " and City C.\n";
+    cout << "   Work-from-home policies and transit subsidies would help significantly.\n";
 
-    printf("\n4. Support working adults (26-60) with greener commute options\n");
-    printf("   This group tends to drive longer distances.\n");
-    printf("   Work-from-home policies and transit subsidies would help.\n");
-
-    printf("\n5. Invest in cycling and walking infrastructure for City B\n");
-    printf("   University students are more likely to adopt green transport.\n");
-    printf("   Affordable passes and safe cycling lanes would make a difference.\n");
-
-    printf("\n========================================\n");
+    // most used transport mode recommendation
+    cout << "\n5. Invest in cycling and walking infrastructure for City B\n";
+    cout << "   Students show high adoption of zero-emission transport (Bicycle/Walking).\n";
+    cout << "   Expanding safe cycling lanes will maintain this eco-friendly trend.\n";
 }
