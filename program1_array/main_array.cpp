@@ -5,12 +5,12 @@
 #include <iomanip>
 #include <limits>
 #include <string>
-#include "arraylist.h"
-#include "../shared/csvloader.h"
-#include "../shared/analysis.h"
-#include "array_sort.h"
-#include "array_search.h"
-#include "../shared/performance.h"
+#include "arraylist.hpp"
+#include "../shared/csvloader.hpp"
+#include "../shared/analysis.hpp"
+#include "array_sort.hpp"
+#include "array_search.hpp"
+#include "../shared/performance.hpp"
 
 using namespace std;
 

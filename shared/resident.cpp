@@ -1,4 +1,4 @@
-#include "resident.h"
+#include "resident.hpp"
 #include <string>
 
 using namespace std;

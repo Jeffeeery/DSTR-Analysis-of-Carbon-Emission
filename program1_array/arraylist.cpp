@@ -1,4 +1,4 @@
-#include "arraylist.h"
+#include "arraylist.hpp"
 
 // Constructor: allocate array
 ResidentArray::ResidentArray(int cap) {

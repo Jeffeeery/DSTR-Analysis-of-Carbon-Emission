@@ -5,11 +5,11 @@
 #include <iomanip>
 #include <limits>
 #include <string>
-#include "linkedlist.h"
-#include "../shared/csvloader.h"
-#include "../shared/analysis.h"
-#include "linkedlist_sort.h"
-#include "linkedlist_search.h"
+#include "linkedlist.hpp"
+#include "../shared/csvloader.hpp"
+#include "../shared/analysis.hpp"
+#include "linkedlist_sort.hpp"
+#include "linkedlist_search.hpp"
 
 using namespace std;
 

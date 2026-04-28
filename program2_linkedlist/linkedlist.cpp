@@ -1,4 +1,4 @@
-#include "linkedlist.h"
+#include "linkedlist.hpp"
 
 // Constructor: initialise empty list
 ResidentList::ResidentList() {
