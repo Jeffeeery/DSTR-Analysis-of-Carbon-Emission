@@ -5,6 +5,7 @@
 #include <chrono>
 #include <iomanip>
 #include <iostream>
+#include <string>
 
 using namespace std;
 using namespace std::chrono;
@@ -119,7 +120,7 @@ void printSortedTableLL(const ResidentList& list, SortField field, const char* a
          << setw(28) << "Age Group"
          << "\n";
 
-    cout << string(109, '-') << "\n";
+    cout << setfill('-') << setw(109) << "" << setfill(' ') << "\n";
 
     Node* current = list.getHead();
 
@@ -143,7 +144,7 @@ void printSortComparisonLL(double insertTime, double selectTime, const char* cit
     cout << "\n--- Linked List Sort Performance [" << cityLabel << "] ---\n";
     cout << left  << setw(25) << "Algorithm"
          << right << setw(15) << "Time (ms)" << "\n";
-    cout << string(40, '-') << "\n";
+    cout << setfill('-') << setw(40) << "" << setfill(' ') << "\n";
 
     cout << left  << setw(25) << "Insertion Sort"
          << right << setw(15) << fixed << setprecision(4) << insertTime << "\n";
@@ -161,7 +162,7 @@ void printCrossStructureComparison(
     cout << left  << setw(25) << "Structure"
          << left  << setw(20) << "Algorithm"
          << right << setw(15) << "Time (ms)" << "\n";
-    cout << string(60, '-') << "\n";
+    cout << setfill('-') << setw(60) << "" << setfill(' ') << "\n";
 
     cout << left  << setw(25) << "Array"
          << left  << setw(20) << arrayAlgo
