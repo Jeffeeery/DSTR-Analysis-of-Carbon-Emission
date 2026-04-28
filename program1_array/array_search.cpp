@@ -4,10 +4,11 @@
 #include "array_search.h"
 #include "array_sort.h"
 #include <chrono>
-#include <cstdio>
-#include <cstring>
-#include <cstdlib>
+#include <iomanip>
+#include <iostream>
+#include <string>
 
+using namespace std;
 using namespace std::chrono;
 
 // Helper function: check if a record matches the user input
@@ -16,12 +17,12 @@ static bool matches(const Resident& r, SearchCriteria criteria, const char* keyw
     comparisonCount++; // Increment every time when checking a record 
     switch (criteria) {
         case SEARCH_BY_AGE_GROUP:
-            return (strcmp(r.ageGroup, keyword) == 0);
+            return (string(r.ageGroup) == keyword);
         case SEARCH_BY_TRANSPORT:
-            return (strcmp(r.transportMode, keyword) == 0);
+            return (string(r.transportMode) == keyword);
         case SEARCH_BY_DISTANCE_THRESHOLD:
             // Convert string keyword to double for comparison
-            return (r.dailyDistance >= atof(keyword));
+            return (r.dailyDistance >= stod(string(keyword)));
         default:
             return false;
     }
@@ -31,7 +32,8 @@ static bool matches(const Resident& r, SearchCriteria criteria, const char* keyw
 SearchResult linearSearch(const ResidentArray& arr, SearchCriteria criteria, const char* keyword) {
     SearchResult result;
     result.indices = new int[arr.size()]; // Allocate max possible size for indices (worst case all match)
-    
+
+
     auto start = high_resolution_clock::now();
 
     for (int i = 0; i < arr.size(); i++) {
@@ -42,7 +44,7 @@ SearchResult linearSearch(const ResidentArray& arr, SearchCriteria criteria, con
     }
 
     auto end = high_resolution_clock::now();
-    result.timeMs = duration<double, std::milli>(end - start).count();
+    result.timeMs = duration<double, milli>(end - start).count();
     return result;
 }
 
@@ -50,7 +52,7 @@ SearchResult linearSearch(const ResidentArray& arr, SearchCriteria criteria, con
 SearchResult binarySearch(const ResidentArray& arr, SearchCriteria criteria, const char* keyword) {
     SearchResult result;
     result.indices = new int[arr.size()];
-    
+
     auto start = high_resolution_clock::now();
 
     int low = 0, high = arr.size() - 1;
@@ -60,22 +62,22 @@ SearchResult binarySearch(const ResidentArray& arr, SearchCriteria criteria, con
     while (low <= high) {
         result.comparisons++; // Track the "Divide" comparison step
         int mid = low + (high - low) / 2;
-        
+
         int cmp;
         // Numerical comparison for distance threshold
         if (criteria == SEARCH_BY_DISTANCE_THRESHOLD) {
-            double target = atof(keyword);
+            double target = stod(string(keyword));
             if (arr.get(mid).dailyDistance == target) cmp = 0;
             else if (arr.get(mid).dailyDistance < target) cmp = -1;
             else cmp = 1;
         } else { // String comparison for age group or transport mode
             const char* currentVal = (criteria == SEARCH_BY_AGE_GROUP) ? arr.get(mid).ageGroup : arr.get(mid).transportMode;
-            cmp = strcmp(currentVal, keyword);
+            cmp = string(currentVal).compare(keyword);
         }
 
         if (cmp == 0) {
             firstMatch = mid;
-            break; 
+            break;
         } else if (cmp < 0) {
             low = mid + 1;
         } else {
@@ -100,7 +102,7 @@ SearchResult binarySearch(const ResidentArray& arr, SearchCriteria criteria, con
     }
 
     auto end = high_resolution_clock::now();
-    result.timeMs = duration<double, std::milli>(end - start).count();
+    result.timeMs = duration<double, milli>(end - start).count();
     return result;
 }
 
@@ -108,26 +110,45 @@ SearchResult binarySearch(const ResidentArray& arr, SearchCriteria criteria, con
 // Use fixed-width columns for better readability, and include all relevant fields for context
 void printSearchResults(const ResidentArray& arr, const SearchResult& result,
                         SearchCriteria criteria, const char* keyword) {
-    printf("\nSearch Results for [%s]: %d match(es) found\n", keyword, result.count);
+    cout << "\nSearch Results for [" << keyword << "]: " << result.count << " match(es) found\n";
     if (result.count == 0) return;
 
-    printf("--------------------------------------------------------------------------------------------------\n");
-    printf("%-12s | %-4s | %-12s | %-10s | %-10s | %-15s\n", 
-           "ResidentID", "Age", "Transport", "Distance", "Emission", "Age Group");
-    printf("--------------------------------------------------------------------------------------------------\n");
+    cout << "--------------------------------------------------------------------------------------------------\n";
+    cout << left
+         << setw(12) << "ResidentID" << " | "
+         << setw(4)  << "Age"        << " | "
+         << setw(12) << "Transport"  << " | "
+         << setw(10) << "Distance"   << " | "
+         << setw(10) << "Emission"   << " | "
+         << setw(15) << "Age Group"  << "\n";
+    cout << "--------------------------------------------------------------------------------------------------\n";
 
     for (int i = 0; i < result.count; i++) {
         const Resident& r = arr.get(result.indices[i]);
-        printf("%-12s | %-4d | %-12s | %-10.2f | %-10.4f | %-15s\n", 
-               r.residentID, r.age, r.transportMode, r.dailyDistance, r.monthlyEmission, r.ageGroup);
+        cout << left
+             << setw(12) << r.residentID    << " | "
+             << setw(4)  << r.age           << " | "
+             << setw(12) << r.transportMode << " | "
+             << setw(10) << fixed << setprecision(2) << r.dailyDistance    << " | "
+             << setw(10) << fixed << setprecision(4) << r.monthlyEmission  << " | "
+             << setw(15) << r.ageGroup      << "\n";
     }
-    printf("--------------------------------------------------------------------------------------------------\n");
+    cout << "--------------------------------------------------------------------------------------------------\n";
 }
 
 // Print performance comparison between linear and binary search
 void printSearchComparison(const SearchResult& linear, const SearchResult& binary) {
-    printf("\n--- Search Performance Comparison ---\n");
-    printf("%-20s %12s %15s %12s\n", "Method", "Matches", "Comparisons", "Time (ms)");
-    printf("%-20s %12d %15d %12.4f\n", "Linear Search", linear.count, linear.comparisons, linear.timeMs);
-    printf("%-20s %12d %15d %12.4f\n", "Binary Search", binary.count, binary.comparisons, binary.timeMs);
+    cout << "\n--- Search Performance Comparison ---\n";
+    cout << left  << setw(20) << "Method"
+         << right << setw(12) << "Matches"
+         << right << setw(15) << "Comparisons"
+         << right << setw(12) << "Time (ms)" << "\n";
+    cout << left  << setw(20) << "Linear Search"
+         << right << setw(12) << linear.count
+         << right << setw(15) << linear.comparisons
+         << right << setw(12) << fixed << setprecision(4) << linear.timeMs << "\n";
+    cout << left  << setw(20) << "Binary Search"
+         << right << setw(12) << binary.count
+         << right << setw(15) << binary.comparisons
+         << right << setw(12) << fixed << setprecision(4) << binary.timeMs << "\n";
 }

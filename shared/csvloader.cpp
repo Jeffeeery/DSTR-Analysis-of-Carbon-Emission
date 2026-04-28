@@ -2,27 +2,35 @@
 // shared/csvloader.cpp - CSV file loading implementation
 
 #include "csvloader.h"
-#include <cstdio>
-#include <cstring>
-#include <cstdlib>
+#include <fstream>
+#include <sstream>
+#include <string>
+
+using namespace std;
+
+// Helper: copy a string into a fixed-size char buffer (null-terminated)
+static void copyField(char* dst, size_t cap, const string& src) {
+    size_t n = src.copy(dst, cap - 1);
+    dst[n] = '\0';
+}
 
 void trimString(char* str) {
+    string s(str);
+
     // Remove trailing whitespace and newline
-    int len = strlen(str);
-    while (len > 0 && (str[len-1] == ' ' || str[len-1] == '\n' || str[len-1] == '\r')) {
-        str[len-1] = '\0';
-        len--;
+    while (!s.empty() && (s.back() == ' ' || s.back() == '\n' || s.back() == '\r')) {
+        s.pop_back();
     }
 
     // Remove leading whitespace
-    int start = 0;
-    while (str[start] == ' ') {
+    size_t start = 0;
+    while (start < s.size() && s[start] == ' ') {
         start++;
     }
+    s.erase(0, start);
 
-    if (start > 0) {
-        memmove(str, str + start, strlen(str) - start + 1);
-    }
+    size_t n = s.copy(str, s.size());
+    str[n] = '\0';
 }
 
 void processResidents(Resident* arr, int count) {
@@ -32,32 +40,51 @@ void processResidents(Resident* arr, int count) {
 }
 
 int loadCSV(const char* filename, Resident* arr, int maxSize) {
-    // 1. Open file with fopen
-    FILE* file = fopen(filename, "r");
-    if (file == NULL)
+    // 1. Open file with ifstream
+    ifstream file(filename);
+    if (!file.is_open())
         return -1;
-    
+
     // 2. Read and skip header line
-    char line[256];
-    fgets(line, sizeof(line), file);
+    string header;
+    getline(file, header);
 
     // 3. For each data line, parse comma-separated fields into a Resident struct
-    //    - Handle City A column order vs City B/C column order
+    string line;
     int count = 0;
-    while (fgets(line, sizeof(line), file) != NULL && count < maxSize) {
-        sscanf(line, "%14[^,],%d,%29[^,],%lf,%lf,%d",
-            arr[count].residentID,          // %14[^,] - Reads up to 14 characters, stopping at a comma
-            &arr[count].age,                // %d - Reads an integer
-            arr[count].transportMode,       // %29[^,] - Reads up to 29 characters, stopping at a comma
-            &arr[count].dailyDistance,      // %lf - Reads a decimal number
-            &arr[count].emissionFactor,     // %lf
-            &arr[count].avgDaysPerMonth);   // %d
+    while (count < maxSize && getline(file, line)) {
+        istringstream ss(line);
+        string field;
+
+        // residentID
+        if (!getline(ss, field, ',')) continue;
+        copyField(arr[count].residentID, sizeof(arr[count].residentID), field);
+
+        // age
+        if (!getline(ss, field, ',')) continue;
+        arr[count].age = stoi(field);
+
+        // transportMode
+        if (!getline(ss, field, ',')) continue;
+        copyField(arr[count].transportMode, sizeof(arr[count].transportMode), field);
+
+        // dailyDistance
+        if (!getline(ss, field, ',')) continue;
+        arr[count].dailyDistance = stod(field);
+
+        // emissionFactor
+        if (!getline(ss, field, ',')) continue;
+        arr[count].emissionFactor = stod(field);
+
+        // avgDaysPerMonth
+        if (!getline(ss, field, ',')) continue;
+        arr[count].avgDaysPerMonth = stoi(field);
+
         count++;
     }
 
     // 4. Call processResidents() after loading
     processResidents(arr, count);
-    fclose(file);
 
     // 5. Return count of loaded records
     return count;
