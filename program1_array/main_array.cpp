@@ -87,7 +87,7 @@ int main() {
                                       (sChoice == 2) ? SEARCH_BY_TRANSPORT :
                                                        SEARCH_BY_DISTANCE_THRESHOLD;
 
-                // We will create pointers to easily iterate through our cities
+                // Create pointers to easily iterate through our cities
                 ResidentArray* cities[] = {&arrA, &arrB, &arrC};
                 const char* cityNames[] = {"City A", "City B", "City C"};
 
