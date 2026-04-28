@@ -108,7 +108,8 @@ int main() {
                 // TODO [EEE]: display collected timing + memory discussion
                 break;
             case 6:
-                // TODO [ALL]: call compareAllCities + printRecommendations
+                compareAllCities(rawA, countA, rawB, countB, rawC, countC);
+                printRecommendations(rawA, countA, rawB, countB, rawC, countC);
                 break;
             case 0:
                 cout << "Exiting...\n";
