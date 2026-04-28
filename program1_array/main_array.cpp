@@ -36,8 +36,8 @@ int main() {
     // Populate ResidentArray objects from raw arrays for structured access
     ResidentArray arrA, arrB, arrC;
     for (int i = 0; i < countA; i++) arrA.add(rawA[i]);
-    for (int i = 0; i < countA; i++) arrB.add(rawB[i]);
-    for (int i = 0; i < countA; i++) arrC.add(rawC[i]);
+    for (int i = 0; i < countB; i++) arrB.add(rawB[i]);
+    for (int i = 0; i < countC; i++) arrC.add(rawC[i]);
 
     int choice = 0;
     do {
