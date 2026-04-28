@@ -23,7 +23,7 @@ g++ -std=c++11 \
     shared/csvloader.cpp \
     shared/analysis.cpp \
     shared/resident.cpp \
-    -o program1.exe
+    -o program1_array/main_array
 
 if [ $? -eq 0 ]; then
     echo "[OK] program1.exe created successfully!"
@@ -44,7 +44,7 @@ g++ -std=c++11 \
     shared/csvloader.cpp \
     shared/analysis.cpp \
     shared/resident.cpp \
-    -o program2.exe
+    -o program2_linkedlist/main_linkedlist
 
 if [ $? -eq 0 ]; then
     echo "[OK] program2.exe created successfully!"
