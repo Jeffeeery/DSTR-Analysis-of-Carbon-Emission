@@ -1,8 +1,8 @@
 // Member 4 - [WK]
 // program1_array/array_search.cpp - Search implementation for Array program
 
-#include "array_search.h"
-#include "array_sort.h"
+#include "array_search.hpp"
+#include "array_sort.hpp"
 #include <chrono>
 #include <iomanip>
 #include <iostream>
