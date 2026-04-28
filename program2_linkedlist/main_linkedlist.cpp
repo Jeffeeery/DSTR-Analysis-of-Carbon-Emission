@@ -209,9 +209,9 @@ int main() {
                 break;
             }
             case 5: {
-                ResidentList* lists[]  = {&listA, &listB, &listC};
-                const char*   names[]  = {"City A", "City B", "City C"};
-                int           cnts[]   = {countA, countB, countC};
+                ResidentList* lists[]        = {&listA, &listB, &listC};
+                const char*   cityNames[]    = {"City A", "City B", "City C"};
+                int           recordCounts[] = {countA, countB, countC};
 
                 // ----- Sort Benchmarks (run on temporary copies) -----
                 cout << "\n--- Sort Performance (field: Monthly Emission, order: Ascending) ---\n";
@@ -219,28 +219,28 @@ int main() {
                      << setw(16) << "Algorithm"
                      << setw(10) << "City"
                      << right
-                     << setw(6)  << "N"
+                     << setw(10) << "Number"
                      << setw(12) << "Time(ms)" << "\n";
                 cout << "--------------------------------------------\n";
 
                 for (int i = 0; i < 3; i++) {
-                    int n = cnts[i];
-                    ResidentList tmpI, tmpS;
-                    for (Node* cur = lists[i]->getHead(); cur != nullptr; cur = cur->next) {
-                        tmpI.insertAtTail(cur->data);
-                        tmpS.insertAtTail(cur->data);
+                    int count = recordCounts[i];
+                    ResidentList tempInsertion, tempSelection;
+                    for (Node* current = lists[i]->getHead(); current != nullptr; current = current->next) {
+                        tempInsertion.insertAtTail(current->data);
+                        tempSelection.insertAtTail(current->data);
                     }
-                    double tI = insertionSortLL(tmpI, SORT_BY_EMISSION, ASCENDING);
-                    double tS = selectionSortLL(tmpS, SORT_BY_EMISSION, ASCENDING);
+                    double timeInsertion = insertionSortLL(tempInsertion, SORT_BY_EMISSION, ASCENDING);
+                    double timeSelection = selectionSortLL(tempSelection, SORT_BY_EMISSION, ASCENDING);
 
                     cout << left  << setw(16) << "InsertionSort"
-                         << setw(10) << names[i]
-                         << right << setw(6) << n
-                         << setw(12) << fixed << setprecision(4) << tI << "\n";
+                         << setw(10) << cityNames[i]
+                         << right << setw(10) << count
+                         << setw(12) << fixed << setprecision(4) << timeInsertion << "\n";
                     cout << left  << setw(16) << "SelectionSort"
-                         << setw(10) << names[i]
-                         << right << setw(6) << n
-                         << setw(12) << fixed << setprecision(4) << tS << "\n";
+                         << setw(10) << cityNames[i]
+                         << right << setw(10) << count
+                         << setw(12) << fixed << setprecision(4) << timeSelection << "\n";
                 }
 
                 // ----- Search Benchmarks -----
@@ -249,46 +249,46 @@ int main() {
                      << setw(16) << "Algorithm"
                      << setw(10) << "City"
                      << right
-                     << setw(6)  << "N"
+                     << setw(10) << "Number"
                      << setw(10) << "Matches"
                      << setw(14) << "Comparisons"
                      << setw(12) << "Time(ms)" << "\n";
                 cout << "------------------------------------------------------------------\n";
 
                 for (int i = 0; i < 3; i++) {
-                    int n = cnts[i];
-                    SearchResult linRes = linearSearchLL (*lists[i], SEARCH_BY_TRANSPORT, "Car");
-                    SearchResult ordRes = orderedSearchLL(*lists[i], SEARCH_BY_TRANSPORT, "Car");
+                    int count = recordCounts[i];
+                    SearchResult linearResult  = linearSearchLL (*lists[i], SEARCH_BY_TRANSPORT, "Car");
+                    SearchResult orderedResult = orderedSearchLL(*lists[i], SEARCH_BY_TRANSPORT, "Car");
 
                     cout << left  << setw(16) << "LinearSearch"
-                         << setw(10) << names[i]
-                         << right << setw(6)  << n
-                         << setw(10) << linRes.count
-                         << setw(14) << linRes.comparisons
-                         << setw(12) << fixed << setprecision(4) << linRes.timeMs << "\n";
+                         << setw(10) << cityNames[i]
+                         << right << setw(10) << count
+                         << setw(10) << linearResult.count
+                         << setw(14) << linearResult.comparisons
+                         << setw(12) << fixed << setprecision(4) << linearResult.timeMs << "\n";
                     cout << left  << setw(16) << "OrderedSearch"
-                         << setw(10) << names[i]
-                         << right << setw(6)  << n
-                         << setw(10) << ordRes.count
-                         << setw(14) << ordRes.comparisons
-                         << setw(12) << fixed << setprecision(4) << ordRes.timeMs << "\n";
+                         << setw(10) << cityNames[i]
+                         << right << setw(10) << count
+                         << setw(10) << orderedResult.count
+                         << setw(14) << orderedResult.comparisons
+                         << setw(12) << fixed << setprecision(4) << orderedResult.timeMs << "\n";
                 }
 
                 // ----- Memory Footprint -----
                 cout << "\n--- Memory Footprint (Linked List) ---\n";
                 cout << "sizeof(Node) = " << sizeof(Node) << " bytes per node"
-                     << " (Resident + 1 pointer)\n";
+                     << " (Resident data + 1 pointer)\n";
                 cout << left  << setw(10) << "City"
-                     << right << setw(6)  << "N"
+                     << right << setw(10) << "Number"
                      << setw(16) << "Mem (bytes)"
                      << setw(12) << "Mem (KB)" << "\n";
                 cout << "--------------------------------------------\n";
                 for (int i = 0; i < 3; i++) {
-                    int mem = static_cast<int>(sizeof(Node)) * cnts[i];
-                    cout << left  << setw(10) << names[i]
-                         << right << setw(6)  << cnts[i]
-                         << setw(16) << mem
-                         << setw(12) << fixed << setprecision(2) << mem / 1024.0 << "\n";
+                    int memoryBytes = static_cast<int>(sizeof(Node)) * recordCounts[i];
+                    cout << left  << setw(10) << cityNames[i]
+                         << right << setw(10) << recordCounts[i]
+                         << setw(16) << memoryBytes
+                         << setw(12) << fixed << setprecision(2) << memoryBytes / 1024.0 << "\n";
                 }
                 break;
             }

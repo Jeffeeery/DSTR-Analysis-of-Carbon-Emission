@@ -5,11 +5,9 @@
 #define PERFORMANCE_H
 
 #include <chrono>
-#include <cstddef>
 
-// -------------------------------------------------------
+
 // Timer - wraps std::chrono::high_resolution_clock
-// -------------------------------------------------------
 class Timer {
 private:
     std::chrono::high_resolution_clock::time_point startTime;
@@ -40,10 +38,10 @@ struct PerfRecord {
     char operation[24];     // "Sort", "Search"
     char algorithm[24];     // "BubbleSort", "MergeSort", "Linear", "Binary", ...
     char city[16];          // "City A" / "City B" / "City C"
-    int  n;                 // dataset size
-    double timeMs;          // execution time
-    long long comparisons;  // operation count (0 if not tracked)
-    std::size_t memBytes;   // estimated memory footprint of structure (0 if N/A)
+    int  recordCount;        // number of records in the dataset
+    double timeMs;           // execution time in milliseconds
+    long long comparisons;   // number of comparisons made (0 if not tracked)
+    int memoryBytes;         // estimated memory footprint in bytes (0 if N/A)
 };
 
 // -------------------------------------------------------
@@ -80,10 +78,10 @@ PerfRecord makePerfRecord(
     const char* operation,
     const char* algorithm,
     const char* city,
-    int n,
+    int recordCount,
     double timeMs,
     long long comparisons = 0,
-    std::size_t memBytes = 0
+    int memoryBytes = 0
 );
 
 #endif // PERFORMANCE_H

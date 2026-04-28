@@ -21,6 +21,7 @@ g++ -std=c++11 ^
     shared/csvloader.cpp ^
     shared/analysis.cpp ^
     shared/resident.cpp ^
+    shared/performance.cpp ^
     -o program1.exe
 
 if %ERRORLEVEL% EQU 0 (
@@ -43,6 +44,7 @@ g++ -std=c++11 ^
     shared/csvloader.cpp ^
     shared/analysis.cpp ^
     shared/resident.cpp ^
+    shared/performance.cpp ^
     -o program2.exe
 
 if %ERRORLEVEL% EQU 0 (
