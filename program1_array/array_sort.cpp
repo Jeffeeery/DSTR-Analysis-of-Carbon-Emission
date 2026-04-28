@@ -3,10 +3,10 @@
 
 #include "array_sort.h"
 #include <chrono>
-#include <cstdio>
 #include <iomanip>
 #include <iostream>
 
+using namespace std;
 using namespace std::chrono;
 
 // Helper: compare two Residents by chosen field
@@ -43,13 +43,16 @@ double mergeSort(ResidentArray& arr, SortField field, SortOrder order) {
 }
 
 void printSortedTable(const ResidentArray& arr, SortField field, const char* algorithm) {
-    // TODO: print header + rows using printf with fixed-width columns
+    // TODO: print header + rows using cout with fixed-width columns
     // Show: ResidentID | Age | Transport | DailyDist | MonthlyEmission | AvgDays
 }
 
 void printSortComparison(double bubbleTime, double mergeTime, const char* cityLabel) {
-    printf("\n--- Sort Performance Comparison [%s] ---\n", cityLabel);
-    printf("%-20s %15s\n", "Algorithm", "Time (ms)");
-    printf("%-20s %15.4f\n", "Bubble Sort", bubbleTime);
-    printf("%-20s %15.4f\n", "Merge Sort",  mergeTime);
+    cout << "\n--- Sort Performance Comparison [" << cityLabel << "] ---\n";
+    cout << left  << setw(20) << "Algorithm"
+         << right << setw(15) << "Time (ms)" << "\n";
+    cout << left  << setw(20) << "Bubble Sort"
+         << right << setw(15) << fixed << setprecision(4) << bubbleTime << "\n";
+    cout << left  << setw(20) << "Merge Sort"
+         << right << setw(15) << fixed << setprecision(4) << mergeTime  << "\n";
 }
