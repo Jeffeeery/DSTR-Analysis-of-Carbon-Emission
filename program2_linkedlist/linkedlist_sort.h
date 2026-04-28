@@ -1,4 +1,4 @@
-// Member 3 - [EEE]
+// Member 3 - [WT]
 // program2_linkedlist/linkedlist_sort.h - Sorting declarations for Linked List program
 
 #ifndef LINKEDLIST_SORT_H
