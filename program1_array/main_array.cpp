@@ -1,12 +1,16 @@
 // Member 1 (skeleton) - all members contribute
 // program1_array/main_array.cpp - Main program for Array-based implementation
 
-#include <cstdio>
+#include <iostream>
+#include <limits>
+#include <string>
 #include "arraylist.h"
 #include "../shared/csvloader.h"
 #include "../shared/analysis.h"
 #include "array_sort.h"
 #include "array_search.h"
+
+using namespace std;
 
 // Dataset file paths (adjust relative path as needed)
 #define PATH_CITY_A "dataset1-cityA.csv"
@@ -21,11 +25,13 @@ int main() {
     int countC = loadCSV(PATH_CITY_C, rawC, MAX_RESIDENTS);
 
     if (countA < 0 || countB < 0 || countC < 0) {
-        printf("Error loading one or more CSV files.\n");
+        cout << "Error loading one or more CSV files.\n";
         return 1;
     }
 
-    printf("Loaded: City A = %d | City B = %d | City C = %d\n", countA, countB, countC);
+    cout << "Loaded: City A = " << countA
+         << " | City B = " << countB
+         << " | City C = " << countC << "\n";
 
     // Populate ResidentArray objects from raw arrays for structured access
     ResidentArray arrA, arrB, arrC;
@@ -35,18 +41,18 @@ int main() {
 
     int choice = 0;
     do {
-        printf("\n========================================\n");
-        printf("  DSTR Assignment - Array Program\n");
-        printf("========================================\n");
-        printf("1. Age Group Categorization & Analysis\n");     // Member 1 [BAN]
-        printf("2. Carbon Emission Analysis\n");                // Member 5 [EV]
-        printf("3. Sorting Experiments\n");                     // Member 2 [WT]
-        printf("4. Searching Experiments\n");                   // Member 4 [WK]
-        printf("5. Performance Analysis\n");                    // Member 3 [EEE]
-        printf("6. Insights & Recommendations\n");              // All
-        printf("0. Exit\n");
-        printf("Enter choice: ");
-        scanf("%d", &choice);
+        cout << "\n========================================\n"
+             << "  DSTR Assignment - Array Program\n"
+             << "========================================\n"
+             << "1. Age Group Categorization & Analysis\n"     // Member 1 [BAN]
+             << "2. Carbon Emission Analysis\n"                // Member 5 [EV]
+             << "3. Sorting Experiments\n"                     // Member 2 [WT]
+             << "4. Searching Experiments\n"                   // Member 4 [WK]
+             << "5. Performance Analysis\n"                    // Member 3 [EEE]
+             << "6. Insights & Recommendations\n"              // All
+             << "0. Exit\n"
+             << "Enter choice: ";
+        cin >> choice;
 
         switch (choice) {
             // Case 1: Display age group categorisation and emission analysis for all cities
@@ -56,8 +62,6 @@ int main() {
                 analyzeByAgeGroup(rawC, countC, "City C");
                 break;
             case 2:
-                // TODO [EV]: call printTotalEmissions + printEmissionsByTransport
-
                 printTotalEmissions(rawA, countA, "City A");
                 printTotalEmissions(rawB, countB, "City B");
                 printTotalEmissions(rawC, countC, "City C");
@@ -68,37 +72,38 @@ int main() {
             case 3:
                 // TODO [WT]: prompt sort field/order, run bubbleSort + mergeSort, print comparison
                 break;
-            case 4:{
-                printf("\n--- Searching Experiments ---\n");
-                printf("1. Age Group\n2. Transport Mode\n3. Distance Threshold\nSelect: ");
+            case 4: {
+                cout << "\n--- Searching Experiments ---\n";
+                cout << "1. Age Group\n2. Transport Mode\n3. Distance Threshold\nSelect: ";
                 int sChoice;
-                scanf("%d", &sChoice);
+                cin >> sChoice;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-                char keyword[50];
-                printf("Enter search keyword (Case Sensitive, e.g., 'Car' or 'Working Adults (26-45)'): ");
-                scanf(" %[^\n]s", keyword); 
+                string keyword;
+                cout << "Enter search keyword (Case Sensitive, e.g., 'Car' or 'Working Adults (26-45)'): ";
+                getline(cin, keyword);
 
-                SearchCriteria crit = (sChoice == 1) ? SEARCH_BY_AGE_GROUP : 
-                                    (sChoice == 2) ? SEARCH_BY_TRANSPORT : 
-                                    SEARCH_BY_DISTANCE_THRESHOLD;
+                SearchCriteria crit = (sChoice == 1) ? SEARCH_BY_AGE_GROUP :
+                                      (sChoice == 2) ? SEARCH_BY_TRANSPORT :
+                                                       SEARCH_BY_DISTANCE_THRESHOLD;
 
                 // We will create pointers to easily iterate through our cities
                 ResidentArray* cities[] = {&arrA, &arrB, &arrC};
                 const char* cityNames[] = {"City A", "City B", "City C"};
 
                 for (int i = 0; i < 3; i++) {
-                    printf("\n>>> Results for %s <<<", cityNames[i]);
-        
+                    cout << "\n>>> Results for " << cityNames[i] << " <<<";
+
                     // Run Searches
-                    SearchResult linRes = linearSearch(*cities[i], crit, keyword);
-                    SearchResult binRes = binarySearch(*cities[i], crit, keyword);
+                    SearchResult linRes = linearSearch(*cities[i], crit, keyword.c_str());
+                    SearchResult binRes = binarySearch(*cities[i], crit, keyword.c_str());
 
                     // Display results using your functions
-                    printSearchResults(*cities[i], linRes, crit, keyword);
+                    printSearchResults(*cities[i], linRes, crit, keyword.c_str());
                     printSearchComparison(linRes, binRes);
                 }
                 break;
-            }                  
+            }
             case 5:
                 // TODO [EEE]: display collected timing + memory discussion
                 break;
@@ -106,10 +111,10 @@ int main() {
                 // TODO [ALL]: call compareAllCities + printRecommendations
                 break;
             case 0:
-                printf("Exiting...\n");
+                cout << "Exiting...\n";
                 break;
             default:
-                printf("Invalid choice.\n");
+                cout << "Invalid choice.\n";
         }
     } while (choice != 0);
 

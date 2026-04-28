@@ -3,8 +3,10 @@
 
 #include "linkedlist_sort.h"
 #include <chrono>
-#include <cstdio>
+#include <iomanip>
+#include <iostream>
 
+using namespace std;
 using namespace std::chrono;
 
 // Helper: get the sort key value from a node
@@ -36,10 +38,13 @@ void printSortedTableLL(const ResidentList& list, SortField field, const char* a
 }
 
 void printSortComparisonLL(double insertTime, double selectTime, const char* cityLabel) {
-    printf("\n--- Linked List Sort Performance [%s] ---\n", cityLabel);
-    printf("%-25s %15s\n", "Algorithm", "Time (ms)");
-    printf("%-25s %15.4f\n", "Insertion Sort", insertTime);
-    printf("%-25s %15.4f\n", "Selection Sort", selectTime);
+    cout << "\n--- Linked List Sort Performance [" << cityLabel << "] ---\n";
+    cout << left  << setw(25) << "Algorithm"
+         << right << setw(15) << "Time (ms)" << "\n";
+    cout << left  << setw(25) << "Insertion Sort"
+         << right << setw(15) << fixed << setprecision(4) << insertTime << "\n";
+    cout << left  << setw(25) << "Selection Sort"
+         << right << setw(15) << fixed << setprecision(4) << selectTime << "\n";
 }
 
 void printCrossStructureComparison(
@@ -47,8 +52,14 @@ void printCrossStructureComparison(
     double llSortTime,    const char* llAlgo,
     const char* cityLabel
 ) {
-    printf("\n--- Array vs Linked List Sort Comparison [%s] ---\n", cityLabel);
-    printf("%-25s %-20s %15s\n", "Structure", "Algorithm", "Time (ms)");
-    printf("%-25s %-20s %15.4f\n", "Array",       arrayAlgo, arraySortTime);
-    printf("%-25s %-20s %15.4f\n", "Linked List", llAlgo,    llSortTime);
+    cout << "\n--- Array vs Linked List Sort Comparison [" << cityLabel << "] ---\n";
+    cout << left  << setw(25) << "Structure"
+         << left  << setw(20) << "Algorithm"
+         << right << setw(15) << "Time (ms)" << "\n";
+    cout << left  << setw(25) << "Array"
+         << left  << setw(20) << arrayAlgo
+         << right << setw(15) << fixed << setprecision(4) << arraySortTime << "\n";
+    cout << left  << setw(25) << "Linked List"
+         << left  << setw(20) << llAlgo
+         << right << setw(15) << fixed << setprecision(4) << llSortTime << "\n";
 }
