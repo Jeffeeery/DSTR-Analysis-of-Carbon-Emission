@@ -69,9 +69,100 @@ int main() {
                 printEmissionsByTransport(rawB, countB, "City B");
                 printEmissionsByTransport(rawC, countC, "City C");
                 break;
-            case 3:
+            case 3: {
                 // TODO [WT]: prompt sort field/order, run bubbleSort + mergeSort, print comparison
+                cout << "\n--- Sorting Experiments: Array ---\n";
+
+                cout << "Choose Dataset:\n";
+                cout << "1. City A\n";
+                cout << "2. City B\n";
+                cout << "3. City C\n";
+                cout << "Select: ";
+
+                int cityChoice;
+                cin >> cityChoice;
+
+                ResidentArray* selectedArray = nullptr;
+                const char* cityLabel = "";
+
+                if (cityChoice == 1) {
+                    selectedArray = &arrA;
+                    cityLabel = "City A";
+                } else if (cityChoice == 2) {
+                    selectedArray = &arrB;
+                    cityLabel = "City B";
+                } else if (cityChoice == 3) {
+                    selectedArray = &arrC;
+                    cityLabel = "City C";
+                } else {
+                    cout << "Invalid city choice.\n";
+                    break;
+                }
+
+                cout << "\nChoose Sort Field:\n";
+                cout << "1. Age\n";
+                cout << "2. Daily Distance\n";
+                cout << "3. Monthly Carbon Emission\n";
+                cout << "Select: ";
+
+                int fieldChoice;
+                cin >> fieldChoice;
+
+                SortField field;
+
+                if (fieldChoice == 1)
+                    field = SORT_BY_AGE;
+                else if (fieldChoice == 2)
+                    field = SORT_BY_DISTANCE;
+                else if (fieldChoice == 3)
+                    field = SORT_BY_EMISSION;
+                else {
+                    cout << "Invalid sort field.\n";
+                    break;
+                }
+
+                cout << "\nChoose Sort Order:\n";
+                cout << "1. Ascending\n";
+                cout << "2. Descending\n";
+                cout << "Select: ";
+
+                int orderChoice;
+                cin >> orderChoice;
+
+                SortOrder order;
+
+                if (orderChoice == 2)
+                    order = DESCENDING;
+                else
+                    order = ASCENDING;
+
+                // Create two copies so both algorithms sort the same original data
+                ResidentArray bubbleCopy(selectedArray->size());
+                ResidentArray mergeCopy(selectedArray->size());
+
+                for (int i = 0; i < selectedArray->size(); i++) {
+                    bubbleCopy.add(selectedArray->get(i));
+                    mergeCopy.add(selectedArray->get(i));
+                }
+
+                double bubbleTime = bubbleSort(bubbleCopy, field, order);
+                double mergeTime = mergeSort(mergeCopy, field, order);
+
+                printSortedTable(mergeCopy, field, "Merge Sort");
+                printSortComparison(bubbleTime, mergeTime, cityLabel);
+
+                // Save the sorted result back to the selected array
+                // This helps binary search / ordered search if needed later
+                selectedArray->clear();
+                for (int i = 0; i < mergeCopy.size(); i++) {
+                    selectedArray->add(mergeCopy.get(i));
+                }
+
+                cout << "\nThe selected dataset has been sorted using Merge Sort.\n";
+
                 break;
+            }
+            
             case 4: {
                 cout << "\n--- Searching Experiments ---\n";
                 cout << "1. Age Group\n2. Transport Mode\n3. Distance Threshold\nSelect: ";

@@ -69,9 +69,107 @@ int main() {
                 printEmissionsByTransport(rawB, countB, "City B");
                 printEmissionsByTransport(rawC, countC, "City C");
                 break;
-            case 3:
-                // TODO [EEE]: prompt sort field/order, run insertionSortLL + selectionSortLL
+            case 3: {
+                // TODO [WT]: prompt sort field/order, run insertionSortLL + selectionSortLL
+                cout << "\n--- Sorting Experiments: Linked List ---\n";
+
+                    cout << "Choose Dataset:\n";
+                    cout << "1. City A\n";
+                    cout << "2. City B\n";
+                    cout << "3. City C\n";
+                    cout << "Select: ";
+
+                    int cityChoice;
+                    cin >> cityChoice;
+
+                    ResidentList* selectedList = nullptr;
+                    const char* cityLabel = "";
+
+                    if (cityChoice == 1) {
+                        selectedList = &listA;
+                        cityLabel = "City A";
+                    } else if (cityChoice == 2) {
+                        selectedList = &listB;
+                        cityLabel = "City B";
+                    } else if (cityChoice == 3) {
+                        selectedList = &listC;
+                        cityLabel = "City C";
+                    } else {
+                        cout << "Invalid city choice.\n";
+                        break;
+                    }
+
+                    cout << "\nChoose Sort Field:\n";
+                    cout << "1. Age\n";
+                    cout << "2. Daily Distance\n";
+                    cout << "3. Monthly Carbon Emission\n";
+                    cout << "Select: ";
+
+                    int fieldChoice;
+                    cin >> fieldChoice;
+
+                    SortField field;
+
+                    if (fieldChoice == 1)
+                        field = SORT_BY_AGE;
+                    else if (fieldChoice == 2)
+                        field = SORT_BY_DISTANCE;
+                    else if (fieldChoice == 3)
+                        field = SORT_BY_EMISSION;
+                    else {
+                        cout << "Invalid sort field.\n";
+                        break;
+                    }
+
+                    cout << "\nChoose Sort Order:\n";
+                    cout << "1. Ascending\n";
+                    cout << "2. Descending\n";
+                    cout << "Select: ";
+
+                    int orderChoice;
+                    cin >> orderChoice;
+
+                    SortOrder order;
+
+                    if (orderChoice == 2)
+                        order = DESCENDING;
+                    else
+                        order = ASCENDING;
+
+                    // Create two copies so both algorithms sort the same original data
+                    ResidentList insertionCopy;
+                    ResidentList selectionCopy;
+
+                    Node* current = selectedList->getHead();
+
+                    while (current != nullptr) {
+                        insertionCopy.insertAtTail(current->data);
+                        selectionCopy.insertAtTail(current->data);
+                        current = current->next;
+                    }
+
+                    double insertTime = insertionSortLL(insertionCopy, field, order);
+                    double selectTime = selectionSortLL(selectionCopy, field, order);
+
+                    printSortedTableLL(insertionCopy, field, "Insertion Sort");
+                    printSortComparisonLL(insertTime, selectTime, cityLabel);
+
+                    // Save the sorted result back to the selected linked list
+                    // This helps ordered traversal search if needed later
+                    selectedList->clear();
+
+                    Node* sortedCurrent = insertionCopy.getHead();
+
+                    while (sortedCurrent != nullptr) {
+                        selectedList->insertAtTail(sortedCurrent->data);
+                        sortedCurrent = sortedCurrent->next;
+                    }
+
+                    cout << "\nThe selected dataset has been sorted using Insertion Sort.\n";
+
                 break;
+            }
+            
             case 4: {
                 cout << "\n--- Searching Experiments (All Cities - Linked List) ---\n";
                 cout << "1. Age Group\n2. Transport Mode\n3. Distance Threshold\nSelect: ";
