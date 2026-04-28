@@ -2,6 +2,7 @@
 // program1_array/main_array.cpp - Main program for Array-based implementation
 
 #include <iostream>
+#include <iomanip>
 #include <limits>
 #include <string>
 #include "arraylist.h"
@@ -9,6 +10,7 @@
 #include "../shared/analysis.h"
 #include "array_sort.h"
 #include "array_search.h"
+#include "../shared/performance.h"
 
 using namespace std;
 
@@ -195,9 +197,89 @@ int main() {
                 }
                 break;
             }
-            case 5:
-                // TODO [EEE]: display collected timing + memory discussion
+            case 5: {
+                ResidentArray* cities[] = {&arrA, &arrB, &arrC};
+                const char*    names[]  = {"City A", "City B", "City C"};
+                int            cnts[]   = {countA, countB, countC};
+
+                // ----- Sort Benchmarks (run on temporary copies) -----
+                cout << "\n--- Sort Performance (field: Monthly Emission, order: Ascending) ---\n";
+                cout << left
+                     << setw(14) << "Algorithm"
+                     << setw(10) << "City"
+                     << right
+                     << setw(6)  << "N"
+                     << setw(12) << "Time(ms)" << "\n";
+                cout << "------------------------------------------\n";
+
+                for (int i = 0; i < 3; i++) {
+                    int n = cnts[i];
+                    ResidentArray tmpB(n), tmpM(n);
+                    for (int j = 0; j < n; j++) {
+                        tmpB.add(cities[i]->get(j));
+                        tmpM.add(cities[i]->get(j));
+                    }
+                    double tB = bubbleSort(tmpB, SORT_BY_EMISSION, ASCENDING);
+                    double tM = mergeSort (tmpM, SORT_BY_EMISSION, ASCENDING);
+
+                    cout << left  << setw(14) << "BubbleSort"
+                         << setw(10) << names[i]
+                         << right << setw(6) << n
+                         << setw(12) << fixed << setprecision(4) << tB << "\n";
+                    cout << left  << setw(14) << "MergeSort"
+                         << setw(10) << names[i]
+                         << right << setw(6) << n
+                         << setw(12) << fixed << setprecision(4) << tM << "\n";
+                }
+
+                // ----- Search Benchmarks -----
+                cout << "\n--- Search Performance (criteria: Transport Mode = 'Car') ---\n";
+                cout << left
+                     << setw(14) << "Algorithm"
+                     << setw(10) << "City"
+                     << right
+                     << setw(6)  << "N"
+                     << setw(10) << "Matches"
+                     << setw(14) << "Comparisons"
+                     << setw(12) << "Time(ms)" << "\n";
+                cout << "------------------------------------------------------------------\n";
+
+                for (int i = 0; i < 3; i++) {
+                    int n = cnts[i];
+                    SearchResult linRes = linearSearch(*cities[i], SEARCH_BY_TRANSPORT, "Car");
+                    SearchResult binRes = binarySearch(*cities[i], SEARCH_BY_TRANSPORT, "Car");
+
+                    cout << left  << setw(14) << "LinearSearch"
+                         << setw(10) << names[i]
+                         << right << setw(6)  << n
+                         << setw(10) << linRes.count
+                         << setw(14) << linRes.comparisons
+                         << setw(12) << fixed << setprecision(4) << linRes.timeMs << "\n";
+                    cout << left  << setw(14) << "BinarySearch"
+                         << setw(10) << names[i]
+                         << right << setw(6)  << n
+                         << setw(10) << binRes.count
+                         << setw(14) << binRes.comparisons
+                         << setw(12) << fixed << setprecision(4) << binRes.timeMs << "\n";
+                }
+
+                // ----- Memory Footprint -----
+                cout << "\n--- Memory Footprint (Array) ---\n";
+                cout << "sizeof(Resident) = " << sizeof(Resident) << " bytes per element\n";
+                cout << left  << setw(10) << "City"
+                     << right << setw(6)  << "N"
+                     << setw(16) << "Mem (bytes)"
+                     << setw(12) << "Mem (KB)" << "\n";
+                cout << "--------------------------------------------\n";
+                for (int i = 0; i < 3; i++) {
+                    int mem = static_cast<int>(sizeof(Resident)) * cnts[i];
+                    cout << left  << setw(10) << names[i]
+                         << right << setw(6)  << cnts[i]
+                         << setw(16) << mem
+                         << setw(12) << fixed << setprecision(2) << mem / 1024.0 << "\n";
+                }
                 break;
+            }
             case 6:
                 compareAllCities(rawA, countA, rawB, countB, rawC, countC);
                 printRecommendations(rawA, countA, rawB, countB, rawC, countC);

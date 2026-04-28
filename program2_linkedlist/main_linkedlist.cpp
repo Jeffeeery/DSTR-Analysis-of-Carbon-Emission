@@ -2,6 +2,7 @@
 // program2_linkedlist/main_linkedlist.cpp - Main program for Linked List-based implementation
 
 #include <iostream>
+#include <iomanip>
 #include <limits>
 #include <string>
 #include "linkedlist.h"
@@ -207,11 +208,93 @@ int main() {
                 }
                 break;
             }
-            case 5:
-                // TODO [EEE]: display collected timing + cross-structure comparison
+            case 5: {
+                ResidentList* lists[]  = {&listA, &listB, &listC};
+                const char*   names[]  = {"City A", "City B", "City C"};
+                int           cnts[]   = {countA, countB, countC};
+
+                // ----- Sort Benchmarks (run on temporary copies) -----
+                cout << "\n--- Sort Performance (field: Monthly Emission, order: Ascending) ---\n";
+                cout << left
+                     << setw(16) << "Algorithm"
+                     << setw(10) << "City"
+                     << right
+                     << setw(6)  << "N"
+                     << setw(12) << "Time(ms)" << "\n";
+                cout << "--------------------------------------------\n";
+
+                for (int i = 0; i < 3; i++) {
+                    int n = cnts[i];
+                    ResidentList tmpI, tmpS;
+                    for (Node* cur = lists[i]->getHead(); cur != nullptr; cur = cur->next) {
+                        tmpI.insertAtTail(cur->data);
+                        tmpS.insertAtTail(cur->data);
+                    }
+                    double tI = insertionSortLL(tmpI, SORT_BY_EMISSION, ASCENDING);
+                    double tS = selectionSortLL(tmpS, SORT_BY_EMISSION, ASCENDING);
+
+                    cout << left  << setw(16) << "InsertionSort"
+                         << setw(10) << names[i]
+                         << right << setw(6) << n
+                         << setw(12) << fixed << setprecision(4) << tI << "\n";
+                    cout << left  << setw(16) << "SelectionSort"
+                         << setw(10) << names[i]
+                         << right << setw(6) << n
+                         << setw(12) << fixed << setprecision(4) << tS << "\n";
+                }
+
+                // ----- Search Benchmarks -----
+                cout << "\n--- Search Performance (criteria: Transport Mode = 'Car') ---\n";
+                cout << left
+                     << setw(16) << "Algorithm"
+                     << setw(10) << "City"
+                     << right
+                     << setw(6)  << "N"
+                     << setw(10) << "Matches"
+                     << setw(14) << "Comparisons"
+                     << setw(12) << "Time(ms)" << "\n";
+                cout << "------------------------------------------------------------------\n";
+
+                for (int i = 0; i < 3; i++) {
+                    int n = cnts[i];
+                    SearchResult linRes = linearSearchLL (*lists[i], SEARCH_BY_TRANSPORT, "Car");
+                    SearchResult ordRes = orderedSearchLL(*lists[i], SEARCH_BY_TRANSPORT, "Car");
+
+                    cout << left  << setw(16) << "LinearSearch"
+                         << setw(10) << names[i]
+                         << right << setw(6)  << n
+                         << setw(10) << linRes.count
+                         << setw(14) << linRes.comparisons
+                         << setw(12) << fixed << setprecision(4) << linRes.timeMs << "\n";
+                    cout << left  << setw(16) << "OrderedSearch"
+                         << setw(10) << names[i]
+                         << right << setw(6)  << n
+                         << setw(10) << ordRes.count
+                         << setw(14) << ordRes.comparisons
+                         << setw(12) << fixed << setprecision(4) << ordRes.timeMs << "\n";
+                }
+
+                // ----- Memory Footprint -----
+                cout << "\n--- Memory Footprint (Linked List) ---\n";
+                cout << "sizeof(Node) = " << sizeof(Node) << " bytes per node"
+                     << " (Resident + 1 pointer)\n";
+                cout << left  << setw(10) << "City"
+                     << right << setw(6)  << "N"
+                     << setw(16) << "Mem (bytes)"
+                     << setw(12) << "Mem (KB)" << "\n";
+                cout << "--------------------------------------------\n";
+                for (int i = 0; i < 3; i++) {
+                    int mem = static_cast<int>(sizeof(Node)) * cnts[i];
+                    cout << left  << setw(10) << names[i]
+                         << right << setw(6)  << cnts[i]
+                         << setw(16) << mem
+                         << setw(12) << fixed << setprecision(2) << mem / 1024.0 << "\n";
+                }
                 break;
+            }
             case 6:
-                // TODO [ALL]: call compareAllCities + printRecommendations
+                compareAllCities(rawA, countA, rawB, countB, rawC, countC);
+                printRecommendations(rawA, countA, rawB, countB, rawC, countC);
                 break;
             case 0:
                 cout << "Exiting...\n";
