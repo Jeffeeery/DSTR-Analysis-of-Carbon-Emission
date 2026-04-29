@@ -103,44 +103,85 @@ int main() {
                 } while (subChoice != 0);
                 break;
             }
+
             case 3: {
                 // TODO [WT]: prompt sort field/order, run insertionSortLL + selectionSortLL
+            while (choice != 0) {
                 cout << "\n--- Sorting Experiments: Linked List ---\n";
+                cout << "Choose Dataset:\n";
+                cout << "1. City A\n";
+                cout << "2. City B\n";
+                cout << "3. City C\n";
+                cout << "4. All Cities\n";
+                cout << "0. Back to Main Menu\n";
+                cout << "9. Exit Program\n";
+                cout << "Select: ";
 
-                    cout << "Choose Dataset:\n";
-                    cout << "1. City A\n";
-                    cout << "2. City B\n";
-                    cout << "3. City C\n";
-                    cout << "Select: ";
+                int cityChoice;
+                cin >> cityChoice;
 
-                    int cityChoice;
-                    cin >> cityChoice;
+                if (cityChoice == 0) {
+                    break;
+                }
 
-                    ResidentList* selectedList = nullptr;
-                    const char* cityLabel = "";
+                if (cityChoice == 9) {
+                    cout << "Exiting...\n";
+                    choice = 0;
+                    break;
+                }
 
-                    if (cityChoice == 1) {
-                        selectedList = &listA;
-                        cityLabel = "City A";
-                    } else if (cityChoice == 2) {
-                        selectedList = &listB;
-                        cityLabel = "City B";
-                    } else if (cityChoice == 3) {
-                        selectedList = &listC;
-                        cityLabel = "City C";
-                    } else {
-                        cout << "Invalid city choice.\n";
-                        break;
-                    }
+                ResidentList* selectedLists[3];
+                const char* cityLabels[3];
+                int cityCount = 0;
 
+                if (cityChoice == 1) {
+                    selectedLists[0] = &listA;
+                    cityLabels[0] = "City A";
+                    cityCount = 1;
+                } else if (cityChoice == 2) {
+                    selectedLists[0] = &listB;
+                    cityLabels[0] = "City B";
+                    cityCount = 1;
+                } else if (cityChoice == 3) {
+                    selectedLists[0] = &listC;
+                    cityLabels[0] = "City C";
+                    cityCount = 1;
+                } else if (cityChoice == 4) {
+                    selectedLists[0] = &listA;
+                    selectedLists[1] = &listB;
+                    selectedLists[2] = &listC;
+
+                    cityLabels[0] = "City A";
+                    cityLabels[1] = "City B";
+                    cityLabels[2] = "City C";
+
+                    cityCount = 3;
+                } else {
+                    cout << "Invalid city choice.\n";
+                    continue;
+                }
+
+                while (choice != 0) {
                     cout << "\nChoose Sort Field:\n";
                     cout << "1. Age\n";
                     cout << "2. Daily Distance\n";
                     cout << "3. Monthly Carbon Emission\n";
+                    cout << "0. Back to Dataset Selection\n";
+                    cout << "9. Exit Program\n";
                     cout << "Select: ";
 
                     int fieldChoice;
                     cin >> fieldChoice;
+
+                    if (fieldChoice == 0) {
+                        break;
+                    }
+
+                    if (fieldChoice == 9) {
+                        cout << "Exiting...\n";
+                        choice = 0;
+                        break;
+                    }
 
                     SortField field;
 
@@ -152,57 +193,121 @@ int main() {
                         field = SORT_BY_EMISSION;
                     else {
                         cout << "Invalid sort field.\n";
-                        break;
+                        continue;
                     }
 
-                    cout << "\nChoose Sort Order:\n";
-                    cout << "1. Ascending\n";
-                    cout << "2. Descending\n";
-                    cout << "Select: ";
+                    while (choice != 0) {
+                        cout << "\nChoose Sort Order:\n";
+                        cout << "1. Ascending\n";
+                        cout << "2. Descending\n";
+                        cout << "0. Back to Sort Field Selection\n";
+                        cout << "9. Exit Program\n";
+                        cout << "Select: ";
 
-                    int orderChoice;
-                    cin >> orderChoice;
+                        int orderChoice;
+                        cin >> orderChoice;
 
-                    SortOrder order;
+                        if (orderChoice == 0) {
+                            break;
+                        }
 
-                    if (orderChoice == 2)
-                        order = DESCENDING;
-                    else
-                        order = ASCENDING;
+                        if (orderChoice == 9) {
+                            cout << "Exiting...\n";
+                            choice = 0;
+                            break;
+                        }
 
-                    // Create two copies so both algorithms sort the same original data
-                    ResidentList insertionCopy;
-                    ResidentList selectionCopy;
+                        SortOrder order;
 
-                    Node* current = selectedList->getHead();
+                        if (orderChoice == 1)
+                            order = ASCENDING;
+                        else if (orderChoice == 2)
+                            order = DESCENDING;
+                        else {
+                            cout << "Invalid sort order.\n";
+                            continue;
+                        }
 
-                    while (current != nullptr) {
-                        insertionCopy.insertAtTail(current->data);
-                        selectionCopy.insertAtTail(current->data);
-                        current = current->next;
+                        for (int cityIndex = 0; cityIndex < cityCount; cityIndex++) {
+                            ResidentList* selectedList = selectedLists[cityIndex];
+                            const char* cityLabel = cityLabels[cityIndex];
+
+                            int recordCount = selectedList->size();
+
+                            // Create two copies so both algorithms sort the same original data
+                            ResidentList insertionCopy;
+                            ResidentList selectionCopy;
+
+                            Node* current = selectedList->getHead();
+
+                            while (current != nullptr) {
+                                insertionCopy.insertAtTail(current->data);
+                                selectionCopy.insertAtTail(current->data);
+                                current = current->next;
+                            }
+
+                            double insertTime = insertionSortLL(insertionCopy, field, order);
+                            double selectTime = selectionSortLL(selectionCopy, field, order);
+
+                            printSortedTableLL(insertionCopy, field, "Insertion Sort");
+                            printSortComparisonLL(insertTime, selectTime, cityLabel);
+
+                            // Estimated memory usage
+                            size_t linkedListStorage = recordCount * sizeof(Node);
+                            size_t insertionExtraMemory = 4 * sizeof(Node*);
+                            size_t selectionExtraMemory = sizeof(Resident) + (3 * sizeof(Node*));
+
+                            cout << "\n--- Estimated Memory Usage [Linked List - " << cityLabel << "] ---\n";
+                            cout << left << setw(35) << "Item"
+                                << right << setw(20) << "Memory (bytes)"
+                                << setw(15) << "Big-O" << "\n";
+                            cout << string(70, '-') << "\n";
+
+                            cout << left << setw(35) << "Linked List Node Storage"
+                                << right << setw(20) << linkedListStorage
+                                << setw(15) << "O(n)" << "\n";
+
+                            cout << left << setw(35) << "Insertion Sort Extra Memory"
+                                << right << setw(20) << insertionExtraMemory
+                                << setw(15) << "O(1)" << "\n";
+
+                            cout << left << setw(35) << "Selection Sort Extra Memory"
+                                << right << setw(20) << selectionExtraMemory
+                                << setw(15) << "O(1)" << "\n";
+
+                            // Save the sorted result back to the selected linked list
+                            selectedList->clear();
+
+                            Node* sortedCurrent = insertionCopy.getHead();
+
+                            while (sortedCurrent != nullptr) {
+                                selectedList->insertAtTail(sortedCurrent->data);
+                                sortedCurrent = sortedCurrent->next;
+                            }
+
+                            cout << "\n" << cityLabel << " has been sorted using Insertion Sort.\n";
+
+                            if (field == SORT_BY_AGE)
+                                cout << cityLabel << " is now sorted by Age.\n";
+                            else if (field == SORT_BY_DISTANCE)
+                                cout << cityLabel << " is now sorted by Daily Distance.\n";
+                            else if (field == SORT_BY_EMISSION)
+                                cout << cityLabel << " is now sorted by Monthly Carbon Emission.\n";
+
+                            cout << "Note: Ordered Search in Option 4 is only valid when the search field matches the sorted field.\n";
+                        }
+
+                        if (cityChoice == 4) {
+                            cout << "\nAll cities have been sorted using the selected field and order.\n";
+                        }
+
+                        cout << "\nEnter another option, or choose 0 to go back.\n";
                     }
-
-                    double insertTime = insertionSortLL(insertionCopy, field, order);
-                    double selectTime = selectionSortLL(selectionCopy, field, order);
-
-                    printSortedTableLL(insertionCopy, field, "Insertion Sort");
-                    printSortComparisonLL(insertTime, selectTime, cityLabel);
-
-                    // Save the sorted result back to the selected linked list
-                    // This helps ordered traversal search if needed later
-                    selectedList->clear();
-
-                    Node* sortedCurrent = insertionCopy.getHead();
-
-                    while (sortedCurrent != nullptr) {
-                        selectedList->insertAtTail(sortedCurrent->data);
-                        sortedCurrent = sortedCurrent->next;
-                    }
-
-                    cout << "\nThe selected dataset has been sorted using Insertion Sort.\n";
-
-                break;
+                }
             }
+
+            break;
+        }                       
             
             case 4: {
                 cout << "\n--- Searching Experiments (All Cities - Linked List) ---\n";
