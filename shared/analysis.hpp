@@ -46,15 +46,6 @@ void compareAllCitiesByAgeGroup(
     const Resident* cityC, int countC
 );
 
-// -------------------------------------------------------
-// Insights & Recommendations
-// -------------------------------------------------------
 
-// Print policy recommendations based on analysis results
-void printRecommendations(
-    const Resident* cityA, int countA,
-    const Resident* cityB, int countB,
-    const Resident* cityC, int countC
-);
 
 #endif // ANALYSIS_HPP

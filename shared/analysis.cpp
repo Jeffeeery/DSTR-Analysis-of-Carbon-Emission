@@ -3,7 +3,6 @@
 #include "analysis.hpp"
 #include <iomanip>
 #include <iostream>
-#include <iomanip>
 #include <string>
 
 using namespace std;
@@ -32,7 +31,7 @@ void analyzeByAgeGroup(const Resident* arr, int count, const char* cityLabel) {
         double totalEmission = 0.0;
         int grpCount = 0;
 
-        char modes[6][20];
+        char modes[6][30];
         int modeFreq[6];
         int modeCount = 0;
 
@@ -72,7 +71,7 @@ void analyzeByAgeGroup(const Resident* arr, int count, const char* cityLabel) {
         }
 
         // Find most preferred transport mode
-        char topMode[20] = "N/A";
+        char topMode[30] = "N/A";
         int highestFreq = 0;
 
         for (int m = 0; m < modeCount; m++) {
@@ -108,7 +107,7 @@ void printTotalEmissions(const Resident* arr, int count, const char* cityLabel) 
 
 void printEmissionsByTransport(const Resident* arr, int count, const char* cityLabel) {
 
-    char modes[6][20];
+    char modes[6][30];
     double modeEmission[6];
     int modeResidents[6];           
     int modeCount = 0;
@@ -165,9 +164,9 @@ void printEmissionsByTransport(const Resident* arr, int count, const char* cityL
 
 void printEmissionsByAgeGroup(const Resident* arr, int count, const char* cityLabel) {
     const char* ageGroups[] = {
-        AGE_GROUP_1, AGE_GROUP_2, AGE_GROUP_3, AGE_GROUP_4, AGE_GROUP_5
+        AGE_GROUP_1, AGE_GROUP_2, AGE_GROUP_3, AGE_GROUP_4
     };
-    const int NUM_GROUPS = 5;
+    const int NUM_GROUPS = 4;
 
     cout << "\n========================================\n";
     cout << "  Emissions by Age Group: " << cityLabel << "\n";
@@ -307,9 +306,9 @@ void compareAllCitiesByAgeGroup(
     const Resident* cityC, int countC
 ) {
     const char* ageGroups[] = {
-        AGE_GROUP_1, AGE_GROUP_2, AGE_GROUP_3, AGE_GROUP_4, AGE_GROUP_5
+        AGE_GROUP_1, AGE_GROUP_2, AGE_GROUP_3, AGE_GROUP_4
     };
-    const int NUM_GROUPS = 5;
+    const int NUM_GROUPS = 4;
 
     cout << "\n========================================\n";
     cout << "  Age Group Comparison - All Cities\n";
