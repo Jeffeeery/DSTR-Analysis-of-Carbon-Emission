@@ -15,12 +15,8 @@ static void copyStr(char* dst, size_t cap, const string& src) {
 
 void analyzeByAgeGroup(const Resident* arr, int count, const char* cityLabel) {
 
-
     const char* ageGroups[] = {
-        AGE_GROUP_1,   // Children/Teens (6-17)
-        AGE_GROUP_2,   // Young Adults (18-25)
-        AGE_GROUP_3,   // Working Adults (26-45)
-        AGE_GROUP_4    // Middle-Aged (46-60)
+        AGE_GROUP_1,   AGE_GROUP_2,   AGE_GROUP_3,   AGE_GROUP_4    
     };
 
     cout << "\n========================================\n";
@@ -33,7 +29,7 @@ void analyzeByAgeGroup(const Resident* arr, int count, const char* cityLabel) {
 
         char modes[6][30];
         int modeFreq[6];
-        int modeCount = 0;
+        int modeCount = 0; // tracks 
 
         // Zero-initialise frequency array before counting
         for (int x = 0; x < 6; x++) 
@@ -173,12 +169,12 @@ void printEmissionsByAgeGroup(const Resident* arr, int count, const char* cityLa
     cout << "========================================\n";
 
     for (int grpNum = 0; grpNum < NUM_GROUPS; grpNum++) {
-        double groupTotal = 0.0;
-        int groupCount = 0;
+        double totalEmission = 0.0;   
+        int grpCount = 0;             
 
         char modes[6][30];
-        double modeEmission[6];
-        int modeResidents[6];
+        double modeEmission[6];   // tracks emission per mode
+        int modeResidents[6];     //tracks count per mode
         int modeCount = 0;
 
         for (int x = 0; x < 6; x++) {
@@ -188,8 +184,9 @@ void printEmissionsByAgeGroup(const Resident* arr, int count, const char* cityLa
 
         for (int r = 0; r < count; r++) {
             if (string(arr[r].ageGroup) != ageGroups[grpNum]) continue;
-            groupCount++;
-            groupTotal += arr[r].monthlyEmission;
+
+            grpCount++;
+            totalEmission += arr[r].monthlyEmission;
 
             bool modeExists = false;
             for (int m = 0; m < modeCount; m++) {
@@ -208,7 +205,7 @@ void printEmissionsByAgeGroup(const Resident* arr, int count, const char* cityLa
             }
         }
 
-        if (groupCount == 0) continue;
+        if (grpCount == 0) continue;
 
         cout << "\nAge Group: " << ageGroups[grpNum] << "\n";
         for (int i = 0; i < 70; i++) cout << '-'; cout << "\n";
@@ -229,7 +226,7 @@ void printEmissionsByAgeGroup(const Resident* arr, int count, const char* cityLa
         }
         for (int i = 0; i < 70; i++) cout << '-'; cout << "\n";
         cout << "Total Emission for Age Group: "
-             << fixed << setprecision(2) << groupTotal << " kg CO2\n";
+             << fixed << setprecision(2) << totalEmission << " kg CO2\n";
     }
 }
 
