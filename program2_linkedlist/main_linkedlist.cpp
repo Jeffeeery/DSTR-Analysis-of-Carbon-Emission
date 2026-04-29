@@ -56,9 +56,9 @@ int main() {
         switch (choice) {
             // Case 1: Display age ground categorisation and emission analysis for all cities
             case 1:
-                analyzeByAgeGroup(rawA, countA, "City A");
-                analyzeByAgeGroup(rawB, countB, "City B");
-                analyzeByAgeGroup(rawC, countC, "City C");
+                analyzeByAgeGroup(listA, "City A");
+                analyzeByAgeGroup(listB, "City B");
+                analyzeByAgeGroup(listC, "City C");
                 break;
             case 2: {
                 int subChoice = 0;
@@ -74,25 +74,25 @@ int main() {
                     cin >> subChoice;
                     switch (subChoice) {
                         case 1:
-                            printTotalEmissions(rawA, countA, "City A");
-                            printTotalEmissions(rawB, countB, "City B");
-                            printTotalEmissions(rawC, countC, "City C");
+                            printTotalEmissions(listA, "City A");
+                            printTotalEmissions(listB, "City B");
+                            printTotalEmissions(listC, "City C");
                             break;
                         case 2:
-                            printEmissionsByTransport(rawA, countA, "City A");
-                            printEmissionsByTransport(rawB, countB, "City B");
-                            printEmissionsByTransport(rawC, countC, "City C");
+                            printEmissionsByTransport(listA, "City A");
+                            printEmissionsByTransport(listB, "City B");
+                            printEmissionsByTransport(listC, "City C");
                             break;
                         case 3:
-                            printEmissionsByAgeGroup(rawA, countA, "City A");
-                            printEmissionsByAgeGroup(rawB, countB, "City B");
-                            printEmissionsByAgeGroup(rawC, countC, "City C");
+                            printEmissionsByAgeGroup(listA, "City A");
+                            printEmissionsByAgeGroup(listB, "City B");
+                            printEmissionsByAgeGroup(listC, "City C");
                             break;
                         case 4:
-                            compareAllCities(rawA, countA, rawB, countB, rawC, countC);
+                            compareAllCities(listA, listB, listC);
                             break;
                         case 5:
-                            compareAllCitiesByAgeGroup(rawA, countA, rawB, countB, rawC, countC);
+                            compareAllCitiesByAgeGroup(listA, listB, listC);
                             break;
                         case 0:
                             break;
