@@ -1,6 +1,4 @@
-// Member 3 - [WT]
-// program2_linkedlist/linkedlist_sort.cpp - Sorting implementation for Linked List program
-
+// Sorting implementation for Linked List program
 #include "linkedlist_sort.hpp"
 #include <chrono>
 #include <iomanip>

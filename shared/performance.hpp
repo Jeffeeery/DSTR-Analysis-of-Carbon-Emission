@@ -1,8 +1,6 @@
-// Member 3 - [EEE]
-// shared/performance.h - Execution timing and performance logging
-
-#ifndef PERFORMANCE_H
-#define PERFORMANCE_H
+// Execution timing and performance logging
+#ifndef PERFORMANCE_HPP
+#define PERFORMANCE_HPP
 
 #include <chrono>
 
@@ -84,4 +82,4 @@ PerfRecord makePerfRecord(
     int memoryBytes = 0
 );
 
-#endif // PERFORMANCE_H
+#endif // PERFORMANCE_HPP

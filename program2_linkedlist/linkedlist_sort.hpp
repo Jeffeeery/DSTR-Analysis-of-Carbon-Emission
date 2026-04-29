@@ -1,8 +1,6 @@
-// Member 3 - [WT]
-// program2_linkedlist/linkedlist_sort.h - Sorting declarations for Linked List program
-
-#ifndef LINKEDLIST_SORT_H
-#define LINKEDLIST_SORT_H
+// Sorting declarations for Linked List program
+#ifndef LINKEDLIST_SORT_HPP
+#define LINKEDLIST_SORT_HPP
 
 #include "linkedlist.hpp"
 #include "../program1_array/array_sort.hpp"  // reuse SortField, SortOrder enums
@@ -28,4 +26,4 @@ void printCrossStructureComparison(
     const char* cityLabel
 );
 
-#endif // LINKEDLIST_SORT_H
+#endif // LINKEDLIST_SORT_HPP

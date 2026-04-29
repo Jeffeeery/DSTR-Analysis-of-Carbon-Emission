@@ -1,8 +1,7 @@
-// Member 1 - [BAN]
-// shared/csvloader.h - CSV file loading declarations
+// CSV file loading declarations
 
-#ifndef CSVLOADER_H
-#define CSVLOADER_H
+#ifndef CSVLOADER_HPP
+#define CSVLOADER_HPP
 
 #include "resident.hpp"
 
@@ -20,4 +19,4 @@ void trimString(char* str);
 // Helper: assign ageGroup and compute monthlyEmission after loading
 void processResidents(Resident* arr, int count);
 
-#endif // CSVLOADER_H
+#endif // CSVLOADER_HPP

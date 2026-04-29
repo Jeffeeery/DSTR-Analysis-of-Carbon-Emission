@@ -1,6 +1,4 @@
-// Member 4 - [WK]
-// program2_linkedlist/linkedlist_search.cpp - Search implementation for Linked List program
-
+// Search implementation for Linked List program
 #include "linkedlist_search.hpp"
 #include <chrono>
 #include <iomanip>

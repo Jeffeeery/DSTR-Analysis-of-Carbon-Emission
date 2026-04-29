@@ -1,8 +1,7 @@
-// Member 2 - [WT]
-// program1_array/array_sort.h - Sorting algorithm declarations for Array program
+// Sorting algorithm declarations for Array program
 
-#ifndef ARRAY_SORT_H
-#define ARRAY_SORT_H
+#ifndef ARRAY_SORT_HPP
+#define ARRAY_SORT_HPP
 
 #include "arraylist.hpp"
 
@@ -33,4 +32,4 @@ void printSortedTable(const ResidentArray& arr, SortField field, const char* alg
 // Print comparison of Bubble Sort vs Merge Sort execution times
 void printSortComparison(double bubbleTime, double mergeTime, const char* cityLabel);
 
-#endif // ARRAY_SORT_H
+#endif // ARRAY_SORT_HPP

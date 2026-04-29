@@ -1,8 +1,8 @@
 // Member 1 - [BAN]
 // shared/resident.h - Core data structure shared across both programs
 
-#ifndef RESIDENT_H
-#define RESIDENT_H
+#ifndef RESIDENT_HPP
+#define RESIDENT_HPP
 
 // Age group labels
 #define AGE_GROUP_1 "Children/Teens (6-17)"

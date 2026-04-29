@@ -1,8 +1,7 @@
-// Member 4 - [WK]
-// program1_array/array_search.h - Search algorithm declarations for Array program
+// Search algorithm declarations for Array program
 
-#ifndef ARRAY_SEARCH_H
-#define ARRAY_SEARCH_H
+#ifndef ARRAY_SEARCH_HPP
+#define ARRAY_SEARCH_HPP
 
 #include "arraylist.hpp"
 
@@ -38,4 +37,4 @@ void printSearchResults(const ResidentArray& arr, const SearchResult& result,
 // Print performance comparison between linear and binary search
 void printSearchComparison(const SearchResult& linear, const SearchResult& binary);
 
-#endif // ARRAY_SEARCH_H
+#endif // ARRAY_SEARCH_HPP

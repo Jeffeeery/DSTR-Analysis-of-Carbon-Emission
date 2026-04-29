@@ -1,5 +1,4 @@
-// Member 5 - [EEE]
-// shared/performance.cpp - Execution timing and performance logging
+// Execution timing and performance logging
 
 #include "performance.hpp"
 #include <iostream>

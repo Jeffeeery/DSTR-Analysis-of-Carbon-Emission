@@ -1,5 +1,4 @@
-// Member 2 - [WT]
-// program1_array/array_sort.cpp - Sorting implementation for Array program
+// Sorting implementation for Array program
 
 #include "array_sort.hpp"
 #include <chrono>

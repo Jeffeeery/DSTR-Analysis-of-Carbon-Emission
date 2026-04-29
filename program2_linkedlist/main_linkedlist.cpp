@@ -1,5 +1,4 @@
-// Member 1 (skeleton) - all members contribute
-// program2_linkedlist/main_linkedlist.cpp - Main program for Linked List-based implementation
+// Main program for Linked List-based implementation
 
 #include <iostream>
 #include <iomanip>

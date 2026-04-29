@@ -1,8 +1,7 @@
-// Member 5 - [EV]
-// shared/analysis.h - Carbon emission analysis declarations
+// Carbon emission analysis declarations
 
-#ifndef ANALYSIS_H
-#define ANALYSIS_H
+#ifndef ANALYSIS_HPP
+#define ANALYSIS_HPP
 
 #include "resident.hpp"
 
@@ -58,4 +57,4 @@ void printRecommendations(
     const Resident* cityC, int countC
 );
 
-#endif // ANALYSIS_H
+#endif // ANALYSIS_HPP

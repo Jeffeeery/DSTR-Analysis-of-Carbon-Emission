@@ -1,11 +1,8 @@
-// Member 1 - [BAN]
-// program2_linkedlist/linkedlist.h - Singly Linked List for Resident records
-
-#ifndef LINKEDLIST_H
-#define LINKEDLIST_H
+// Singly Linked List for Resident records
+#ifndef LINKEDLIST_HPP
+#define LINKEDLIST_HPP
 
 #include "../shared/resident.hpp"
-
 struct Node {
     Resident data;
     Node* next;
@@ -40,4 +37,4 @@ public:
     void setHead(Node* newHead);
 };
 
-#endif // LINKEDLIST_H
+#endif // LINKEDLIST_HPP

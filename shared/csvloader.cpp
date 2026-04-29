@@ -1,5 +1,4 @@
-// Member 1 - [BAN]
-// shared/csvloader.cpp - CSV file loading implementation
+// CSV file loading implementation
 
 #include "csvloader.hpp"
 #include <fstream>
@@ -9,8 +8,8 @@
 using namespace std;
 
 // Helper: copy a string into a fixed-size char buffer (null-terminated)
-static void copyField(char* dst, size_t cap, const string& src) {
-    size_t n = src.copy(dst, cap - 1);
+static void copyField(char* dst, int cap, const string& src) {
+    int n = src.copy(dst, cap - 1);
     dst[n] = '\0';
 }
 
@@ -23,13 +22,13 @@ void trimString(char* str) {
     }
 
     // Remove leading whitespace
-    size_t start = 0;
-    while (start < s.size() && s[start] == ' ') {
+    int start = 0;
+    while (start < (int)s.size() && s[start] == ' ') {
         start++;
     }
     s.erase(0, start);
 
-    size_t n = s.copy(str, s.size());
+    int n = s.copy(str, s.size());
     str[n] = '\0';
 }
 
@@ -41,7 +40,8 @@ void processResidents(Resident* arr, int count) {
 
 int loadCSV(const char* filename, Resident* arr, int maxSize) {
     // 1. Open file with ifstream
-    ifstream file(filename);
+    ifstream file;
+    file.open(filename);
     if (!file.is_open())
         return -1;
 

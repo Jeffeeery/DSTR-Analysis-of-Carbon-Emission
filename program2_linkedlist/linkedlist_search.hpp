@@ -1,8 +1,6 @@
-// Member 4 - [WK]
-// program2_linkedlist/linkedlist_search.h - Search declarations for Linked List program
-
-#ifndef LINKEDLIST_SEARCH_H
-#define LINKEDLIST_SEARCH_H
+// Search declarations for Linked List program
+#ifndef LINKEDLIST_SEARCH_HPP
+#define LINKEDLIST_SEARCH_HPP
 
 #include "linkedlist.hpp"
 #include "../program1_array/array_search.hpp"  // reuse SearchCriteria, SearchResult
@@ -21,4 +19,4 @@ void printSearchResultsLL(const ResidentList& list, const SearchResult& result,
 // Print performance comparison: Linear vs Ordered Traversal
 void printSearchComparisonLL(const SearchResult& linear, const SearchResult& ordered);
 
-#endif // LINKEDLIST_SEARCH_H
+#endif // LINKEDLIST_SEARCH_HPP

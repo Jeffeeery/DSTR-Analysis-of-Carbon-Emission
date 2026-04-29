@@ -1,6 +1,4 @@
-// Member 1 (skeleton) - all members contribute
-// program1_array/main_array.cpp - Main program for Array-based implementation
-
+// Main program for Array-based implementation
 #include <iostream>
 #include <iomanip>
 #include <limits>
@@ -14,7 +12,7 @@
 
 using namespace std;
 
-// Dataset file paths (adjust relative path as needed)
+// Dataset file paths
 #define PATH_CITY_A "dataset1-cityA.csv"
 #define PATH_CITY_B "dataset2-cityB.csv"
 #define PATH_CITY_C "dataset3-cityC.csv"

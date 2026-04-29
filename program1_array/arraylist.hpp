@@ -1,8 +1,7 @@
-// Member 1 - [BAN]
-// program1_array/arraylist.h - Custom dynamic array for Resident records
+// Custom dynamic array for Resident records
 
-#ifndef ARRAYLIST_H
-#define ARRAYLIST_H
+#ifndef ARRAYLIST_HPP
+#define ARRAYLIST_HPP
 
 #include "../shared/resident.hpp"
 
@@ -33,4 +32,4 @@ public:
     void clear();
 };
 
-#endif // ARRAYLIST_H
+#endif // ARRAYLIST_HPP

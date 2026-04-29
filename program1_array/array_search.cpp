@@ -1,5 +1,4 @@
-// Member 4 - [WK]
-// program1_array/array_search.cpp - Search implementation for Array program
+// Search implementation for Array program
 
 #include "array_search.hpp"
 #include "array_sort.hpp"
