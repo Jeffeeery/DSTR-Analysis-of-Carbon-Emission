@@ -44,3 +44,8 @@ int ResidentArray::size() const {
 void ResidentArray::clear() {
     count = 0;
 }
+
+// Get pointer to internal data array
+Resident* ResidentArray::getData() {
+    return data;
+}
