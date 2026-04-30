@@ -74,37 +74,6 @@ double insertionSortLL(ResidentList& list, SortField field, SortOrder order) {
     return elapsed.count();
 }
 
-double selectionSortLL(ResidentList& list, SortField field, SortOrder order) {
-    auto start = high_resolution_clock::now();
-
-    Node* current = list.getHead();
-
-    while (current != nullptr) {
-        Node* selected = current;
-        Node* checker = current->next;
-
-        while (checker != nullptr) {
-            if (comesBefore(checker, selected, field, order)) {
-                selected = checker;
-            }
-
-            checker = checker->next;
-        }
-
-        if (selected != current) {
-            Resident temp = current->data;
-            current->data = selected->data;
-            selected->data = temp;
-        }
-
-        current = current->next;
-    }
-
-    auto end = high_resolution_clock::now();
-    duration<double, milli> elapsed = end - start;
-    return elapsed.count();
-}
-
 static void splitList(Node* source, Node*& front, Node*& back) {
     if (source == nullptr || source->next == nullptr) {
         front = source;

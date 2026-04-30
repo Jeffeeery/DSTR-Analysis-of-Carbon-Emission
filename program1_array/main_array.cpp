@@ -338,10 +338,10 @@ int main() {
                         tempBubble.add(cities[i]->get(j));
                         tempMerge.add(cities[i]->get(j));
                     }
-                    double timeBubble = bubbleSort(tempBubble, SORT_BY_EMISSION, ASCENDING);
+                    double timeBubble = insertionSort(tempBubble, SORT_BY_EMISSION, ASCENDING);
                     double timeMerge  = mergeSort (tempMerge,  SORT_BY_EMISSION, ASCENDING);
 
-                    cout << left  << setw(14) << "BubbleSort"
+                    cout << left  << setw(14) << "InsertionSort"
                          << setw(10) << cityNames[i]
                          << right << setw(10) << count
                          << setw(12) << fixed << setprecision(4) << timeBubble << "\n";

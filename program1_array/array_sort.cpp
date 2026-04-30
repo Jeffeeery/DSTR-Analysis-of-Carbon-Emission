@@ -38,31 +38,6 @@ static bool compare(const Resident& a, const Resident& b, SortField field, SortO
         return keyA > keyB;
 }
 
-double bubbleSort(ResidentArray& arr, SortField field, SortOrder order) {
-    auto start = high_resolution_clock::now();
-
-    int n = arr.size();
-
-    for (int i = 0; i < n - 1; i++) {
-        bool swapped = false;
-
-        for (int j = 0; j < n - i - 1; j++) {
-            if (compare(arr.get(j + 1), arr.get(j), field, order)) {
-                arr.swap(j, j + 1);
-                swapped = true;
-            }
-        }
-
-        // If no swap happened, array is already sorted
-        if (!swapped)
-            break;
-    }
-
-    auto end = high_resolution_clock::now();
-    duration<double, milli> elapsed = end - start;
-    return elapsed.count();
-}
-
 double insertionSort(ResidentArray& arr, SortField field, SortOrder order) {
     auto start = high_resolution_clock::now();
 
@@ -182,14 +157,14 @@ void printSortedTable(const ResidentArray& arr, SortField field, const char* alg
     }
 }
 
-void printSortComparison(double bubbleTime, double mergeTime, const char* cityLabel) {
+void printSortComparison(double InsertionTime, double mergeTime, const char* cityLabel) {
     cout << "\n--- Sort Performance Comparison [" << cityLabel << "] ---\n";
     cout << left  << setw(20) << "Algorithm"
          << right << setw(15) << "Time (ms)" << "\n";
     cout << string(35, '-') << "\n";
 
     cout << left  << setw(20) << "Insertion Sort"
-         << right << setw(15) << fixed << setprecision(4) << bubbleTime << "\n";
+         << right << setw(15) << fixed << setprecision(4) << InsertionTime << "\n";
 
     cout << left  << setw(20) << "Merge Sort"
          << right << setw(15) << fixed << setprecision(4) << mergeTime << "\n";

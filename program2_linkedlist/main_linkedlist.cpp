@@ -104,7 +104,7 @@ int main() {
             }
 
             case 3: {
-                // TODO [WT]: prompt sort field/order, run insertionSortLL + selectionSortLL
+                // TODO [WT]: prompt sort field/order, run insertionSortLL + mergeSortLL
             while (choice != 0) {
                 cout << "\n--- Sorting Experiments: Linked List ---\n";
                 cout << "Choose Dataset:\n";
@@ -361,22 +361,22 @@ int main() {
 
                 for (int i = 0; i < 3; i++) {
                     int count = recordCounts[i];
-                    ResidentList tempInsertion, tempSelection;
+                    ResidentList tempInsertion, tempMerge;
                     for (Node* current = lists[i]->getHead(); current != nullptr; current = current->next) {
                         tempInsertion.insertAtTail(current->data);
-                        tempSelection.insertAtTail(current->data);
+                        tempMerge.insertAtTail(current->data);
                     }
                     double timeInsertion = insertionSortLL(tempInsertion, SORT_BY_EMISSION, ASCENDING);
-                    double timeSelection = selectionSortLL(tempSelection, SORT_BY_EMISSION, ASCENDING);
+                    double timeMerge = mergeSortLL(tempMerge, SORT_BY_EMISSION, ASCENDING);
 
                     cout << left  << setw(16) << "InsertionSort"
                          << setw(10) << cityNames[i]
                          << right << setw(10) << count
                          << setw(12) << fixed << setprecision(4) << timeInsertion << "\n";
-                    cout << left  << setw(16) << "SelectionSort"
+                    cout << left  << setw(16) << "MergeSort"
                          << setw(10) << cityNames[i]
                          << right << setw(10) << count
-                         << setw(12) << fixed << setprecision(4) << timeSelection << "\n";
+                         << setw(12) << fixed << setprecision(4) << timeMerge << "\n";
                 }
 
                 // ----- Search Benchmarks -----
