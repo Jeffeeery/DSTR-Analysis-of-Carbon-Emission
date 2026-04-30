@@ -104,7 +104,7 @@ int main() {
             }
 
             case 3: {
-                // TODO [WT]: prompt sort field/order, run bubbleSort + mergeSort, print comparison           
+                // TODO [WT]: prompt sort field/order, run insertionSort + mergeSort, print comparison           
                 while (choice != 0) {
                     cout << "\n--- Sorting Experiments: Array ---\n";
                     cout << "Choose Dataset:\n";
@@ -220,23 +220,23 @@ int main() {
                             int recordCount = selectedArray->size();
 
                             // Create two copies so both algorithms sort the same original data
-                            ResidentArray bubbleCopy(recordCount);
+                            ResidentArray insertionCopy(recordCount);
                             ResidentArray mergeCopy(recordCount);
 
                             for (int i = 0; i < recordCount; i++) {
-                                bubbleCopy.add(selectedArray->get(i));
+                                insertionCopy.add(selectedArray->get(i));
                                 mergeCopy.add(selectedArray->get(i));
                             }
 
-                            double bubbleTime = bubbleSort(bubbleCopy, field, order);
+                            double insertionTime = insertionSort(insertionCopy, field, order);
                             double mergeTime = mergeSort(mergeCopy, field, order);
 
                             printSortedTable(mergeCopy, field, "Merge Sort");
-                            printSortComparison(bubbleTime, mergeTime, cityLabel);
+                            printSortComparison(insertionTime, mergeTime, cityLabel);
 
                             // Estimated memory usage
                             size_t arrayStorage = recordCount * sizeof(Resident);
-                            size_t bubbleExtraMemory = sizeof(Resident);
+                            size_t insertionExtraMemory = sizeof(Resident);
                             size_t mergeExtraMemory = recordCount * sizeof(Resident);
 
                             cout << "\n--- Estimated Memory Usage [Array - " << cityLabel << "] ---\n";
@@ -249,8 +249,8 @@ int main() {
                                 << right << setw(20) << arrayStorage
                                 << setw(15) << "O(n)" << "\n";
 
-                            cout << left << setw(30) << "Bubble Sort Extra Memory"
-                                << right << setw(20) << bubbleExtraMemory
+                            cout << left << setw(30) << "Insertion Sort Extra Memory"
+                                << right << setw(20) << insertionExtraMemory
                                 << setw(15) << "O(1)" << "\n";
 
                             cout << left << setw(30) << "Merge Sort Extra Memory"
@@ -338,10 +338,10 @@ int main() {
                         tempBubble.add(cities[i]->get(j));
                         tempMerge.add(cities[i]->get(j));
                     }
-                    double timeBubble = bubbleSort(tempBubble, SORT_BY_EMISSION, ASCENDING);
+                    double timeBubble = insertionSort(tempBubble, SORT_BY_EMISSION, ASCENDING);
                     double timeMerge  = mergeSort (tempMerge,  SORT_BY_EMISSION, ASCENDING);
 
-                    cout << left  << setw(14) << "BubbleSort"
+                    cout << left  << setw(14) << "InsertionSort"
                          << setw(10) << cityNames[i]
                          << right << setw(10) << count
                          << setw(12) << fixed << setprecision(4) << timeBubble << "\n";

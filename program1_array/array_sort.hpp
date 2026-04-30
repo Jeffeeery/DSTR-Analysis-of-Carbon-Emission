@@ -18,9 +18,9 @@ enum SortOrder {
     DESCENDING
 };
 
-// Bubble Sort on ResidentArray
+// Insertion Sort on ResidentArray
 // Returns execution time in milliseconds
-double bubbleSort(ResidentArray& arr, SortField field, SortOrder order = ASCENDING);
+double insertionSort(ResidentArray& arr, SortField field, SortOrder order = ASCENDING);
 
 // Merge Sort on ResidentArray
 // Returns execution time in milliseconds
@@ -29,7 +29,7 @@ double mergeSort(ResidentArray& arr, SortField field, SortOrder order = ASCENDIN
 // Print sorted results as a formatted text table
 void printSortedTable(const ResidentArray& arr, SortField field, const char* algorithm);
 
-// Print comparison of Bubble Sort vs Merge Sort execution times
-void printSortComparison(double bubbleTime, double mergeTime, const char* cityLabel);
+// Print comparison of Insertion Sort vs Merge Sort execution times
+void printSortComparison(double InsertionTime, double mergeTime, const char* cityLabel);
 
 #endif // ARRAY_SORT_HPP
