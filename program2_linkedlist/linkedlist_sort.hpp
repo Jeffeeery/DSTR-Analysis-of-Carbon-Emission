@@ -9,15 +9,15 @@
 // Returns execution time in milliseconds
 double insertionSortLL(ResidentList& list, SortField field, SortOrder order = ASCENDING);
 
-// Selection Sort on ResidentList
+// Merge Sort on ResidentList
 // Returns execution time in milliseconds
-double selectionSortLL(ResidentList& list, SortField field, SortOrder order = ASCENDING);
+double mergeSortLL(ResidentList& list, SortField field, SortOrder order = ASCENDING);
 
 // Print sorted linked list as a formatted text table
 void printSortedTableLL(const ResidentList& list, SortField field, const char* algorithm);
 
-// Print comparison: Insertion Sort vs Selection Sort
-void printSortComparisonLL(double insertTime, double selectTime, const char* cityLabel);
+// Print comparison: Insertion Sort vs Merge Sort
+void printSortComparisonLL(double insertTime, double mergeTime, const char* cityLabel);
 
 // Print Array vs Linked List sort time comparison
 void printCrossStructureComparison(

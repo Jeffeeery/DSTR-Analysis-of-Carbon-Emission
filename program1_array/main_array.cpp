@@ -52,6 +52,13 @@ int main() {
              << "0. Exit\n"
              << "Enter choice: ";
         cin >> choice;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input.\n";
+            choice = -1;
+            continue;
+        }
 
         switch (choice) {
             // Case 1: Display age group categorisation and emission analysis for all cities
@@ -72,6 +79,13 @@ int main() {
                          << "0. Back\n"
                          << "Enter choice: ";
                     cin >> subChoice;
+                    if (cin.fail()) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Invalid input.\n";
+                        subChoice = -1;
+                        continue;
+                    }
                     switch (subChoice) {
                         case 1:
                             printTotalEmissions(arrA.getData(), arrA.size(), "City A");
@@ -104,7 +118,7 @@ int main() {
             }
 
             case 3: {
-                // TODO [WT]: prompt sort field/order, run bubbleSort + mergeSort, print comparison           
+                // TODO [WT]: prompt sort field/order, run insertionSort + mergeSort, print comparison           
                 while (choice != 0) {
                     cout << "\n--- Sorting Experiments: Array ---\n";
                     cout << "Choose Dataset:\n";
@@ -117,6 +131,12 @@ int main() {
 
                     int cityChoice;
                     cin >> cityChoice;
+                    if (cin.fail()) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Invalid input.\n";
+                        continue;
+                    }
 
                     if (cityChoice == 0) {
                         break;
@@ -163,6 +183,12 @@ int main() {
 
                         int fieldChoice;
                         cin >> fieldChoice;
+                        if (cin.fail()) {
+                            cin.clear();
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            cout << "Invalid input.\n";
+                            continue;
+                        }
 
                         if (fieldChoice == 0) {
                             break;
@@ -191,6 +217,12 @@ int main() {
 
                             int orderChoice;
                             cin >> orderChoice;
+                            if (cin.fail()) {
+                                cin.clear();
+                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                                cout << "Invalid input.\n";
+                                continue;
+                            }
 
                             if (orderChoice == 0) {
                                 break;
@@ -220,23 +252,23 @@ int main() {
                             int recordCount = selectedArray->size();
 
                             // Create two copies so both algorithms sort the same original data
-                            ResidentArray bubbleCopy(recordCount);
+                            ResidentArray insertionCopy(recordCount);
                             ResidentArray mergeCopy(recordCount);
 
                             for (int i = 0; i < recordCount; i++) {
-                                bubbleCopy.add(selectedArray->get(i));
+                                insertionCopy.add(selectedArray->get(i));
                                 mergeCopy.add(selectedArray->get(i));
                             }
 
-                            double bubbleTime = bubbleSort(bubbleCopy, field, order);
+                            double insertionTime = insertionSort(insertionCopy, field, order);
                             double mergeTime = mergeSort(mergeCopy, field, order);
 
                             printSortedTable(mergeCopy, field, "Merge Sort");
-                            printSortComparison(bubbleTime, mergeTime, cityLabel);
+                            printSortComparison(insertionTime, mergeTime, cityLabel);
 
                             // Estimated memory usage
                             size_t arrayStorage = recordCount * sizeof(Resident);
-                            size_t bubbleExtraMemory = sizeof(Resident);
+                            size_t insertionExtraMemory = sizeof(Resident);
                             size_t mergeExtraMemory = recordCount * sizeof(Resident);
 
                             cout << "\n--- Estimated Memory Usage [Array - " << cityLabel << "] ---\n";
@@ -249,8 +281,8 @@ int main() {
                                 << right << setw(20) << arrayStorage
                                 << setw(15) << "O(n)" << "\n";
 
-                            cout << left << setw(30) << "Bubble Sort Extra Memory"
-                                << right << setw(20) << bubbleExtraMemory
+                            cout << left << setw(30) << "Insertion Sort Extra Memory"
+                                << right << setw(20) << insertionExtraMemory
                                 << setw(15) << "O(1)" << "\n";
 
                             cout << left << setw(30) << "Merge Sort Extra Memory"
@@ -285,38 +317,77 @@ int main() {
                 }         
             
             case 4: {
-                cout << "\n--- Searching Experiments ---\n";
-                cout << "1. Age Group\n2. Transport Mode\n3. Distance Threshold\nSelect: ";
-                int sChoice;
-                cin >> sChoice;
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                int searchMenu = -1;
+                while (searchMenu != 0) {
+                    cout << "\n--- Searching Experiments ---" << endl;
+                    cout << "1. Search by Age Group" << endl;
+                    cout << "2. Search by Transport Mode" << endl;
+                    cout << "3. Search by Distance Threshold" << endl;
+                    cout << "0. Back" << endl;
+                    cout << "Select: ";
+                    cin >> searchMenu;
+                    if (cin.fail()) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Invalid input.\n";
+                        continue;
+                    }
 
-                string keyword;
-                cout << "Enter search keyword (Case Sensitive, e.g., 'Car' or 'Working Adults (26-45)'): ";
-                getline(cin, keyword);
+                    if (searchMenu == 0) break; // Back function
 
-                SearchCriteria crit = (sChoice == 1) ? SEARCH_BY_AGE_GROUP :
-                                      (sChoice == 2) ? SEARCH_BY_TRANSPORT :
-                                                       SEARCH_BY_DISTANCE_THRESHOLD;
+                    string keyword = "";
+                    SearchCriteria crit;
 
-                // We will create pointers to easily iterate through our cities
-                ResidentArray* cities[] = {&arrA, &arrB, &arrC};
-                const char* cityNames[] = {"City A", "City B", "City C"};
+                    switch (searchMenu) {
+                        case 1: {
+                            cout << "\nSelect Age Group:\n1. Children & Teenagers (6-17)\n2. University Students (18-25)\n"
+                                << "3. Working Adults (Early) (26-45)\n4. Working Adults (Late) (46-60)\n5. Seniors (61-100)\nSelect: ";
+                            int ageChoice; cin >> ageChoice;
+                            if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; continue; }
+                            if (ageChoice == 1) keyword = "Children & Teenagers (6-17)";
+                            else if (ageChoice == 2) keyword = "University Students (18-25)";
+                            else if (ageChoice == 3) keyword = "Working Adults (Early Career) (26-45)";
+                            else if (ageChoice == 4) keyword = "Working Adults (Late Career) (46-60)";
+                            else keyword = "Senior Citizens (61-100)";
+                            crit = SEARCH_BY_AGE_GROUP;
+                            break;
+                        }
+                        case 2: {
+                            cout << "\nSelect Transport:\n1. Car\n2. Bus\n3. Bicycle\n4. Walking\n5. School Bus\n6. Carpool\nSelect: ";
+                            int transChoice;
+                            cin >> transChoice;
+                            if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; continue; }
+                            const char* modes[] = {"", "Car", "Bus", "Bicycle", "Walking", "School Bus", "Carpool"};
+                            if (transChoice >= 1 && transChoice <= 6) {
+                                keyword = modes[transChoice];
+                            }
+                            crit = SEARCH_BY_TRANSPORT;
+                            break;
+                        }
+                        case 3: {
+                            cout << "Enter minimum distance threshold (km): ";
+                            cin >> keyword;
+                            crit = SEARCH_BY_DISTANCE_THRESHOLD;
+                            break;
+                        }
+                        default: continue;
+                    }
 
-                for (int i = 0; i < 3; i++) {
-                    cout << "\n>>> Results for " << cityNames[i] << " <<<";
+                    ResidentArray* cities[] = {&arrA, &arrB, &arrC};
+                    const char* names[] = {"City A", "City B", "City C"};
 
-                    // Run Searches
-                    SearchResult linRes = linearSearch(*cities[i], crit, keyword.c_str());
-                    SearchResult binRes = binarySearch(*cities[i], crit, keyword.c_str());
-
-                    // Display results using your functions
-                    printSearchResults(*cities[i], linRes, crit, keyword.c_str());
-                    printSearchComparison(linRes, binRes);
+                    for (int i = 0; i < 3; i++) {
+                        cout << "\n>>> " << names[i] << " Results <<<";
+                        SearchResult lin = linearSearch(*cities[i], crit, keyword.c_str());
+                        printSearchResults(*cities[i], lin, crit, keyword.c_str());
+                        
+                        // Note: Binary search logic requires comparison with global sort state
+                        SearchResult bin = binarySearch(*cities[i], crit, keyword.c_str());
+                        printSearchComparison(lin, bin);
+                    }
                 }
                 break;
-            }
-            case 5: {
+}            case 5: {
                 ResidentArray* cities[]      = {&arrA, &arrB, &arrC};
                 const char*    cityNames[]   = {"City A", "City B", "City C"};
                 int            recordCounts[] = {countA, countB, countC};
@@ -338,10 +409,10 @@ int main() {
                         tempBubble.add(cities[i]->get(j));
                         tempMerge.add(cities[i]->get(j));
                     }
-                    double timeBubble = bubbleSort(tempBubble, SORT_BY_EMISSION, ASCENDING);
+                    double timeBubble = insertionSort(tempBubble, SORT_BY_EMISSION, ASCENDING);
                     double timeMerge  = mergeSort (tempMerge,  SORT_BY_EMISSION, ASCENDING);
 
-                    cout << left  << setw(14) << "BubbleSort"
+                    cout << left  << setw(14) << "InsertionSort"
                          << setw(10) << cityNames[i]
                          << right << setw(10) << count
                          << setw(12) << fixed << setprecision(4) << timeBubble << "\n";

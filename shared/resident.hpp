@@ -1,5 +1,4 @@
-// Member 1 - [BAN]
-// shared/resident.h - Core data structure shared across both programs
+// Core data structure shared across both programs
 
 #ifndef RESIDENT_HPP
 #define RESIDENT_HPP
@@ -30,4 +29,4 @@ void assignAgeGroup(Resident& r);
 // Compute monthly carbon emission and assign age group
 void computeResident(Resident& r);
 
-#endif // RESIDENT_H
+#endif // RESIDENT_HPP

@@ -1,2 +1,6 @@
 # ignore all .exe program
 *.exe
+
+# compiled binaries (no extension, Linux/macOS style)
+program1_array/main_array
+program2_linkedlist/main_linkedlist

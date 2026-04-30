@@ -1,5 +1,4 @@
 // Carbon emission analysis implementation
-
 #include "analysis.hpp"
 #include <iomanip>
 #include <iostream>

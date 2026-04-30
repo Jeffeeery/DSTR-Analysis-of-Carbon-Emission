@@ -52,6 +52,13 @@ int main() {
              << "0. Exit\n"
              << "Enter choice: ";
         cin >> choice;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input.\n";
+            choice = -1;
+            continue;
+        }
 
         switch (choice) {
             // Case 1: Display age ground categorisation and emission analysis for all cities
@@ -72,6 +79,13 @@ int main() {
                          << "0. Back\n"
                          << "Enter choice: ";
                     cin >> subChoice;
+                    if (cin.fail()) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Invalid input.\n";
+                        subChoice = -1;
+                        continue;
+                    }
                     switch (subChoice) {
                         case 1:
                             printTotalEmissions(listA, "City A");
@@ -104,7 +118,7 @@ int main() {
             }
 
             case 3: {
-                // TODO [WT]: prompt sort field/order, run insertionSortLL + selectionSortLL
+                // TODO [WT]: prompt sort field/order, run insertionSortLL + mergeSortLL
             while (choice != 0) {
                 cout << "\n--- Sorting Experiments: Linked List ---\n";
                 cout << "Choose Dataset:\n";
@@ -118,6 +132,12 @@ int main() {
 
                 int cityChoice;
                 cin >> cityChoice;
+                if (cin.fail()) {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "Invalid input.\n";
+                    continue;
+                }
 
                 if (cityChoice == 0) {
                     break;
@@ -171,6 +191,12 @@ int main() {
 
                     int fieldChoice;
                     cin >> fieldChoice;
+                    if (cin.fail()) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Invalid input.\n";
+                        continue;
+                    }
 
                     if (fieldChoice == 0) {
                         break;
@@ -205,6 +231,12 @@ int main() {
 
                         int orderChoice;
                         cin >> orderChoice;
+                        if (cin.fail()) {
+                            cin.clear();
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            cout << "Invalid input.\n";
+                            continue;
+                        }
 
                         if (orderChoice == 0) {
                             break;
@@ -235,26 +267,26 @@ int main() {
 
                             // Create two copies so both algorithms sort the same original data
                             ResidentList insertionCopy;
-                            ResidentList selectionCopy;
+                            ResidentList mergeCopy;
 
                             Node* current = selectedList->getHead();
 
                             while (current != nullptr) {
                                 insertionCopy.insertAtTail(current->data);
-                                selectionCopy.insertAtTail(current->data);
+                            mergeCopy.insertAtTail(current->data);
                                 current = current->next;
                             }
 
                             double insertTime = insertionSortLL(insertionCopy, field, order);
-                            double selectTime = selectionSortLL(selectionCopy, field, order);
+                            double mergeTime = mergeSortLL(mergeCopy, field, order);
 
-                            printSortedTableLL(insertionCopy, field, "Insertion Sort");
-                            printSortComparisonLL(insertTime, selectTime, cityLabel);
+                            printSortedTableLL(mergeCopy, field, "Merge Sort");
+                            printSortComparisonLL(insertTime, mergeTime, cityLabel);
 
                             // Estimated memory usage
                             size_t linkedListStorage = recordCount * sizeof(Node);
                             size_t insertionExtraMemory = 4 * sizeof(Node*);
-                            size_t selectionExtraMemory = sizeof(Resident) + (3 * sizeof(Node*));
+                            size_t mergeExtraMemory = 3 * sizeof(Node*);
 
                             cout << "\n--- Estimated Memory Usage [Linked List - " << cityLabel << "] ---\n";
                             cout << left << setw(35) << "Item"
@@ -270,21 +302,20 @@ int main() {
                                 << right << setw(20) << insertionExtraMemory
                                 << setw(15) << "O(1)" << "\n";
 
-                            cout << left << setw(35) << "Selection Sort Extra Memory"
-                                << right << setw(20) << selectionExtraMemory
-                                << setw(15) << "O(1)" << "\n";
-
+                            cout << left << setw(35) << "Merge Sort Extra Memory"
+                                << right << setw(20) << mergeExtraMemory
+                                << setw(15) << "O(log n)" << "\n";
                             // Save the sorted result back to the selected linked list
                             selectedList->clear();
 
-                            Node* sortedCurrent = insertionCopy.getHead();
+                            Node* sortedCurrent = mergeCopy.getHead();
 
                             while (sortedCurrent != nullptr) {
                                 selectedList->insertAtTail(sortedCurrent->data);
                                 sortedCurrent = sortedCurrent->next;
                             }
 
-                            cout << "\n" << cityLabel << " has been sorted using Insertion Sort.\n";
+                            cout << "\n" << cityLabel << " has been sorted using Merge Sort.\n";
 
                             if (field == SORT_BY_AGE)
                                 cout << cityLabel << " is now sorted by Age.\n";
@@ -309,39 +340,85 @@ int main() {
         }                       
             
             case 4: {
-                cout << "\n--- Searching Experiments (All Cities - Linked List) ---\n";
-                cout << "1. Age Group\n2. Transport Mode\n3. Distance Threshold\nSelect: ";
-                int sChoice;
-                cin >> sChoice;
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                int searchMenu = -1;
+                while (searchMenu != 0) {
+                    cout << "\n--- Searching Experiments (Linked List) ---" << endl;
+                    cout << "1. Search by Age Group" << endl;
+                    cout << "2. Search by Transport Mode" << endl;
+                    cout << "3. Search by Distance Threshold" << endl;
+                    cout << "0. Back to Main Menu" << endl;
+                    cout << "Select: ";
+                    cin >> searchMenu;
+                    if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; searchMenu = -1; continue; }
 
-                string keyword;
-                cout << "Enter search keyword: ";
-                getline(cin, keyword);
+                    if (searchMenu == 0) break; // Back function
 
-                SearchCriteria crit;
-                if (sChoice == 1) crit = SEARCH_BY_AGE_GROUP;
-                else if (sChoice == 2) crit = SEARCH_BY_TRANSPORT;
-                else crit = SEARCH_BY_DISTANCE_THRESHOLD;
+                    string keyword = "";
+                    SearchCriteria crit;
 
-                // Array of pointers to our 3 lists for easy iteration
-                ResidentList* lists[] = {&listA, &listB, &listC};
-                const char* cityNames[] = {"City A", "City B", "City C"};
+                    switch (searchMenu) {
+                        case 1: {
+                            cout << "\nSelect Age Group:\n"
+                                 << "1. Children & Teenagers (6-17)\n"
+                                 << "2. University Students / Young Adults (18-25)\n"
+                                 << "3. Working Adults (Early Career) (26-45)\n"
+                                 << "4. Working Adults (Late Career) (46-60)\n"
+                                 << "5. Senior Citizens / Retirees (61-100)\n"
+                                 << "Select: ";
+                            int ageChoice; cin >> ageChoice;
+                            if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; continue; }
+                            if (ageChoice == 1) keyword = "6-17";
+                            else if (ageChoice == 2) keyword = "18-25";
+                            else if (ageChoice == 3) keyword = "26-45";
+                            else if (ageChoice == 4) keyword = "46-60";
+                            else keyword = "61-100";
+                            crit = SEARCH_BY_AGE_GROUP;
+                            break;
+                        }
+                        case 2: {
+                            // City A, B, and C combined transport modes
+                            cout << "\nSelect Transport Mode:\n"
+                                 << "1. Car\n2. Bus\n3. Bicycle\n4. Walking\n5. School Bus\n6. Carpool\n"
+                                 << "Select: ";
+                            int transChoice; cin >> transChoice;
+                            if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; continue; }
+                            const char* modes[] = {"", "Car", "Bus", "Bicycle", "Walking", "School Bus", "Carpool"};
+                            if (transChoice >= 1 && transChoice <= 6) keyword = modes[transChoice];
+                            crit = SEARCH_BY_TRANSPORT;
+                            break;
+                        }
+                        case 3: {
+                            cout << "Enter minimum daily distance (km) threshold: ";
+                            cin >> keyword;
+                            crit = SEARCH_BY_DISTANCE_THRESHOLD;
+                            break;
+                        }
+                        default: 
+                            cout << "Invalid selection." << endl;
+                            continue;
+                    }
 
-                for (int i = 0; i < 3; i++) {
-                    cout << "\n>>> Searching " << cityNames[i] << " <<<";
+                    ResidentList* lists[] = {&listA, &listB, &listC};
+                    const char* names[] = {"City A", "City B", "City C"};
 
-                    // Run Linear Search
-                    SearchResult linRes = linearSearchLL(*lists[i], crit, keyword.c_str());
+                    for (int i = 0; i < 3; i++) {
+                        cout << "\n>>> " << names[i] << " Results (Linked List) <<<";
+                        
+                        // Run Linear Search
+                        SearchResult linRes = linearSearchLL(*lists[i], crit, keyword.c_str());
+                        
+                        // Run Ordered Search (Member 4 Task)
+                        cout << "\n(Ordered Search assumes data was sorted by Member 3)\n";
+                        SearchResult ordRes = orderedSearchLL(*lists[i], crit, keyword.c_str());
 
-                    // Run Ordered Traversal Search
-                    cout << "\nNote: Ordered Search results only valid if " << cityNames[i]
-                         << " was sorted by this field in Option 3.\n";
-                    SearchResult ordRes = orderedSearchLL(*lists[i], crit, keyword.c_str());
+                        // Show Results and Performance Comparison[cite: 4]
+                        printSearchResultsLL(*lists[i], linRes, crit, keyword.c_str());
+                        printSearchComparisonLL(linRes, ordRes);
 
-                    // Show Results and Performance Comparison
-                    printSearchResultsLL(*lists[i], linRes, crit, keyword.c_str());
-                    printSearchComparisonLL(linRes, ordRes);
+                        // CRITICAL: Cleanup memory if indices were heap-allocated
+                        // delete[] linRes.indices; 
+                        // delete[] ordRes.indices;
+                    }
                 }
                 break;
             }
@@ -362,22 +439,22 @@ int main() {
 
                 for (int i = 0; i < 3; i++) {
                     int count = recordCounts[i];
-                    ResidentList tempInsertion, tempSelection;
+                    ResidentList tempInsertion, tempMerge;
                     for (Node* current = lists[i]->getHead(); current != nullptr; current = current->next) {
                         tempInsertion.insertAtTail(current->data);
-                        tempSelection.insertAtTail(current->data);
+                        tempMerge.insertAtTail(current->data);
                     }
                     double timeInsertion = insertionSortLL(tempInsertion, SORT_BY_EMISSION, ASCENDING);
-                    double timeSelection = selectionSortLL(tempSelection, SORT_BY_EMISSION, ASCENDING);
+                    double timeMerge = mergeSortLL(tempMerge, SORT_BY_EMISSION, ASCENDING);
 
                     cout << left  << setw(16) << "InsertionSort"
                          << setw(10) << cityNames[i]
                          << right << setw(10) << count
                          << setw(12) << fixed << setprecision(4) << timeInsertion << "\n";
-                    cout << left  << setw(16) << "SelectionSort"
+                    cout << left  << setw(16) << "MergeSort"
                          << setw(10) << cityNames[i]
                          << right << setw(10) << count
-                         << setw(12) << fixed << setprecision(4) << timeSelection << "\n";
+                         << setw(12) << fixed << setprecision(4) << timeMerge << "\n";
                 }
 
                 // ----- Search Benchmarks -----
