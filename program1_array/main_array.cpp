@@ -104,7 +104,7 @@ int main() {
             }
 
             case 3: {
-                // TODO [WT]: prompt sort field/order, run bubbleSort + mergeSort, print comparison           
+                // TODO [WT]: prompt sort field/order, run insertionSort + mergeSort, print comparison           
                 while (choice != 0) {
                     cout << "\n--- Sorting Experiments: Array ---\n";
                     cout << "Choose Dataset:\n";
