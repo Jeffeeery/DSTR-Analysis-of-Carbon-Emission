@@ -397,7 +397,7 @@ void compareAllCitiesByAgeGroup(
 
 // LINKED LIST
 
-void analyzeByAgeGroup(const ResidentList &list, const char *cityLabel)
+void analyzeByAgeGroup_list(const ResidentList &list, const char *cityLabel)
 {
 
     const char *ageGroups[] = {
@@ -479,7 +479,7 @@ void analyzeByAgeGroup(const ResidentList &list, const char *cityLabel)
     }
 }
 
-void printTotalEmissions(const ResidentList &list, const char *cityLabel)
+void printTotalEmissions_list(const ResidentList &list, const char *cityLabel)
 {
     double total = 0.0;
 
@@ -496,7 +496,7 @@ void printTotalEmissions(const ResidentList &list, const char *cityLabel)
     cout << "Total : " << fixed << setprecision(2) << total << " kg CO2\n";
 }
 
-void printEmissionsByTransport(const ResidentList &list, const char *cityLabel)
+void printEmissionsByTransport_list(const ResidentList &list, const char *cityLabel)
 {
 
     char modes[6][30];
@@ -570,7 +570,7 @@ void printEmissionsByTransport(const ResidentList &list, const char *cityLabel)
     }
 }
 
-void printEmissionsByAgeGroup(const ResidentList &list, const char *cityLabel)
+void printEmissionsByAgeGroup_list(const ResidentList &list, const char *cityLabel)
 {
 
     const char *ageGroups[] = {
@@ -676,7 +676,7 @@ void printEmissionsByAgeGroup(const ResidentList &list, const char *cityLabel)
     }
 }
 
-void compareAllCities(
+void compareAllCities_list(
     const ResidentList &listA,
     const ResidentList &listB,
     const ResidentList &listC)
@@ -744,7 +744,7 @@ void compareAllCities(
          << setw(20) << fixed << setprecision(2) << overallAvg << "\n";
 }
 
-void compareAllCitiesByAgeGroup(
+void compareAllCitiesByAgeGroup_list(
     const ResidentList &listA,
     const ResidentList &listB,
     const ResidentList &listC)

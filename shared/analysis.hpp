@@ -48,12 +48,12 @@ void compareAllCitiesByAgeGroup(
 );
 
 // Linked List versions — declared separately
-void analyzeByAgeGroup(const ResidentList& list, const char* cityLabel);
-void printTotalEmissions(const ResidentList& list, const char* cityLabel);
-void printEmissionsByTransport(const ResidentList& list, const char* cityLabel);
-void printEmissionsByAgeGroup(const ResidentList& list, const char* cityLabel);
-void compareAllCities(const ResidentList& listA, const ResidentList& listB, const ResidentList& listC);
-void compareAllCitiesByAgeGroup(const ResidentList& listA, const ResidentList& listB, const ResidentList& listC);
+void analyzeByAgeGroup_list(const ResidentList& list, const char* cityLabel);
+void printTotalEmissions_list(const ResidentList& list, const char* cityLabel);
+void printEmissionsByTransport_list(const ResidentList& list, const char* cityLabel);
+void printEmissionsByAgeGroup_list(const ResidentList& list, const char* cityLabel);
+void compareAllCities_list(const ResidentList& listA, const ResidentList& listB, const ResidentList& listC);
+void compareAllCitiesByAgeGroup_list(const ResidentList& listA, const ResidentList& listB, const ResidentList& listC);
 
 
 #endif // ANALYSIS_HPP

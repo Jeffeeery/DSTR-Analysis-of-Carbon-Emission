@@ -18,11 +18,11 @@ g++ -std=c++11 ^
     program1_array/arraylist.cpp ^
     program1_array/array_sort.cpp ^
     program1_array/array_search.cpp ^
-    program2_linkedlist/linkedlist.cpp ^
     shared/csvloader.cpp ^
     shared/analysis.cpp ^
     shared/resident.cpp ^
     shared/performance.cpp ^
+    program2_linkedlist/linkedlist.cpp ^
     -o program1.exe
 
 if %ERRORLEVEL% EQU 0 (
