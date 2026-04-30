@@ -105,6 +105,99 @@ double selectionSortLL(ResidentList& list, SortField field, SortOrder order) {
     return elapsed.count();
 }
 
+static void splitList(Node* source, Node*& front, Node*& back) {
+    if (source == nullptr || source->next == nullptr) {
+        front = source;
+        back = nullptr;
+        return;
+    }
+
+    Node* slow = source;
+    Node* fast = source->next;
+
+    while (fast != nullptr) {
+        fast = fast->next;
+
+        if (fast != nullptr) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+    }
+
+    front = source;
+    back = slow->next;
+    slow->next = nullptr;
+}
+
+static Node* mergeSortedLists(Node* first, Node* second, SortField field, SortOrder order) {
+    Node* resultHead = nullptr;
+    Node* resultTail = nullptr;
+
+    while (first != nullptr && second != nullptr) {
+        Node* selected = nullptr;
+
+        if (!comesBefore(second, first, field, order)) {
+            selected = first;
+            first = first->next;
+        } else {
+            selected = second;
+            second = second->next;
+        }
+
+        selected->next = nullptr;
+
+        if (resultHead == nullptr) {
+            resultHead = selected;
+            resultTail = selected;
+        } else {
+            resultTail->next = selected;
+            resultTail = selected;
+        }
+    }
+
+    Node* remaining = nullptr;
+
+    if (first != nullptr)
+        remaining = first;
+    else
+        remaining = second;
+
+    if (resultHead == nullptr) {
+        resultHead = remaining;
+    } else {
+        resultTail->next = remaining;
+    }
+
+    return resultHead;
+}
+
+static Node* mergeSortNodes(Node* head, SortField field, SortOrder order) {
+    if (head == nullptr || head->next == nullptr) {
+        return head;
+    }
+
+    Node* firstHalf = nullptr;
+    Node* secondHalf = nullptr;
+
+    splitList(head, firstHalf, secondHalf);
+
+    firstHalf = mergeSortNodes(firstHalf, field, order);
+    secondHalf = mergeSortNodes(secondHalf, field, order);
+
+    return mergeSortedLists(firstHalf, secondHalf, field, order);
+}
+
+double mergeSortLL(ResidentList& list, SortField field, SortOrder order) {
+    auto start = high_resolution_clock::now();
+
+    Node* sortedHead = mergeSortNodes(list.getHead(), field, order);
+    list.setHead(sortedHead);
+
+    auto end = high_resolution_clock::now();
+    duration<double, milli> elapsed = end - start;
+    return elapsed.count();
+}
+
 void printSortedTableLL(const ResidentList& list, SortField field, const char* algorithm) {
     cout << "\n--- Sorted Results: " << algorithm
          << " by " << getFieldNameLL(field) << " ---\n";
@@ -138,17 +231,17 @@ void printSortedTableLL(const ResidentList& list, SortField field, const char* a
     }
 }
 
-void printSortComparisonLL(double insertTime, double selectTime, const char* cityLabel) {
+void printSortComparisonLL(double insertTime, double mergeTime, const char* cityLabel) {
     cout << "\n--- Linked List Sort Performance [" << cityLabel << "] ---\n";
     cout << left  << setw(25) << "Algorithm"
          << right << setw(15) << "Time (ms)" << "\n";
-    cout << setfill('-') << setw(40) << "" << setfill(' ') << "\n";
+    cout << string(40, '-') << "\n";
 
     cout << left  << setw(25) << "Insertion Sort"
          << right << setw(15) << fixed << setprecision(4) << insertTime << "\n";
 
-    cout << left  << setw(25) << "Selection Sort"
-         << right << setw(15) << fixed << setprecision(4) << selectTime << "\n";
+    cout << left  << setw(25) << "Merge Sort"
+         << right << setw(15) << fixed << setprecision(4) << mergeTime << "\n";
 }
 
 void printCrossStructureComparison(

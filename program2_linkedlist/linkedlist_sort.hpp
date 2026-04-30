@@ -9,6 +9,10 @@
 // Returns execution time in milliseconds
 double insertionSortLL(ResidentList& list, SortField field, SortOrder order = ASCENDING);
 
+// Merge Sort on ResidentList
+// Returns execution time in milliseconds
+double mergeSortLL(ResidentList& list, SortField field, SortOrder order = ASCENDING);
+
 // Selection Sort on ResidentList
 // Returns execution time in milliseconds
 double selectionSortLL(ResidentList& list, SortField field, SortOrder order = ASCENDING);

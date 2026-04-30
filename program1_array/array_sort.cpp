@@ -63,6 +63,28 @@ double bubbleSort(ResidentArray& arr, SortField field, SortOrder order) {
     return elapsed.count();
 }
 
+double insertionSort(ResidentArray& arr, SortField field, SortOrder order) {
+    auto start = high_resolution_clock::now();
+
+    int n = arr.size();
+
+    for (int i = 1; i < n; i++) {
+        Resident key = arr.get(i);
+        int j = i - 1;
+
+        while (j >= 0 && compare(key, arr.get(j), field, order)) {
+            arr.get(j + 1) = arr.get(j);
+            j--;
+        }
+
+        arr.get(j + 1) = key;
+    }
+
+    auto end = high_resolution_clock::now();
+    duration<double, milli> elapsed = end - start;
+    return elapsed.count();
+}
+
 // Merge Sort helper: merge two halves into a temp buffer then copy back
 static void merge(ResidentArray& arr, int left, int mid, int right, SortField field, SortOrder order) {
     int leftSize = mid - left + 1;
@@ -166,7 +188,7 @@ void printSortComparison(double bubbleTime, double mergeTime, const char* cityLa
          << right << setw(15) << "Time (ms)" << "\n";
     cout << string(35, '-') << "\n";
 
-    cout << left  << setw(20) << "Bubble Sort"
+    cout << left  << setw(20) << "Insertion Sort"
          << right << setw(15) << fixed << setprecision(4) << bubbleTime << "\n";
 
     cout << left  << setw(20) << "Merge Sort"

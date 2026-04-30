@@ -22,6 +22,10 @@ enum SortOrder {
 // Returns execution time in milliseconds
 double bubbleSort(ResidentArray& arr, SortField field, SortOrder order = ASCENDING);
 
+// Insertion Sort on ResidentArray
+// Returns execution time in milliseconds
+double insertionSort(ResidentArray& arr, SortField field, SortOrder order = ASCENDING);
+
 // Merge Sort on ResidentArray
 // Returns execution time in milliseconds
 double mergeSort(ResidentArray& arr, SortField field, SortOrder order = ASCENDING);

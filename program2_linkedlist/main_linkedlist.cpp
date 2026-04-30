@@ -235,26 +235,26 @@ int main() {
 
                             // Create two copies so both algorithms sort the same original data
                             ResidentList insertionCopy;
-                            ResidentList selectionCopy;
+                            ResidentList mergeCopy;
 
                             Node* current = selectedList->getHead();
 
                             while (current != nullptr) {
                                 insertionCopy.insertAtTail(current->data);
-                                selectionCopy.insertAtTail(current->data);
+                            mergeCopy.insertAtTail(current->data);
                                 current = current->next;
                             }
 
                             double insertTime = insertionSortLL(insertionCopy, field, order);
-                            double selectTime = selectionSortLL(selectionCopy, field, order);
+                            double mergeTime = mergeSortLL(mergeCopy, field, order);
 
-                            printSortedTableLL(insertionCopy, field, "Insertion Sort");
-                            printSortComparisonLL(insertTime, selectTime, cityLabel);
+                            printSortedTableLL(mergeCopy, field, "Merge Sort");
+                            printSortComparisonLL(insertTime, mergeTime, cityLabel);
 
                             // Estimated memory usage
                             size_t linkedListStorage = recordCount * sizeof(Node);
                             size_t insertionExtraMemory = 4 * sizeof(Node*);
-                            size_t selectionExtraMemory = sizeof(Resident) + (3 * sizeof(Node*));
+                            size_t mergeExtraMemory = 3 * sizeof(Node*);
 
                             cout << "\n--- Estimated Memory Usage [Linked List - " << cityLabel << "] ---\n";
                             cout << left << setw(35) << "Item"
@@ -270,21 +270,20 @@ int main() {
                                 << right << setw(20) << insertionExtraMemory
                                 << setw(15) << "O(1)" << "\n";
 
-                            cout << left << setw(35) << "Selection Sort Extra Memory"
-                                << right << setw(20) << selectionExtraMemory
-                                << setw(15) << "O(1)" << "\n";
-
+                            cout << left << setw(35) << "Merge Sort Extra Memory"
+                                << right << setw(20) << mergeExtraMemory
+                                << setw(15) << "O(log n)" << "\n";
                             // Save the sorted result back to the selected linked list
                             selectedList->clear();
 
-                            Node* sortedCurrent = insertionCopy.getHead();
+                            Node* sortedCurrent = mergeCopy.getHead();
 
                             while (sortedCurrent != nullptr) {
                                 selectedList->insertAtTail(sortedCurrent->data);
                                 sortedCurrent = sortedCurrent->next;
                             }
 
-                            cout << "\n" << cityLabel << " has been sorted using Insertion Sort.\n";
+                            cout << "\n" << cityLabel << " has been sorted using Merge Sort.\n";
 
                             if (field == SORT_BY_AGE)
                                 cout << cityLabel << " is now sorted by Age.\n";
