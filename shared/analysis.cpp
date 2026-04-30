@@ -1,5 +1,4 @@
 // Carbon emission analysis implementation
-
 #include "analysis.hpp"
 #include <iomanip>
 #include <iostream>
@@ -15,8 +14,6 @@ static void copyStr(char* dst, size_t cap, const string& src) {
 }
 
 void analyzeByAgeGroup(const Resident* arr, int count, const char* cityLabel) {
-
-
     const char* ageGroups[] = {
         AGE_GROUP_1,   // Children/Teens (6-17)
         AGE_GROUP_2,   // Young Adults (18-25)
