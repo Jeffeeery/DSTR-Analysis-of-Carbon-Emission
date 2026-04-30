@@ -340,39 +340,82 @@ int main() {
         }                       
             
             case 4: {
-                cout << "\n--- Searching Experiments (All Cities - Linked List) ---\n";
-                cout << "1. Age Group\n2. Transport Mode\n3. Distance Threshold\nSelect: ";
-                int sChoice;
-                cin >> sChoice;
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                int searchMenu = -1;
+                while (searchMenu != 0) {
+                    cout << "\n--- Searching Experiments (Linked List) ---" << endl;
+                    cout << "1. Search by Age Group" << endl;
+                    cout << "2. Search by Transport Mode" << endl;
+                    cout << "3. Search by Distance Threshold" << endl;
+                    cout << "0. Back to Main Menu" << endl;
+                    cout << "Select: ";
+                    cin >> searchMenu;
 
-                string keyword;
-                cout << "Enter search keyword: ";
-                getline(cin, keyword);
+                    if (searchMenu == 0) break; // Back function
 
-                SearchCriteria crit;
-                if (sChoice == 1) crit = SEARCH_BY_AGE_GROUP;
-                else if (sChoice == 2) crit = SEARCH_BY_TRANSPORT;
-                else crit = SEARCH_BY_DISTANCE_THRESHOLD;
+                    string keyword = "";
+                    SearchCriteria crit;
 
-                // Array of pointers to our 3 lists for easy iteration
-                ResidentList* lists[] = {&listA, &listB, &listC};
-                const char* cityNames[] = {"City A", "City B", "City C"};
+                    switch (searchMenu) {
+                        case 1: {
+                            cout << "\nSelect Age Group:\n"
+                                 << "1. Children & Teenagers (6-17)\n"
+                                 << "2. University Students / Young Adults (18-25)\n"
+                                 << "3. Working Adults (Early Career) (26-45)\n"
+                                 << "4. Working Adults (Late Career) (46-60)\n"
+                                 << "5. Senior Citizens / Retirees (61-100)\n"
+                                 << "Select: ";
+                            int ageChoice; cin >> ageChoice;
+                            if (ageChoice == 1) keyword = "6-17";
+                            else if (ageChoice == 2) keyword = "18-25";
+                            else if (ageChoice == 3) keyword = "26-45";
+                            else if (ageChoice == 4) keyword = "46-60";
+                            else keyword = "61-100";
+                            crit = SEARCH_BY_AGE_GROUP;
+                            break;
+                        }
+                        case 2: {
+                            // City A, B, and C combined transport modes
+                            cout << "\nSelect Transport Mode:\n"
+                                 << "1. Car\n2. Bus\n3. Bicycle\n4. Walking\n5. School Bus\n6. Carpool\n"
+                                 << "Select: ";
+                            int transChoice; cin >> transChoice;
+                            const char* modes[] = {"", "Car", "Bus", "Bicycle", "Walking", "School Bus", "Carpool"};
+                            if (transChoice >= 1 && transChoice <= 6) keyword = modes[transChoice];
+                            crit = SEARCH_BY_TRANSPORT;
+                            break;
+                        }
+                        case 3: {
+                            cout << "Enter minimum daily distance (km) threshold: ";
+                            cin >> keyword;
+                            crit = SEARCH_BY_DISTANCE_THRESHOLD;
+                            break;
+                        }
+                        default: 
+                            cout << "Invalid selection." << endl;
+                            continue;
+                    }
 
-                for (int i = 0; i < 3; i++) {
-                    cout << "\n>>> Searching " << cityNames[i] << " <<<";
+                    ResidentList* lists[] = {&listA, &listB, &listC};
+                    const char* names[] = {"City A", "City B", "City C"};
 
-                    // Run Linear Search
-                    SearchResult linRes = linearSearchLL(*lists[i], crit, keyword.c_str());
+                    for (int i = 0; i < 3; i++) {
+                        cout << "\n>>> " << names[i] << " Results (Linked List) <<<";
+                        
+                        // Run Linear Search
+                        SearchResult linRes = linearSearchLL(*lists[i], crit, keyword.c_str());
+                        
+                        // Run Ordered Search (Member 4 Task)
+                        cout << "\n(Ordered Search assumes data was sorted by Member 3)\n";
+                        SearchResult ordRes = orderedSearchLL(*lists[i], crit, keyword.c_str());
 
-                    // Run Ordered Traversal Search
-                    cout << "\nNote: Ordered Search results only valid if " << cityNames[i]
-                         << " was sorted by this field in Option 3.\n";
-                    SearchResult ordRes = orderedSearchLL(*lists[i], crit, keyword.c_str());
+                        // Show Results and Performance Comparison[cite: 4]
+                        printSearchResultsLL(*lists[i], linRes, crit, keyword.c_str());
+                        printSearchComparisonLL(linRes, ordRes);
 
-                    // Show Results and Performance Comparison
-                    printSearchResultsLL(*lists[i], linRes, crit, keyword.c_str());
-                    printSearchComparisonLL(linRes, ordRes);
+                        // CRITICAL: Cleanup memory if indices were heap-allocated
+                        // delete[] linRes.indices; 
+                        // delete[] ordRes.indices;
+                    }
                 }
                 break;
             }
