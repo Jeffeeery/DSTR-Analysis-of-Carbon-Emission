@@ -343,6 +343,7 @@ int main() {
                             cout << "\nSelect Age Group:\n1. Children & Teenagers (6-17)\n2. University Students (18-25)\n"
                                 << "3. Working Adults (Early) (26-45)\n4. Working Adults (Late) (46-60)\n5. Seniors (61-100)\nSelect: ";
                             int ageChoice; cin >> ageChoice;
+                            if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; continue; }
                             if (ageChoice == 1) keyword = "Children & Teenagers (6-17)";
                             else if (ageChoice == 2) keyword = "University Students (18-25)";
                             else if (ageChoice == 3) keyword = "Working Adults (Early Career) (26-45)";
@@ -353,8 +354,9 @@ int main() {
                         }
                         case 2: {
                             cout << "\nSelect Transport:\n1. Car\n2. Bus\n3. Bicycle\n4. Walking\n5. School Bus\n6. Carpool\nSelect: ";
-                            int transChoice; 
-                            cin >> transChoice; // Use transChoice consistently
+                            int transChoice;
+                            cin >> transChoice;
+                            if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; continue; }
                             const char* modes[] = {"", "Car", "Bus", "Bicycle", "Walking", "School Bus", "Carpool"};
                             if (transChoice >= 1 && transChoice <= 6) {
                                 keyword = modes[transChoice];

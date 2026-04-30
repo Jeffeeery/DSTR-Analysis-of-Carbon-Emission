@@ -349,6 +349,7 @@ int main() {
                     cout << "0. Back to Main Menu" << endl;
                     cout << "Select: ";
                     cin >> searchMenu;
+                    if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; searchMenu = -1; continue; }
 
                     if (searchMenu == 0) break; // Back function
 
@@ -365,6 +366,7 @@ int main() {
                                  << "5. Senior Citizens / Retirees (61-100)\n"
                                  << "Select: ";
                             int ageChoice; cin >> ageChoice;
+                            if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; continue; }
                             if (ageChoice == 1) keyword = "6-17";
                             else if (ageChoice == 2) keyword = "18-25";
                             else if (ageChoice == 3) keyword = "26-45";
@@ -379,6 +381,7 @@ int main() {
                                  << "1. Car\n2. Bus\n3. Bicycle\n4. Walking\n5. School Bus\n6. Carpool\n"
                                  << "Select: ";
                             int transChoice; cin >> transChoice;
+                            if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; continue; }
                             const char* modes[] = {"", "Car", "Bus", "Bicycle", "Walking", "School Bus", "Carpool"};
                             if (transChoice >= 1 && transChoice <= 6) keyword = modes[transChoice];
                             crit = SEARCH_BY_TRANSPORT;
