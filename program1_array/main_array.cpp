@@ -52,6 +52,13 @@ int main() {
              << "0. Exit\n"
              << "Enter choice: ";
         cin >> choice;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input.\n";
+            choice = -1;
+            continue;
+        }
 
         switch (choice) {
             // Case 1: Display age group categorisation and emission analysis for all cities
@@ -72,6 +79,13 @@ int main() {
                          << "0. Back\n"
                          << "Enter choice: ";
                     cin >> subChoice;
+                    if (cin.fail()) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Invalid input.\n";
+                        subChoice = -1;
+                        continue;
+                    }
                     switch (subChoice) {
                         case 1:
                             printTotalEmissions(rawA, countA, "City A");
@@ -117,6 +131,12 @@ int main() {
 
                     int cityChoice;
                     cin >> cityChoice;
+                    if (cin.fail()) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Invalid input.\n";
+                        continue;
+                    }
 
                     if (cityChoice == 0) {
                         break;
@@ -163,6 +183,12 @@ int main() {
 
                         int fieldChoice;
                         cin >> fieldChoice;
+                        if (cin.fail()) {
+                            cin.clear();
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            cout << "Invalid input.\n";
+                            continue;
+                        }
 
                         if (fieldChoice == 0) {
                             break;
@@ -191,6 +217,12 @@ int main() {
 
                             int orderChoice;
                             cin >> orderChoice;
+                            if (cin.fail()) {
+                                cin.clear();
+                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                                cout << "Invalid input.\n";
+                                continue;
+                            }
 
                             if (orderChoice == 0) {
                                 break;
@@ -289,6 +321,12 @@ int main() {
                 cout << "1. Age Group\n2. Transport Mode\n3. Distance Threshold\nSelect: ";
                 int sChoice;
                 cin >> sChoice;
+                if (cin.fail()) {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "Invalid input.\n";
+                    break;
+                }
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
                 string keyword;
