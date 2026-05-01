@@ -231,10 +231,7 @@ void printEmissionsByAgeGroup(const Resident* arr, int count, const char* cityLa
     }
 }
 
-void compareAllCities(
-    const Resident* cityA, int countA,
-    const Resident* cityB, int countB,
-    const Resident* cityC, int countC
+void compareAllCities(const Resident* cityA, int countA,const Resident* cityB, int countB, const Resident* cityC, int countC
 ) {
     // Safety check
     if (!cityA || !cityB || !cityC || countA <= 0 || countB <= 0 || countC <= 0) {
@@ -298,10 +295,7 @@ void compareAllCities(
          << setw(20) << fixed << setprecision(2) << overallAvg << "\n";
 }
 
-void compareAllCitiesByAgeGroup(
-    const Resident* cityA, int countA,
-    const Resident* cityB, int countB,
-    const Resident* cityC, int countC
+void compareAllCitiesByAgeGroup( const Resident* cityA, int countA, const Resident* cityB, int countB, const Resident* cityC, int countC
 ) {
     const char* ageGroups[] = {
         AGE_GROUP_1, AGE_GROUP_2, AGE_GROUP_3, AGE_GROUP_4, AGE_GROUP_5
@@ -333,6 +327,237 @@ void compareAllCitiesByAgeGroup(
 
         cout << left
              << setw(30) << ageGroups[grpNum]
+             << setw(20) << fixed << setprecision(2) << totalA
+             << setw(20) << fixed << setprecision(2) << totalB
+             << setw(20) << fixed << setprecision(2) << totalC << "\n";
+    }
+    for (int i = 0; i < 90; i++) cout << '-'; cout << "\n";
+}
+
+// -------------------------------------------------------
+// LINKED LIST versions
+// -------------------------------------------------------
+
+double calculateAverageEmission(double totalEmission, int residentCount) {
+    if (residentCount > 0)
+        return totalEmission / residentCount;
+    return 0.0;
+}
+
+void analyzeByAgeGroup_list(const ResidentList &list, const char *cityLabel)
+{
+    const char *ageGroups[] = {
+        AGE_GROUP_1, AGE_GROUP_2, AGE_GROUP_3, AGE_GROUP_4
+    };
+
+    cout << "\n========================================\n";
+    cout << "  Age Group Analysis: " << cityLabel << "\n";
+    cout << "========================================\n";
+
+    for (int grpNum = 0; grpNum < 4; grpNum++)
+    {
+        double totalEmission = 0.0;
+        int grpCount = 0;
+        char modes[6][30];
+        int modeFreq[6];
+        int modeCount = 0;
+
+        for (int x = 0; x < 6; x++) modeFreq[x] = 0;
+
+        Node *current = list.getHead();
+        while (current != nullptr)
+        {
+            if (string(current->data.ageGroup) != ageGroups[grpNum]) { current = current->next; continue; }
+            grpCount++;
+            totalEmission += current->data.monthlyEmission;
+            bool modeExists = false;
+            for (int m = 0; m < modeCount; m++) {
+                if (string(modes[m]) == current->data.transportMode) { modeFreq[m]++; modeExists = true; break; }
+            }
+            if (!modeExists && modeCount < 6) {
+                copyStr(modes[modeCount], sizeof(modes[modeCount]), current->data.transportMode);
+                modeFreq[modeCount] = 1;
+                modeCount++;
+            }
+            current = current->next;
+        }
+
+        char topMode[30] = "N/A";
+        int highestFreq = 0;
+        for (int m = 0; m < modeCount; m++) {
+            if (modeFreq[m] > highestFreq) { highestFreq = modeFreq[m]; copyStr(topMode, sizeof(topMode), modes[m]); }
+        }
+        double avg = (grpCount > 0) ? totalEmission / grpCount : 0.0;
+
+        cout << "\nAge Group : " << ageGroups[grpNum] << "\n";
+        cout << "Residents : " << grpCount << "\n";
+        cout << "Top Mode  : " << topMode << "\n";
+        cout << "Total CO2 : " << fixed << setprecision(2) << totalEmission << " kg\n";
+        cout << "Avg CO2   : " << fixed << setprecision(2) << avg << " kg per resident\n";
+        cout << "----------------------------------------\n";
+    }
+}
+
+void printTotalEmissions_list(const ResidentList &list, const char *cityLabel)
+{
+    double total = 0.0;
+    Node *current = list.getHead();
+    while (current != nullptr) { total += current->data.monthlyEmission; current = current->next; }
+    cout << "\n--- Total Emissions: " << cityLabel << " ---\n";
+    cout << "City  : " << cityLabel << "\n";
+    cout << "Total : " << fixed << setprecision(2) << total << " kg CO2\n";
+}
+
+void printEmissionsByTransport_list(const ResidentList &list, const char *cityLabel)
+{
+    char modes[6][30];
+    double modeEmission[6];
+    int modeResidents[6];
+    int modeCount = 0;
+
+    for (int x = 0; x < 6; x++) { modeEmission[x] = 0.0; modeResidents[x] = 0; }
+
+    Node *current = list.getHead();
+    while (current != nullptr)
+    {
+        bool modeExists = false;
+        for (int m = 0; m < modeCount; m++) {
+            if (string(modes[m]) == current->data.transportMode) {
+                modeEmission[m] += current->data.monthlyEmission; modeResidents[m]++; modeExists = true; break;
+            }
+        }
+        if (!modeExists && modeCount < 6) {
+            copyStr(modes[modeCount], sizeof(modes[modeCount]), current->data.transportMode);
+            modeEmission[modeCount] = current->data.monthlyEmission;
+            modeResidents[modeCount] = 1;
+            modeCount++;
+        }
+        current = current->next;
+    }
+
+    cout << "\n--- Emissions by Transport: " << cityLabel << " ---\n";
+    cout << left << setw(20) << "Mode" << setw(10) << "Count" << setw(20) << "Total (kg CO2)" << setw(20) << "Avg per Resident" << "\n";
+    cout << left << setw(20) << "----" << setw(10) << "-----" << setw(20) << "--------------" << setw(20) << "----------------" << "\n";
+    for (int m = 0; m < modeCount; m++) {
+        double avg = (modeResidents[m] > 0) ? modeEmission[m] / modeResidents[m] : 0.0;
+        cout << left << setw(20) << modes[m] << setw(10) << modeResidents[m]
+             << setw(20) << fixed << setprecision(2) << modeEmission[m]
+             << setw(20) << fixed << setprecision(2) << avg << "\n";
+    }
+}
+
+void printEmissionsByAgeGroup_list(const ResidentList &list, const char *cityLabel)
+{
+    const char *ageGroups[] = { AGE_GROUP_1, AGE_GROUP_2, AGE_GROUP_3, AGE_GROUP_4 };
+    const int NUM_GROUPS = 4;
+
+    cout << "\n========================================\n";
+    cout << "  Emissions by Age Group: " << cityLabel << "\n";
+    cout << "========================================\n";
+
+    for (int grpNum = 0; grpNum < NUM_GROUPS; grpNum++)
+    {
+        double totalEmission = 0.0;
+        int grpCount = 0;
+        char modes[6][30];
+        double modeEmission[6];
+        int modeResidents[6];
+        int modeCount = 0;
+
+        for (int x = 0; x < 6; x++) { modeEmission[x] = 0.0; modeResidents[x] = 0; }
+
+        Node *current = list.getHead();
+        while (current != nullptr)
+        {
+            if (string(current->data.ageGroup) != ageGroups[grpNum]) { current = current->next; continue; }
+            grpCount++;
+            totalEmission += current->data.monthlyEmission;
+            bool modeExists = false;
+            for (int m = 0; m < modeCount; m++) {
+                if (string(modes[m]) == current->data.transportMode) {
+                    modeEmission[m] += current->data.monthlyEmission; modeResidents[m]++; modeExists = true; break;
+                }
+            }
+            if (!modeExists && modeCount < 6) {
+                copyStr(modes[modeCount], sizeof(modes[modeCount]), current->data.transportMode);
+                modeEmission[modeCount] = current->data.monthlyEmission;
+                modeResidents[modeCount] = 1;
+                modeCount++;
+            }
+            current = current->next;
+        }
+
+        if (grpCount == 0) continue;
+
+        cout << "\nAge Group: " << ageGroups[grpNum] << "\n";
+        for (int i = 0; i < 70; i++) cout << '-'; cout << "\n";
+        cout << left << setw(22) << "Mode of Transport" << setw(8) << "Count"
+             << setw(24) << "Total Emission (kg CO2)" << setw(20) << "Average per Resident" << "\n";
+        for (int i = 0; i < 70; i++) cout << '-'; cout << "\n";
+        for (int m = 0; m < modeCount; m++) {
+            double avg = (modeResidents[m] > 0) ? modeEmission[m] / modeResidents[m] : 0.0;
+            cout << left << setw(22) << modes[m] << setw(8) << modeResidents[m]
+                 << setw(24) << fixed << setprecision(2) << modeEmission[m]
+                 << setw(20) << fixed << setprecision(2) << avg << "\n";
+        }
+        for (int i = 0; i < 70; i++) cout << '-'; cout << "\n";
+        cout << "Total Emission for Age Group: " << fixed << setprecision(2) << totalEmission << " kg CO2\n";
+    }
+}
+
+void compareAllCities_list(const ResidentList &listA, const ResidentList &listB, const ResidentList &listC)
+{
+    double emissionA = 0, emissionB = 0, emissionC = 0;
+    int cntA = 0, cntB = 0, cntC = 0;
+
+    Node *current = listA.getHead();
+    while (current != nullptr) { emissionA += current->data.monthlyEmission; cntA++; current = current->next; }
+    current = listB.getHead();
+    while (current != nullptr) { emissionB += current->data.monthlyEmission; cntB++; current = current->next; }
+    current = listC.getHead();
+    while (current != nullptr) { emissionC += current->data.monthlyEmission; cntC++; current = current->next; }
+
+    double avgA = calculateAverageEmission(emissionA, cntA);
+    double avgB = calculateAverageEmission(emissionB, cntB);
+    double avgC = calculateAverageEmission(emissionC, cntC);
+    int totalResidents = cntA + cntB + cntC;
+    double overallEmission = emissionA + emissionB + emissionC;
+    double overallAvg = calculateAverageEmission(overallEmission, totalResidents);
+
+    cout << "\n========================================\n";
+    cout << "   Cross-City Emission Comparison\n";
+    cout << "========================================\n";
+    cout << left << setw(20) << "City" << setw(12) << "Residents" << setw(20) << "Total (kg CO2)" << setw(20) << "Avg per Resident" << "\n";
+    cout << left << setw(20) << "----" << setw(12) << "---------" << setw(20) << "--------------" << setw(20) << "----------------" << "\n";
+    cout << left << setw(20) << "City A (Metro)"    << setw(12) << cntA << setw(20) << fixed << setprecision(2) << emissionA << setw(20) << fixed << setprecision(2) << avgA << "\n";
+    cout << left << setw(20) << "City B (Uni Town)" << setw(12) << cntB << setw(20) << fixed << setprecision(2) << emissionB << setw(20) << fixed << setprecision(2) << avgB << "\n";
+    cout << left << setw(20) << "City C (Suburban)" << setw(12) << cntC << setw(20) << fixed << setprecision(2) << emissionC << setw(20) << fixed << setprecision(2) << avgC << "\n";
+    cout << left << setw(20) << "----"              << setw(12) << "---------" << setw(20) << "--------------" << setw(20) << "----------------" << "\n";
+    cout << left << setw(20) << "OVERALL"           << setw(12) << totalResidents << setw(20) << fixed << setprecision(2) << overallEmission << setw(20) << fixed << setprecision(2) << overallAvg << "\n";
+}
+
+void compareAllCitiesByAgeGroup_list(const ResidentList &listA, const ResidentList &listB, const ResidentList &listC)
+{
+    const char *ageGroups[] = { AGE_GROUP_1, AGE_GROUP_2, AGE_GROUP_3, AGE_GROUP_4 };
+    const int NUM_GROUPS = 4;
+
+    cout << "\n========================================\n";
+    cout << "  Age Group Comparison - All Cities\n";
+    cout << "========================================\n";
+    cout << left << setw(30) << "Age Group" << setw(20) << "City A (kg CO2)" << setw(20) << "City B (kg CO2)" << setw(20) << "City C (kg CO2)" << "\n";
+    for (int i = 0; i < 90; i++) cout << '-'; cout << "\n";
+
+    for (int grpNum = 0; grpNum < NUM_GROUPS; grpNum++)
+    {
+        double totalA = 0, totalB = 0, totalC = 0;
+        Node *current = listA.getHead();
+        while (current != nullptr) { if (string(current->data.ageGroup) == ageGroups[grpNum]) totalA += current->data.monthlyEmission; current = current->next; }
+        current = listB.getHead();
+        while (current != nullptr) { if (string(current->data.ageGroup) == ageGroups[grpNum]) totalB += current->data.monthlyEmission; current = current->next; }
+        current = listC.getHead();
+        while (current != nullptr) { if (string(current->data.ageGroup) == ageGroups[grpNum]) totalC += current->data.monthlyEmission; current = current->next; }
+
+        cout << left << setw(30) << ageGroups[grpNum]
              << setw(20) << fixed << setprecision(2) << totalA
              << setw(20) << fixed << setprecision(2) << totalB
              << setw(20) << fixed << setprecision(2) << totalC << "\n";

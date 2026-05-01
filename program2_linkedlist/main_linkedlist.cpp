@@ -88,25 +88,25 @@ int main() {
                     }
                     switch (subChoice) {
                         case 1:
-                            printTotalEmissions(rawA, countA, "City A");
-                            printTotalEmissions(rawB, countB, "City B");
-                            printTotalEmissions(rawC, countC, "City C");
+                            printTotalEmissions_list(listA, "City A");
+                            printTotalEmissions_list(listB, "City B");
+                            printTotalEmissions_list(listC, "City C");
                             break;
                         case 2:
-                            printEmissionsByTransport(rawA, countA, "City A");
-                            printEmissionsByTransport(rawB, countB, "City B");
-                            printEmissionsByTransport(rawC, countC, "City C");
+                            printEmissionsByTransport_list(listA, "City A");
+                            printEmissionsByTransport_list(listB, "City B");
+                            printEmissionsByTransport_list(listC, "City C");
                             break;
                         case 3:
-                            printEmissionsByAgeGroup(rawA, countA, "City A");
-                            printEmissionsByAgeGroup(rawB, countB, "City B");
-                            printEmissionsByAgeGroup(rawC, countC, "City C");
+                            printEmissionsByAgeGroup_list(listA, "City A");
+                            printEmissionsByAgeGroup_list(listB, "City B");
+                            printEmissionsByAgeGroup_list(listC, "City C");
                             break;
                         case 4:
-                            compareAllCities(rawA, countA, rawB, countB, rawC, countC);
+                            compareAllCities_list(listA, listB, listC);
                             break;
                         case 5:
-                            compareAllCitiesByAgeGroup(rawA, countA, rawB, countB, rawC, countC);
+                            compareAllCitiesByAgeGroup_list(listA, listB, listC);
                             break;
                         case 0:
                             break;
