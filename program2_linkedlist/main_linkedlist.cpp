@@ -63,9 +63,9 @@ int main() {
         switch (choice) {
             // Case 1: Display age ground categorisation and emission analysis for all cities
             case 1:
-                analyzeByAgeGroup(rawA, countA, "City A");
-                analyzeByAgeGroup(rawB, countB, "City B");
-                analyzeByAgeGroup(rawC, countC, "City C");
+                analyzeByAgeGroup_list(listA, "City A");
+                analyzeByAgeGroup_list(listB, "City B");
+                analyzeByAgeGroup_list(listC, "City C");
                 break;
             case 2: {
                 int subChoice = 0;

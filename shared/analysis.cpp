@@ -79,7 +79,7 @@ void analyzeByAgeGroup(const Resident* arr, int count, const char* cityLabel) {
             }
         }
 
-        double avg = (grpCount > 0) ? totalEmission / grpCount : 0.0;
+        double avg = calculateAverageEmission(totalEmission, grpCount);
 
         cout << "\nAge Group : " << ageGroups[grpNum] << "\n";
         cout << "Residents : " << grpCount << "\n";
@@ -151,7 +151,7 @@ void printEmissionsByTransport(const Resident* arr, int count, const char* cityL
          << setw(20) << "----------------" << "\n";
 
     for (int m = 0; m < modeCount; m++) {
-        double avg = (modeResidents[m] > 0) ? modeEmission[m] / modeResidents[m] : 0.0;
+        double avg = calculateAverageEmission(modeEmission[m], modeResidents[m]);
         cout << left
              << setw(20) << modes[m]
              << setw(10) << modeResidents[m]
@@ -218,7 +218,7 @@ void printEmissionsByAgeGroup(const Resident* arr, int count, const char* cityLa
         for (int i = 0; i < 70; i++) cout << '-'; cout << "\n";
 
         for (int m = 0; m < modeCount; m++) {
-            double avg = (modeResidents[m] > 0) ? modeEmission[m] / modeResidents[m] : 0.0;
+            double avg = calculateAverageEmission(modeEmission[m], modeResidents[m]);
             cout << left
                  << setw(22) << modes[m]
                  << setw(8)  << modeResidents[m]
@@ -246,14 +246,14 @@ void compareAllCities(const Resident* cityA, int countA,const Resident* cityB, i
     for (int r = 0; r < countC; r++) emissionC += cityC[r].monthlyEmission;
 
     // Average per resident per city
-    double avgA = countA > 0 ? emissionA / countA : 0;
-    double avgB = countB > 0 ? emissionB / countB : 0;
-    double avgC = countC > 0 ? emissionC / countC : 0;
+    double avgA = calculateAverageEmission(emissionA, countA);
+    double avgB = calculateAverageEmission(emissionB, countB);
+    double avgC = calculateAverageEmission(emissionC, countC);
 
     // Combined overall figures
     int totalResidents     = countA + countB + countC;
     double overallEmission = emissionA + emissionB + emissionC;
-    double overallAvg      = totalResidents > 0 ? overallEmission / totalResidents : 0;
+    double overallAvg      = calculateAverageEmission(overallEmission, totalResidents);
 
     cout << "\n========================================\n";
     cout << "   Cross-City Emission Comparison\n";
@@ -387,7 +387,7 @@ void analyzeByAgeGroup_list(const ResidentList &list, const char *cityLabel)
         for (int m = 0; m < modeCount; m++) {
             if (modeFreq[m] > highestFreq) { highestFreq = modeFreq[m]; copyStr(topMode, sizeof(topMode), modes[m]); }
         }
-        double avg = (grpCount > 0) ? totalEmission / grpCount : 0.0;
+        double avg = calculateAverageEmission(totalEmission, grpCount);
 
         cout << "\nAge Group : " << ageGroups[grpNum] << "\n";
         cout << "Residents : " << grpCount << "\n";
@@ -439,7 +439,7 @@ void printEmissionsByTransport_list(const ResidentList &list, const char *cityLa
     cout << left << setw(20) << "Mode" << setw(10) << "Count" << setw(20) << "Total (kg CO2)" << setw(20) << "Avg per Resident" << "\n";
     cout << left << setw(20) << "----" << setw(10) << "-----" << setw(20) << "--------------" << setw(20) << "----------------" << "\n";
     for (int m = 0; m < modeCount; m++) {
-        double avg = (modeResidents[m] > 0) ? modeEmission[m] / modeResidents[m] : 0.0;
+        double avg = calculateAverageEmission(modeEmission[m], modeResidents[m]);
         cout << left << setw(20) << modes[m] << setw(10) << modeResidents[m]
              << setw(20) << fixed << setprecision(2) << modeEmission[m]
              << setw(20) << fixed << setprecision(2) << avg << "\n";
@@ -495,7 +495,7 @@ void printEmissionsByAgeGroup_list(const ResidentList &list, const char *cityLab
              << setw(24) << "Total Emission (kg CO2)" << setw(20) << "Average per Resident" << "\n";
         for (int i = 0; i < 70; i++) cout << '-'; cout << "\n";
         for (int m = 0; m < modeCount; m++) {
-            double avg = (modeResidents[m] > 0) ? modeEmission[m] / modeResidents[m] : 0.0;
+            double avg = calculateAverageEmission(modeEmission[m], modeResidents[m]);
             cout << left << setw(22) << modes[m] << setw(8) << modeResidents[m]
                  << setw(24) << fixed << setprecision(2) << modeEmission[m]
                  << setw(20) << fixed << setprecision(2) << avg << "\n";
