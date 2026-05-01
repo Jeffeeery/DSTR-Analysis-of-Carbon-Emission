@@ -22,7 +22,6 @@ g++ -std=c++11 ^
     shared/analysis.cpp ^
     shared/resident.cpp ^
     shared/performance.cpp ^
-    program2_linkedlist/linkedlist.cpp ^
     -o program1.exe
 
 if %ERRORLEVEL% EQU 0 (

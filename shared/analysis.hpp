@@ -4,7 +4,6 @@
 #define ANALYSIS_HPP
 
 #include "resident.hpp"
-#include "../program2_linkedlist/linkedlist.hpp"
 
 // -------------------------------------------------------
 // Age Group Analysis
@@ -47,13 +46,15 @@ void compareAllCitiesByAgeGroup(
     const Resident* cityC, int countC
 );
 
-// Linked List versions — declared separately
-void analyzeByAgeGroup_list(const ResidentList& list, const char* cityLabel);
-void printTotalEmissions_list(const ResidentList& list, const char* cityLabel);
-void printEmissionsByTransport_list(const ResidentList& list, const char* cityLabel);
-void printEmissionsByAgeGroup_list(const ResidentList& list, const char* cityLabel);
-void compareAllCities_list(const ResidentList& listA, const ResidentList& listB, const ResidentList& listC);
-void compareAllCitiesByAgeGroup_list(const ResidentList& listA, const ResidentList& listB, const ResidentList& listC);
+// -------------------------------------------------------
+// Insights & Recommendations
+// -------------------------------------------------------
 
+// Print policy recommendations based on analysis results
+void printRecommendations(
+    const Resident* cityA, int countA,
+    const Resident* cityB, int countB,
+    const Resident* cityC, int countC
+);
 
 #endif // ANALYSIS_HPP

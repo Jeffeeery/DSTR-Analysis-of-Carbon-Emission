@@ -30,9 +30,6 @@ public:
 
     // Reset count to 0 (does not free memory)
     void clear();
-
-    // Get pointer to internal data array
-    Resident* getData();
 };
 
 #endif // ARRAYLIST_HPP
