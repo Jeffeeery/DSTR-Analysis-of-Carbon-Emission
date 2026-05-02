@@ -367,6 +367,7 @@ int main() {
                     SearchCriteria crit;
 
                     switch (searchMenu) {
+                        // Case 1: Search by age group
                         case 1: {
                             cout << "\nSelect Age Group:\n"
                                  << "1. Children & Teenagers (6-17)\n"
@@ -390,6 +391,7 @@ int main() {
                             crit = SEARCH_BY_AGE_GROUP;
                             break;
                         }
+                        // Case 2: Search by transport mode
                         case 2: {
                             // City A, B, and C combined transport modes
                             cout << "\nSelect Transport Mode:\n"
@@ -406,6 +408,7 @@ int main() {
                             crit = SEARCH_BY_TRANSPORT;
                             break;
                         }
+                        // Case 3: Search by distance threshold
                         case 3: {
                             cout << "Enter minimum daily distance (km) threshold: ";
                             cin >> keyword;
@@ -433,10 +436,6 @@ int main() {
                         // Show Results and Performance Comparison
                         printSearchResultsLL(*lists[i], linRes, crit, keyword.c_str());
                         printSearchComparisonLL(linRes, ordRes);
-
-                        // CRITICAL: Cleanup memory if indices were heap-allocated
-                        // delete[] linRes.indices; 
-                        // delete[] ordRes.indices;
                     }
                 }
                 break;

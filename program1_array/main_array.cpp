@@ -318,7 +318,7 @@ int main() {
             }
                     break;
                 }         
-            
+            // Case 4: Searching experiments menu
             case 4: {
                 int searchMenu = -1;
                 while (searchMenu != 0) {
