@@ -457,37 +457,31 @@ int main() {
                 for (int i = 0; i < 3; i++) {
                     int count = recordCounts[i];
                     double totalLinTime = 0.0, totalBinTime = 0.0;
-                    SearchResult linearResult, binaryResult;
+                    int linCount = 0, linComp = 0, binCount = 0, binComp = 0;
                     for (int r = 0; r < RUNS; r++) {
                         SearchResult lin = linearSearch(*cities[i], SEARCH_BY_TRANSPORT, "Car");
                         SearchResult bin = binarySearch(*cities[i], SEARCH_BY_TRANSPORT, "Car");
                         totalLinTime += lin.timeMs;
                         totalBinTime += bin.timeMs;
-                        if (r < RUNS - 1) {
-                            delete[] lin.indices;
-                            delete[] bin.indices;
-                        } else {
-                            linearResult = lin;
-                            binaryResult = bin;
+                        if (r == RUNS - 1) {
+                            linCount = lin.count; linComp = lin.comparisons;
+                            binCount = bin.count; binComp = bin.comparisons;
                         }
+                        // destructor auto-frees indices when lin/bin go out of scope
                     }
-                    linearResult.timeMs = totalLinTime / RUNS;
-                    binaryResult.timeMs = totalBinTime / RUNS;
 
                     cout << left  << setw(14) << "LinearSearch"
                          << setw(10) << cityNames[i]
                          << right << setw(10) << count
-                         << setw(10) << linearResult.count
-                         << setw(14) << linearResult.comparisons
-                         << setw(12) << fixed << setprecision(4) << linearResult.timeMs << "\n";
+                         << setw(10) << linCount
+                         << setw(14) << linComp
+                         << setw(12) << fixed << setprecision(4) << totalLinTime / RUNS << "\n";
                     cout << left  << setw(14) << "BinarySearch"
                          << setw(10) << cityNames[i]
                          << right << setw(10) << count
-                         << setw(10) << binaryResult.count
-                         << setw(14) << binaryResult.comparisons
-                         << setw(12) << fixed << setprecision(4) << binaryResult.timeMs << "\n";
-                    delete[] linearResult.indices;
-                    delete[] binaryResult.indices;
+                         << setw(10) << binCount
+                         << setw(14) << binComp
+                         << setw(12) << fixed << setprecision(4) << totalBinTime / RUNS << "\n";
                 }
 
                 // ----- Memory Footprint -----

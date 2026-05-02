@@ -496,37 +496,31 @@ int main() {
                 for (int i = 0; i < 3; i++) {
                     int count = recordCounts[i];
                     double totalLinTime = 0.0, totalOrdTime = 0.0;
-                    SearchResult linearResult, orderedResult;
+                    int linCount = 0, linComp = 0, ordCount = 0, ordComp = 0;
                     for (int r = 0; r < RUNS; r++) {
                         SearchResult lin = linearSearchLL (*lists[i], SEARCH_BY_TRANSPORT, "Car");
                         SearchResult ord = orderedSearchLL(*lists[i], SEARCH_BY_TRANSPORT, "Car");
                         totalLinTime += lin.timeMs;
                         totalOrdTime += ord.timeMs;
-                        if (r < RUNS - 1) {
-                            delete[] lin.indices;
-                            delete[] ord.indices;
-                        } else {
-                            linearResult  = lin;
-                            orderedResult = ord;
+                        if (r == RUNS - 1) {
+                            linCount = lin.count; linComp = lin.comparisons;
+                            ordCount = ord.count; ordComp = ord.comparisons;
                         }
+                        // destructor auto-frees indices when lin/ord go out of scope
                     }
-                    linearResult.timeMs  = totalLinTime / RUNS;
-                    orderedResult.timeMs = totalOrdTime / RUNS;
 
                     cout << left  << setw(16) << "LinearSearch"
                          << setw(10) << cityNames[i]
                          << right << setw(10) << count
-                         << setw(10) << linearResult.count
-                         << setw(14) << linearResult.comparisons
-                         << setw(12) << fixed << setprecision(4) << linearResult.timeMs << "\n";
+                         << setw(10) << linCount
+                         << setw(14) << linComp
+                         << setw(12) << fixed << setprecision(4) << totalLinTime / RUNS << "\n";
                     cout << left  << setw(16) << "OrderedSearch"
                          << setw(10) << cityNames[i]
                          << right << setw(10) << count
-                         << setw(10) << orderedResult.count
-                         << setw(14) << orderedResult.comparisons
-                         << setw(12) << fixed << setprecision(4) << orderedResult.timeMs << "\n";
-                    delete[] linearResult.indices;
-                    delete[] orderedResult.indices;
+                         << setw(10) << ordCount
+                         << setw(14) << ordComp
+                         << setw(12) << fixed << setprecision(4) << totalOrdTime / RUNS << "\n";
                 }
 
                 // ----- Memory Footprint -----
