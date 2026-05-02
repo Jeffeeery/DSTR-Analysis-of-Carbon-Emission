@@ -1,4 +1,10 @@
 // Carbon emission analysis implementation
+
+// References :
+// GeeksforGeeks. (2023, October 7). C++ program to find the frequency of elements in an array. GeeksforGeeks.
+//   https://www.geeksforgeeks.org/cpp/cpp-program-to-find-frequency-of-elements-in-array/
+
+
 #include "analysis.hpp"
 #include <iomanip>
 #include <iostream>
