@@ -4,12 +4,13 @@
 
 #include <chrono>
 
+using namespace std;
 
 // Timer - wraps std::chrono::high_resolution_clock
 class Timer {
 private:
-    std::chrono::high_resolution_clock::time_point startTime;
-    std::chrono::high_resolution_clock::time_point endTime;
+    chrono::high_resolution_clock::time_point startTime;
+    chrono::high_resolution_clock::time_point endTime;
     bool running;
 
 public:
@@ -28,13 +29,11 @@ public:
     double elapsedUs() const;
 };
 
-// -------------------------------------------------------
 // PerfRecord - one timing entry
-// -------------------------------------------------------
 struct PerfRecord {
     char structure[16];     // "Array" or "LinkedList"
     char operation[24];     // "Sort", "Search"
-    char algorithm[24];     // "BubbleSort", "MergeSort", "Linear", "Binary", ...
+    char algorithm[24];     // "InsertionSort", "MergeSort", "Linear", "Binary", ...
     char city[16];          // "City A" / "City B" / "City C"
     int  recordCount;        // number of records in the dataset
     double timeMs;           // execution time in milliseconds
@@ -42,9 +41,8 @@ struct PerfRecord {
     int memoryBytes;         // estimated memory footprint in bytes (0 if N/A)
 };
 
-// -------------------------------------------------------
+
 // PerfLog - global record store (max 64 entries)
-// -------------------------------------------------------
 class PerfLog {
 public:
     static const int MAX_RECORDS = 64;
@@ -68,9 +66,8 @@ public:
     static void clear();
 };
 
-// -------------------------------------------------------
-// Helper: build a PerfRecord with safe string copying
-// -------------------------------------------------------
+
+// Helper: build a PerfRecord with safe string copying and field assignment
 PerfRecord makePerfRecord(
     const char* structure,
     const char* operation,

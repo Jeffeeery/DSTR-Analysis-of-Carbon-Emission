@@ -7,9 +7,9 @@
 
 using namespace std;
 
-// -------------------------------------------------------
-// Timer
-// -------------------------------------------------------
+
+// Timer implementation adapted from GeeksforGeeks (2017)
+// https://www.geeksforgeeks.org/measure-execution-time-function-cpp/
 
 Timer::Timer() : running(false) {}
 
@@ -60,6 +60,7 @@ const PerfRecord& PerfLog::get(int index) {
     return logStore[index];
 }
 
+// Prints all records in a formatted table
 void PerfLog::printTable() {
     if (logCount == 0) {
         cout << "\nNo performance records logged.\n";
@@ -101,6 +102,7 @@ void PerfLog::printTable() {
     printLine('=', W);
 }
 
+// Prints records for a specific operation (e.g. "Sorting", "Searching")
 void PerfLog::printByOperation(const char* operation) {
     string op(operation);
     bool found = false;
@@ -139,19 +141,19 @@ void PerfLog::printByOperation(const char* operation) {
         cout << "No records for operation: " << op << "\n";
 }
 
+// Clears all logged records
 void PerfLog::clear() {
     logCount = 0;
 }
 
-// -------------------------------------------------------
 // makePerfRecord
-// -------------------------------------------------------
-
+// Helper: create a PerfRecord with proper string copying and field assignment
 static void copyField(char* dst, int capacity, const string& src) {
     auto copied = src.copy(dst, capacity - 1);
     dst[copied] = '\0';
 }
 
+// Factory function to create a PerfRecord with given parameters
 PerfRecord makePerfRecord(
     const char* structure,
     const char* operation,
