@@ -406,8 +406,9 @@ int main() {
                 const char*    cityNames[]   = {"City A", "City B", "City C"};
                 int            recordCounts[] = {countA, countB, countC};
 
-                // ----- Sort Benchmarks (run on temporary copies) -----
-                cout << "\n--- Sort Performance (field: Monthly Emission, order: Ascending) ---\n";
+                // ----- Sort Benchmarks (avg of 20 runs on temporary copies) -----
+                const int RUNS = 20;
+                cout << "\n--- Sort Performance (avg of 20 runs, field: Monthly Emission, order: Ascending) ---\n";
                 cout << left
                      << setw(14) << "Algorithm"
                      << setw(10) << "City"
@@ -418,13 +419,18 @@ int main() {
 
                 for (int i = 0; i < 3; i++) {
                     int count = recordCounts[i];
-                    ResidentArray tempInsertion(count), tempMerge(count);
-                    for (int j = 0; j < count; j++) {
-                        tempInsertion.add(cities[i]->get(j));
-                        tempMerge.add(cities[i]->get(j));
+                    double totalInsertion = 0.0, totalMerge = 0.0;
+                    for (int r = 0; r < RUNS; r++) {
+                        ResidentArray tempInsertion(count), tempMerge(count);
+                        for (int j = 0; j < count; j++) {
+                            tempInsertion.add(cities[i]->get(j));
+                            tempMerge.add(cities[i]->get(j));
+                        }
+                        totalInsertion += insertionSort(tempInsertion, SORT_BY_EMISSION, ASCENDING);
+                        totalMerge     += mergeSort(tempMerge, SORT_BY_EMISSION, ASCENDING);
                     }
-                    double timeInsertion = insertionSort(tempInsertion, SORT_BY_EMISSION, ASCENDING);
-                    double timeMerge  = mergeSort (tempMerge,  SORT_BY_EMISSION, ASCENDING);
+                    double timeInsertion = totalInsertion / RUNS;
+                    double timeMerge     = totalMerge / RUNS;
 
                     cout << left  << setw(14) << "InsertionSort"
                          << setw(10) << cityNames[i]
@@ -433,11 +439,11 @@ int main() {
                     cout << left  << setw(14) << "MergeSort"
                          << setw(10) << cityNames[i]
                          << right << setw(10) << count
-                         << setw(12) << fixed << setprecision(4) << timeMerge  << "\n";
+                         << setw(12) << fixed << setprecision(4) << timeMerge << "\n";
                 }
 
                 // ----- Search Benchmarks -----
-                cout << "\n--- Search Performance (criteria: Transport Mode = 'Car') ---\n";
+                cout << "\n--- Search Performance (avg of 20 runs, criteria: Transport Mode = 'Car') ---\n";
                 cout << left
                      << setw(14) << "Algorithm"
                      << setw(10) << "City"
@@ -450,8 +456,23 @@ int main() {
 
                 for (int i = 0; i < 3; i++) {
                     int count = recordCounts[i];
-                    SearchResult linearResult = linearSearch(*cities[i], SEARCH_BY_TRANSPORT, "Car");
-                    SearchResult binaryResult = binarySearch(*cities[i], SEARCH_BY_TRANSPORT, "Car");
+                    double totalLinTime = 0.0, totalBinTime = 0.0;
+                    SearchResult linearResult, binaryResult;
+                    for (int r = 0; r < RUNS; r++) {
+                        SearchResult lin = linearSearch(*cities[i], SEARCH_BY_TRANSPORT, "Car");
+                        SearchResult bin = binarySearch(*cities[i], SEARCH_BY_TRANSPORT, "Car");
+                        totalLinTime += lin.timeMs;
+                        totalBinTime += bin.timeMs;
+                        if (r < RUNS - 1) {
+                            delete[] lin.indices;
+                            delete[] bin.indices;
+                        } else {
+                            linearResult = lin;
+                            binaryResult = bin;
+                        }
+                    }
+                    linearResult.timeMs = totalLinTime / RUNS;
+                    binaryResult.timeMs = totalBinTime / RUNS;
 
                     cout << left  << setw(14) << "LinearSearch"
                          << setw(10) << cityNames[i]
@@ -465,6 +486,8 @@ int main() {
                          << setw(10) << binaryResult.count
                          << setw(14) << binaryResult.comparisons
                          << setw(12) << fixed << setprecision(4) << binaryResult.timeMs << "\n";
+                    delete[] linearResult.indices;
+                    delete[] binaryResult.indices;
                 }
 
                 // ----- Memory Footprint -----

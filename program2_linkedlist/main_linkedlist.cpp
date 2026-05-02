@@ -445,8 +445,9 @@ int main() {
                 const char*   cityNames[]    = {"City A", "City B", "City C"};
                 int           recordCounts[] = {countA, countB, countC};
 
-                // ----- Sort Benchmarks (run on temporary copies) -----
-                cout << "\n--- Sort Performance (field: Monthly Emission, order: Ascending) ---\n";
+                // ----- Sort Benchmarks (avg of 20 runs on temporary copies) -----
+                const int RUNS = 20;
+                cout << "\n--- Sort Performance (avg of 20 runs, field: Monthly Emission, order: Ascending) ---\n";
                 cout << left
                      << setw(16) << "Algorithm"
                      << setw(10) << "City"
@@ -457,13 +458,18 @@ int main() {
 
                 for (int i = 0; i < 3; i++) {
                     int count = recordCounts[i];
-                    ResidentList tempInsertion, tempMerge;
-                    for (Node* current = lists[i]->getHead(); current != nullptr; current = current->next) {
-                        tempInsertion.insertAtTail(current->data);
-                        tempMerge.insertAtTail(current->data);
+                    double totalInsertion = 0.0, totalMerge = 0.0;
+                    for (int r = 0; r < RUNS; r++) {
+                        ResidentList tempInsertion, tempMerge;
+                        for (Node* current = lists[i]->getHead(); current != nullptr; current = current->next) {
+                            tempInsertion.insertAtTail(current->data);
+                            tempMerge.insertAtTail(current->data);
+                        }
+                        totalInsertion += insertionSortLL(tempInsertion, SORT_BY_EMISSION, ASCENDING);
+                        totalMerge     += mergeSortLL(tempMerge, SORT_BY_EMISSION, ASCENDING);
                     }
-                    double timeInsertion = insertionSortLL(tempInsertion, SORT_BY_EMISSION, ASCENDING);
-                    double timeMerge = mergeSortLL(tempMerge, SORT_BY_EMISSION, ASCENDING);
+                    double timeInsertion = totalInsertion / RUNS;
+                    double timeMerge     = totalMerge / RUNS;
 
                     cout << left  << setw(16) << "InsertionSort"
                          << setw(10) << cityNames[i]
@@ -476,7 +482,7 @@ int main() {
                 }
 
                 // ----- Search Benchmarks -----
-                cout << "\n--- Search Performance (criteria: Transport Mode = 'Car') ---\n";
+                cout << "\n--- Search Performance (avg of 20 runs, criteria: Transport Mode = 'Car') ---\n";
                 cout << left
                      << setw(16) << "Algorithm"
                      << setw(10) << "City"
@@ -489,8 +495,23 @@ int main() {
 
                 for (int i = 0; i < 3; i++) {
                     int count = recordCounts[i];
-                    SearchResult linearResult  = linearSearchLL (*lists[i], SEARCH_BY_TRANSPORT, "Car");
-                    SearchResult orderedResult = orderedSearchLL(*lists[i], SEARCH_BY_TRANSPORT, "Car");
+                    double totalLinTime = 0.0, totalOrdTime = 0.0;
+                    SearchResult linearResult, orderedResult;
+                    for (int r = 0; r < RUNS; r++) {
+                        SearchResult lin = linearSearchLL (*lists[i], SEARCH_BY_TRANSPORT, "Car");
+                        SearchResult ord = orderedSearchLL(*lists[i], SEARCH_BY_TRANSPORT, "Car");
+                        totalLinTime += lin.timeMs;
+                        totalOrdTime += ord.timeMs;
+                        if (r < RUNS - 1) {
+                            delete[] lin.indices;
+                            delete[] ord.indices;
+                        } else {
+                            linearResult  = lin;
+                            orderedResult = ord;
+                        }
+                    }
+                    linearResult.timeMs  = totalLinTime / RUNS;
+                    orderedResult.timeMs = totalOrdTime / RUNS;
 
                     cout << left  << setw(16) << "LinearSearch"
                          << setw(10) << cityNames[i]
@@ -504,6 +525,8 @@ int main() {
                          << setw(10) << orderedResult.count
                          << setw(14) << orderedResult.comparisons
                          << setw(12) << fixed << setprecision(4) << orderedResult.timeMs << "\n";
+                    delete[] linearResult.indices;
+                    delete[] orderedResult.indices;
                 }
 
                 // ----- Memory Footprint -----
