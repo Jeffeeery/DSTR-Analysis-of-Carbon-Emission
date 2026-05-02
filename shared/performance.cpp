@@ -7,7 +7,6 @@
 
 using namespace std;
 
-
 // Timer implementation adapted from GeeksforGeeks (2017)
 // https://www.geeksforgeeks.org/measure-execution-time-function-cpp/
 
