@@ -43,17 +43,16 @@ int main() {
         cout << "\n========================================\n"
              << "  DSTR Assignment - Array Program\n"
              << "========================================\n"
-             << "1. Age Group Categorization & Analysis\n"     // Member 1 [BAN]
-             << "2. Carbon Emission Analysis\n"                // Member 2 [EV]
-             << "3. Sorting Experiments\n"                     // Member 3 [WT]
-             << "4. Searching Experiments\n"                   // Member 4 [WK]
-             << "5. Performance Analysis\n"                    // Member 5 [EEE]
+             << "1. Age Group Categorization & Analysis\n"
+             << "2. Carbon Emission Analysis\n"
+             << "3. Sorting Experiments\n"
+             << "4. Searching Experiments\n"
+             << "5. Performance Analysis\n"
              << "0. Exit\n"
              << "Enter choice: ";
         cin >> choice;
         if (cin.fail()) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Invalid input.\n";
             choice = -1;
             continue;
@@ -66,6 +65,7 @@ int main() {
                 analyzeByAgeGroup(rawB, countB, "City B");
                 analyzeByAgeGroup(rawC, countC, "City C");
                 break;
+            // Case 2: Carbon emission analysis menu
             case 2: {
                 int subChoice = 0;
                 do {
@@ -85,29 +85,36 @@ int main() {
                         continue;
                     }
                     switch (subChoice) {
+                        // Case 1: Total emissions per city
                         case 1:
                             printTotalEmissions(rawA, countA, "City A");
                             printTotalEmissions(rawB, countB, "City B");
                             printTotalEmissions(rawC, countC, "City C");
                             break;
+                        // Case 2: Emissions by transport mode
                         case 2:
                             printEmissionsByTransport(rawA, countA, "City A");
                             printEmissionsByTransport(rawB, countB, "City B");
                             printEmissionsByTransport(rawC, countC, "City C");
                             break;
+                        // Case 3: Emissions by age group
                         case 3:
                             printEmissionsByAgeGroup(rawA, countA, "City A");
                             printEmissionsByAgeGroup(rawB, countB, "City B");
                             printEmissionsByAgeGroup(rawC, countC, "City C");
                             break;
+                        // Case 4: Compare all cities
                         case 4:
                             compareAllCities(rawA, countA, rawB, countB, rawC, countC);
                             break;
+                        // Case 5: Compare all cities by age group
                         case 5:
                             compareAllCitiesByAgeGroup(rawA, countA, rawB, countB, rawC, countC);
                             break;
+                        // Case 0: Back
                         case 0:
                             break;
+                        // Default: Invalid choice
                         default:
                             cout << "Invalid choice.\n";
                     }
@@ -115,8 +122,9 @@ int main() {
                 break;
             }
 
+            // Case 3: Sorting experiments menu
             case 3: {
-                // TODO [WT]: prompt sort field/order, run insertionSort + mergeSort, print comparison           
+                // prompt sort field/order, run insertionSort + mergeSort, print comparison           
                 while (choice != 0) {
                     cout << "\n--- Sorting Experiments: Array ---\n";
                     cout << "Choose Dataset:\n";
@@ -333,6 +341,7 @@ int main() {
                     SearchCriteria crit;
 
                     switch (searchMenu) {
+                        // Case 1: Search by age group
                         case 1: {
                             cout << "\nSelect Age Group:\n1. Children & Teenagers (6-17)\n2. University Students (18-25)\n"
                                 << "3. Working Adults (Early) (26-45)\n4. Working Adults (Late) (46-60)\n5. Seniors (61-100)\nSelect: ";
@@ -350,6 +359,7 @@ int main() {
                             crit = SEARCH_BY_AGE_GROUP;
                             break;
                         }
+                        // Case 2: Search by transport mode
                         case 2: {
                             cout << "\nSelect Transport:\n1. Car\n2. Bus\n3. Bicycle\n4. Walking\n5. School Bus\n6. Carpool\nSelect: ";
                             int transChoice;
@@ -366,6 +376,7 @@ int main() {
                             crit = SEARCH_BY_TRANSPORT;
                             break;
                         }
+                        // Case 3: Search by distance threshold
                         case 3: {
                             cout << "Enter minimum distance threshold (km): ";
                             cin >> keyword;
@@ -383,12 +394,13 @@ int main() {
                         SearchResult lin = linearSearch(*cities[i], crit, keyword.c_str());
                         printSearchResults(*cities[i], lin, crit, keyword.c_str());
                         
-                        // Note: Binary search logic requires comparison with global sort state
+                        // Binary search logic requires comparison with global sort state
                         SearchResult bin = binarySearch(*cities[i], crit, keyword.c_str());
                         printSearchComparison(lin, bin);
                     }
                 }
                 break;
+            // Case 5: Performance analysis Table(sorting + searching benchmarks, memory usage)
 }            case 5: {
                 ResidentArray* cities[]      = {&arrA, &arrB, &arrC};
                 const char*    cityNames[]   = {"City A", "City B", "City C"};
@@ -472,9 +484,11 @@ int main() {
                 }
                 break;
             }
+            // Case 0: Exit
             case 0:
                 cout << "Exiting...\n";
                 break;
+            // Default: Invalid choice    
             default:
                 cout << "Invalid choice.\n";
         }

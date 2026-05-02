@@ -11,7 +11,7 @@
 
 using namespace std;
 
-// Dataset file paths (adjust relative path as needed)
+// Dataset file paths
 #define PATH_CITY_A "dataset1-cityA.csv"
 #define PATH_CITY_B "dataset2-cityB.csv"
 #define PATH_CITY_C "dataset3-cityC.csv"
@@ -43,11 +43,11 @@ int main() {
         cout << "\n========================================\n"
              << "  DSTR Assignment - Linked List Program\n"
              << "========================================\n"
-             << "1. Age Group Categorization & Analysis\n"  // Member 1 [BAN]
-             << "2. Carbon Emission Analysis\n"              // Member 2 [EV]
-             << "3. Sorting Experiments\n"                   // Member 3 [EEE]
-             << "4. Searching Experiments\n"                 // Member 4 [WK]
-             << "5. Performance Analysis\n"                  // Member 5 [EEE]
+             << "1. Age Group Categorization & Analysis\n"
+             << "2. Carbon Emission Analysis\n"
+             << "3. Sorting Experiments\n"
+             << "4. Searching Experiments\n"
+             << "5. Performance Analysis\n"
              << "0. Exit\n"
              << "Enter choice: ";
         cin >> choice;
@@ -66,6 +66,7 @@ int main() {
                 analyzeByAgeGroup(rawB, countB, "City B");
                 analyzeByAgeGroup(rawC, countC, "City C");
                 break;
+            // Case 2: Carbon emission analysis menu
             case 2: {
                 int subChoice = 0;
                 do {
@@ -86,36 +87,44 @@ int main() {
                         continue;
                     }
                     switch (subChoice) {
+                        // Sub-menu cases for carbon emission analysis
+                        // Case 1: Total emissions per city
                         case 1:
                             printTotalEmissions(rawA, countA, "City A");
                             printTotalEmissions(rawB, countB, "City B");
                             printTotalEmissions(rawC, countC, "City C");
                             break;
+                        // Case 2: Emissions by transport mode
                         case 2:
                             printEmissionsByTransport(rawA, countA, "City A");
                             printEmissionsByTransport(rawB, countB, "City B");
                             printEmissionsByTransport(rawC, countC, "City C");
                             break;
+                        // Case 3: Emissions by age group
                         case 3:
                             printEmissionsByAgeGroup(rawA, countA, "City A");
                             printEmissionsByAgeGroup(rawB, countB, "City B");
                             printEmissionsByAgeGroup(rawC, countC, "City C");
                             break;
+                        // Case 4: Compare all cities
                         case 4:
                             compareAllCities(rawA, countA, rawB, countB, rawC, countC);
                             break;
+                        // Case 5: Compare all cities by age group
                         case 5:
                             compareAllCitiesByAgeGroup(rawA, countA, rawB, countB, rawC, countC);
                             break;
+                        // Case 0: Back to main menu    
                         case 0:
                             break;
+                        // Default: Invalid choice
                         default:
                             cout << "Invalid choice.\n";
                     }
                 } while (subChoice != 0);
                 break;
             }
-
+            // Case 3: Sorting experiments menu
             case 3: {
                 // prompt sort field/order, run insertionSortLL + mergeSortLL
             while (choice != 0) {
@@ -334,7 +343,7 @@ int main() {
 
             break;
         }                       
-            
+            // Case 4: Searching experiments menu
             case 4: {
                 int searchMenu = -1;
                 while (searchMenu != 0) {
@@ -432,6 +441,7 @@ int main() {
                 }
                 break;
             }
+            // Case 5: Performance analysis Table(sorting + searching benchmarks, memory usage)
             case 5: {
                 ResidentList* lists[]        = {&listA, &listB, &listC};
                 const char*   cityNames[]    = {"City A", "City B", "City C"};
@@ -516,9 +526,11 @@ int main() {
                 }
                 break;
             }
+            // case 0: Exit
             case 0:
                 cout << "Exiting...\n";
                 break;
+            // Default: Invalid choice
             default:
                 cout << "Invalid choice.\n";
         }
