@@ -61,9 +61,9 @@ int main() {
         switch (choice) {
             // Case 1: Display age group categorisation and emission analysis for all cities
             case 1:
-                analyzeByAgeGroup(rawA, countA, "City A");
-                analyzeByAgeGroup(rawB, countB, "City B");
-                analyzeByAgeGroup(rawC, countC, "City C");
+                analyzeByAgeGroup(arrA.getData(), arrA.size(), "City A");
+                analyzeByAgeGroup(arrB.getData(), arrB.size(), "City B");
+                analyzeByAgeGroup(arrC.getData(), arrC.size(), "City C");
                 break;
             // Case 2: Carbon emission analysis menu
             case 2: {
@@ -87,29 +87,29 @@ int main() {
                     switch (subChoice) {
                         // Case 1: Total emissions per city
                         case 1:
-                            printTotalEmissions(rawA, countA, "City A");
-                            printTotalEmissions(rawB, countB, "City B");
-                            printTotalEmissions(rawC, countC, "City C");
+                            printTotalEmissions(arrA.getData(), arrA.size(), "City A");
+                            printTotalEmissions(arrB.getData(), arrB.size(), "City B");
+                            printTotalEmissions(arrC.getData(), arrC.size(), "City C");
                             break;
                         // Case 2: Emissions by transport mode
                         case 2:
-                            printEmissionsByTransport(rawA, countA, "City A");
-                            printEmissionsByTransport(rawB, countB, "City B");
-                            printEmissionsByTransport(rawC, countC, "City C");
+                            printEmissionsByTransport(arrA.getData(), arrA.size(), "City A");
+                            printEmissionsByTransport(arrB.getData(), arrB.size(), "City B");
+                            printEmissionsByTransport(arrC.getData(), arrC.size(), "City C");
                             break;
                         // Case 3: Emissions by age group
                         case 3:
-                            printEmissionsByAgeGroup(rawA, countA, "City A");
-                            printEmissionsByAgeGroup(rawB, countB, "City B");
-                            printEmissionsByAgeGroup(rawC, countC, "City C");
+                            printEmissionsByAgeGroup(arrA.getData(), arrA.size(), "City A");
+                            printEmissionsByAgeGroup(arrB.getData(), arrB.size(), "City B");
+                            printEmissionsByAgeGroup(arrC.getData(), arrC.size(), "City C");
                             break;
                         // Case 4: Compare all cities
                         case 4:
-                            compareAllCities(rawA, countA, rawB, countB, rawC, countC);
+                            compareAllCities(arrA.getData(), arrA.size(), arrB.getData(), arrB.size(), arrC.getData(), arrC.size());
                             break;
                         // Case 5: Compare all cities by age group
                         case 5:
-                            compareAllCitiesByAgeGroup(rawA, countA, rawB, countB, rawC, countC);
+                            compareAllCitiesByAgeGroup(arrA.getData(), arrA.size(), arrB.getData(), arrB.size(), arrC.getData(), arrC.size());
                             break;
                         // Case 0: Back
                         case 0:

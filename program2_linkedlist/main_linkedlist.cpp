@@ -62,9 +62,9 @@ int main() {
         switch (choice) {
             // Case 1: Display age ground categorisation and emission analysis for all cities
             case 1:
-                analyzeByAgeGroup(rawA, countA, "City A");
-                analyzeByAgeGroup(rawB, countB, "City B");
-                analyzeByAgeGroup(rawC, countC, "City C");
+                analyzeByAgeGroup_list(listA, "City A");
+                analyzeByAgeGroup_list(listB, "City B");
+                analyzeByAgeGroup_list(listC, "City C");
                 break;
             // Case 2: Carbon emission analysis menu
             case 2: {
@@ -90,29 +90,29 @@ int main() {
                         // Sub-menu cases for carbon emission analysis
                         // Case 1: Total emissions per city
                         case 1:
-                            printTotalEmissions(rawA, countA, "City A");
-                            printTotalEmissions(rawB, countB, "City B");
-                            printTotalEmissions(rawC, countC, "City C");
+                            printTotalEmissions_list(listA, "City A");
+                            printTotalEmissions_list(listB, "City B");
+                            printTotalEmissions_list(listC, "City C");
                             break;
                         // Case 2: Emissions by transport mode
                         case 2:
-                            printEmissionsByTransport(rawA, countA, "City A");
-                            printEmissionsByTransport(rawB, countB, "City B");
-                            printEmissionsByTransport(rawC, countC, "City C");
+                            printEmissionsByTransport_list(listA, "City A");
+                            printEmissionsByTransport_list(listB, "City B");
+                            printEmissionsByTransport_list(listC, "City C");
                             break;
                         // Case 3: Emissions by age group
                         case 3:
-                            printEmissionsByAgeGroup(rawA, countA, "City A");
-                            printEmissionsByAgeGroup(rawB, countB, "City B");
-                            printEmissionsByAgeGroup(rawC, countC, "City C");
+                            printEmissionsByAgeGroup_list(listA, "City A");
+                            printEmissionsByAgeGroup_list(listB, "City B");
+                            printEmissionsByAgeGroup_list(listC, "City C");
                             break;
                         // Case 4: Compare all cities
                         case 4:
-                            compareAllCities(rawA, countA, rawB, countB, rawC, countC);
+                            compareAllCities_list(listA, listB, listC);
                             break;
                         // Case 5: Compare all cities by age group
                         case 5:
-                            compareAllCitiesByAgeGroup(rawA, countA, rawB, countB, rawC, countC);
+                            compareAllCitiesByAgeGroup_list(listA, listB, listC);
                             break;
                         // Case 0: Back to main menu    
                         case 0:

@@ -30,6 +30,10 @@ public:
 
     // Reset count to 0 (does not free memory)
     void clear();
+
+    // Get pointer to internal data array
+    Resident* getData();
+    const Resident* getData() const;
 };
 
 #endif // ARRAYLIST_HPP
