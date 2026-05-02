@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <limits>
 #include <string>
 #include "linkedlist.hpp"
 #include "../shared/csvloader.hpp"
@@ -53,7 +54,6 @@ int main() {
         cin >> choice;
         if (cin.fail()) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Invalid input.\n";
             choice = -1;
             continue;
@@ -81,7 +81,6 @@ int main() {
                     cin >> subChoice;
                     if (cin.fail()) {
                         cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         cout << "Invalid input.\n";
                         subChoice = -1;
                         continue;
