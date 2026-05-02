@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <iomanip>
-#include <limits>
 #include <string>
 #include "linkedlist.hpp"
 #include "../shared/csvloader.hpp"
@@ -118,7 +117,7 @@ int main() {
             }
 
             case 3: {
-                // TODO [WT]: prompt sort field/order, run insertionSortLL + mergeSortLL
+                // prompt sort field/order, run insertionSortLL + mergeSortLL
             while (choice != 0) {
                 cout << "\n--- Sorting Experiments: Linked List ---\n";
                 cout << "Choose Dataset:\n";
@@ -134,7 +133,6 @@ int main() {
                 cin >> cityChoice;
                 if (cin.fail()) {
                     cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "Invalid input.\n";
                     continue;
                 }
@@ -193,7 +191,6 @@ int main() {
                     cin >> fieldChoice;
                     if (cin.fail()) {
                         cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         cout << "Invalid input.\n";
                         continue;
                     }
@@ -233,7 +230,6 @@ int main() {
                         cin >> orderChoice;
                         if (cin.fail()) {
                             cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
                             cout << "Invalid input.\n";
                             continue;
                         }
@@ -349,7 +345,12 @@ int main() {
                     cout << "0. Back to Main Menu" << endl;
                     cout << "Select: ";
                     cin >> searchMenu;
-                    if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; searchMenu = -1; continue; }
+                    if (cin.fail()) { 
+                        cin.clear(); 
+                        cout << "Invalid input.\n"; 
+                        searchMenu = -1; 
+                        continue; 
+                    }
 
                     if (searchMenu == 0) break; // Back function
 
@@ -366,7 +367,12 @@ int main() {
                                  << "5. Senior Citizens / Retirees (61-100)\n"
                                  << "Select: ";
                             int ageChoice; cin >> ageChoice;
-                            if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; continue; }
+                            if (cin.fail()) { 
+                            cin.clear(); 
+                            cout << "Invalid input.\n"; 
+                            searchMenu = -1; 
+                            continue; 
+                        }
                             if (ageChoice == 1) keyword = "6-17";
                             else if (ageChoice == 2) keyword = "18-25";
                             else if (ageChoice == 3) keyword = "26-45";
@@ -381,7 +387,11 @@ int main() {
                                  << "1. Car\n2. Bus\n3. Bicycle\n4. Walking\n5. School Bus\n6. Carpool\n"
                                  << "Select: ";
                             int transChoice; cin >> transChoice;
-                            if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; continue; }
+                            if (cin.fail()) { 
+                                cin.clear();  
+                                cout << "Invalid input.\n";
+                                continue; 
+                            }
                             const char* modes[] = {"", "Car", "Bus", "Bicycle", "Walking", "School Bus", "Carpool"};
                             if (transChoice >= 1 && transChoice <= 6) keyword = modes[transChoice];
                             crit = SEARCH_BY_TRANSPORT;
@@ -407,11 +417,11 @@ int main() {
                         // Run Linear Search
                         SearchResult linRes = linearSearchLL(*lists[i], crit, keyword.c_str());
                         
-                        // Run Ordered Search (Member 4 Task)
+                        // Run Ordered Search
                         cout << "\n(Ordered Search assumes data was sorted by Member 3)\n";
                         SearchResult ordRes = orderedSearchLL(*lists[i], crit, keyword.c_str());
 
-                        // Show Results and Performance Comparison[cite: 4]
+                        // Show Results and Performance Comparison
                         printSearchResultsLL(*lists[i], linRes, crit, keyword.c_str());
                         printSearchComparisonLL(linRes, ordRes);
 

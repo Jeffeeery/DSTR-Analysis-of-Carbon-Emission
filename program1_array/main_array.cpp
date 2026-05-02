@@ -1,7 +1,6 @@
 // Main program for Array-based implementation
 #include <iostream>
 #include <iomanip>
-#include <limits>
 #include <string>
 #include "arraylist.hpp"
 #include "../shared/csvloader.hpp"
@@ -81,7 +80,6 @@ int main() {
                     cin >> subChoice;
                     if (cin.fail()) {
                         cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         cout << "Invalid input.\n";
                         subChoice = -1;
                         continue;
@@ -133,7 +131,6 @@ int main() {
                     cin >> cityChoice;
                     if (cin.fail()) {
                         cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         cout << "Invalid input.\n";
                         continue;
                     }
@@ -185,7 +182,6 @@ int main() {
                         cin >> fieldChoice;
                         if (cin.fail()) {
                             cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
                             cout << "Invalid input.\n";
                             continue;
                         }
@@ -219,7 +215,6 @@ int main() {
                             cin >> orderChoice;
                             if (cin.fail()) {
                                 cin.clear();
-                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                                 cout << "Invalid input.\n";
                                 continue;
                             }
@@ -328,7 +323,6 @@ int main() {
                     cin >> searchMenu;
                     if (cin.fail()) {
                         cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         cout << "Invalid input.\n";
                         continue;
                     }
@@ -343,7 +337,11 @@ int main() {
                             cout << "\nSelect Age Group:\n1. Children & Teenagers (6-17)\n2. University Students (18-25)\n"
                                 << "3. Working Adults (Early) (26-45)\n4. Working Adults (Late) (46-60)\n5. Seniors (61-100)\nSelect: ";
                             int ageChoice; cin >> ageChoice;
-                            if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; continue; }
+                            if (cin.fail()) { 
+                                cin.clear(); 
+                                cout << "Invalid input.\n"; 
+                                continue; 
+                            }
                             if (ageChoice == 1) keyword = "Children & Teenagers (6-17)";
                             else if (ageChoice == 2) keyword = "University Students (18-25)";
                             else if (ageChoice == 3) keyword = "Working Adults (Early Career) (26-45)";
@@ -356,7 +354,11 @@ int main() {
                             cout << "\nSelect Transport:\n1. Car\n2. Bus\n3. Bicycle\n4. Walking\n5. School Bus\n6. Carpool\nSelect: ";
                             int transChoice;
                             cin >> transChoice;
-                            if (cin.fail()) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); cout << "Invalid input.\n"; continue; }
+                            if (cin.fail()) { 
+                                cin.clear();                                 
+                                cout << "Invalid input.\n"; 
+                                continue; 
+                            }
                             const char* modes[] = {"", "Car", "Bus", "Bicycle", "Walking", "School Bus", "Carpool"};
                             if (transChoice >= 1 && transChoice <= 6) {
                                 keyword = modes[transChoice];
@@ -404,18 +406,18 @@ int main() {
 
                 for (int i = 0; i < 3; i++) {
                     int count = recordCounts[i];
-                    ResidentArray tempBubble(count), tempMerge(count);
+                    ResidentArray tempInsertion(count), tempMerge(count);
                     for (int j = 0; j < count; j++) {
-                        tempBubble.add(cities[i]->get(j));
+                        tempInsertion.add(cities[i]->get(j));
                         tempMerge.add(cities[i]->get(j));
                     }
-                    double timeBubble = insertionSort(tempBubble, SORT_BY_EMISSION, ASCENDING);
+                    double timeInsertion = insertionSort(tempInsertion, SORT_BY_EMISSION, ASCENDING);
                     double timeMerge  = mergeSort (tempMerge,  SORT_BY_EMISSION, ASCENDING);
 
                     cout << left  << setw(14) << "InsertionSort"
                          << setw(10) << cityNames[i]
                          << right << setw(10) << count
-                         << setw(12) << fixed << setprecision(4) << timeBubble << "\n";
+                         << setw(12) << fixed << setprecision(4) << timeInsertion << "\n";
                     cout << left  << setw(14) << "MergeSort"
                          << setw(10) << cityNames[i]
                          << right << setw(10) << count
